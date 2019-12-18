@@ -1,1 +1,2 @@
 helm-extra-args: --timeout 800
+chart-dirs: .
