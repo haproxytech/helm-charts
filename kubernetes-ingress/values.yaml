@@ -1,0 +1,175 @@
+# Default values for kubernetes-ingress chart
+## HAProxy Ingress Controller
+## ref: https://github.com/haproxytech/kubernetes-ingress/tree/master/documentation
+
+
+## Enable RBAC Authorization
+## ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+rbac:
+  create: true
+
+
+## Configure Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+serviceAccount:
+  create: true
+  name:
+
+
+## Controller default values
+controller:
+  name: controller
+  image:
+    repository: haproxytech/kubernetes-ingress    # can be changed to use CE or EE Controller images
+    tag: "{{ .Chart.AppVersion }}"
+    pullPolicy: IfNotPresent
+
+  ## Deployment or DaemonSet pod mode
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
+  kind: Deployment    # can be 'Deployment' or 'DaemonSet'
+  replicaCount: 2   # used only for Deployment mode
+
+  ## Private Registry configuration
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  imageCredentials:
+    registry: null
+    username: null
+    password: null
+
+  ## Controller Container listener port configuration
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/
+  containerPort:
+    http: 80
+    https: 443
+    stat: 1024
+
+  ## Ingress Class used for ingress.class annotation in multi-ingress environments
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/#using-multiple-ingress-controllers
+  ingressClass: null   # typically "haproxy" or null to receive all events
+
+  ## Ingress TLS secret, if left null then controller will use auto-generated TLS secret
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  defaultTLSSecret: null
+
+  ## Compute Resources for controller container
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  resources: {}
+  #  limits:
+  #    cpu: 100m
+  #    memory: 64Mi
+  #  requests:
+  #    cpu: 100m
+  #    memory: 64Mi
+
+  ## Pod Node assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+  nodeSelector: {}
+
+  ## Node Taints and Tolerations for pod-node cheduling through attraction/repelling
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  #  - key: "key"
+  #    operator: "Equal|Exists"
+  #    value: "value"
+  #    effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+
+  ## Node Affinity for pod-node scheduling constraints
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+
+  ## Additional command line arguments to pass to Controller
+  ## ref: https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/controller.md
+  extraArgs: []
+  #  - --namespace-whitelist=default
+  #  - --namespace-whitelist=namespace1
+  #  - --namespace-blacklist=namespace2
+
+  ## Custom configuration for Controller
+  ## ref: https://github.com/haproxytech/kubernetes-ingress/tree/master/documentation
+  config: {}
+  #   timeout-connect: "250ms"
+  #   servers-increment: "10"
+  #   servers-increment-max-disabled: "10"
+  #   rate-limit: "ON"
+  #   rate-limit-expire: "1m"
+  #   rate-limit-interval: "10s"
+  #   rate-limit-size: "100k"
+  #   syslogServer: "port:514, address:192.168.122.1, facility:local0"
+
+  ## Controller Service configuration
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+  service:
+    type: NodePort
+
+    ## Service ports to use for http, https and stat
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ports:
+      http: 80
+      https: 443
+      stat: 1024
+
+    ## Target port mappings for http, https and stat
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    targetPorts:
+      http: http
+      https: https
+      stat: stat
+
+    ## Expose service via external IPs that route to one or more cluster nodes
+    externalIPs: []
+
+  ## Controller DaemonSet configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
+  daemonset:
+    hostPorts:
+      http: 80
+      https: 443
+      stat: 1024
+
+
+## Default 404 backend
+defaultBackend:
+  name: default-backend
+  replicaCount: 2
+
+  image:
+    repository: k8s.gcr.io/defaultbackend-amd64
+    tag: 1.5
+    pullPolicy: IfNotPresent
+    runAsUser: 65534
+
+  ## Compute Resources
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
+  resources: {}
+  #  limits:
+  #    cpu: 100m
+  #    memory: 64Mi
+  #  requests:
+  #    cpu: 100m
+  #    memory: 64Mi
+
+  ## Listener port configuration
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/
+  containerPort: 8080
+
+  ## Pod Node assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+  nodeSelector: {}
+
+  ## Node Taints and Tolerations for pod-node cheduling through attraction/repelling
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  tolerations: []
+  #  - key: "key"
+  #    operator: "Equal|Exists"
+  #    value: "value"
+  #    effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+
+  ## Node Affinity for pod-node scheduling constraints
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  affinity: {}
+
+  service:
+    ## Service ports
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    port: 8080

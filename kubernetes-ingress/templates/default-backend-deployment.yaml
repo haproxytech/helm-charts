@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "kubernetes-ingress.defaultBackend.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
+    helm.sh/chart: {{ template "kubernetes-ingress.chart" . }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+spec:
+  replicas: {{ .Values.defaultBackend.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ template "kubernetes-ingress.defaultBackend.fullname" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ template "kubernetes-ingress.defaultBackend.fullname" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ template "kubernetes-ingress.name" . }}-{{ .Values.defaultBackend.name }}
+          image: "{{ .Values.defaultBackend.image.repository }}:{{ .Values.defaultBackend.image.tag }}"
+          imagePullPolicy: {{ .Values.defaultBackend.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.defaultBackend.containerPort }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.defaultBackend.resources | nindent 12 }}
+      {{- with .Values.defaultBackend.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.defaultBackend.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.defaultBackend.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

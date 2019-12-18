@@ -1,0 +1,34 @@
+{{- if eq .Values.controller.kind "Deployment" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "kubernetes-ingress.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
+    helm.sh/chart: {{ template "kubernetes-ingress.chart" . }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+spec:
+  type: {{ .Values.controller.service.type }}
+  ports:
+    - name: http
+      port: {{ .Values.controller.service.ports.http }}
+      protocol: TCP
+      targetPort: {{ .Values.controller.service.targetPorts.http }}
+    - name: https
+      port: {{ .Values.controller.service.ports.https }}
+      protocol: TCP
+      targetPort: {{ .Values.controller.service.targetPorts.https }}
+    - name: stat
+      port: {{ .Values.controller.service.ports.stat }}
+      protocol: TCP
+      targetPort: {{ .Values.controller.service.targetPorts.stat }}
+  selector:
+    app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  externalIPs:
+{{- if .Values.controller.service.externalIPs }}
+{{ toYaml .Values.controller.service.externalIPs | indent 4 }}
+{{- end -}}
+{{- end -}}

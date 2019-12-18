@@ -1,0 +1,65 @@
+version: 2
+jobs:
+  lint-scripts:
+    docker:
+      - image: koalaman/shellcheck-alpine
+    steps:
+      - checkout
+      - run:
+          command: |
+            shellcheck -x .circleci/install_charts.sh
+            shellcheck -x .circleci/install_tools.sh
+            shellcheck -x .circleci/release.sh
+  lint-charts:
+    docker:
+      - image: quay.io/helmpack/chart-testing:v3.0.0-beta.1
+    steps:
+      - checkout
+      - run:
+          command: ct lint --config .circleci/ct.yaml
+  install-charts:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          no_output_timeout: 20m
+          command: .circleci/install_charts.sh
+  release-charts:
+    machine: true
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "7f:84:3b:70:a1:c8:63:8e:dc:5f:51:51:b8:f4:7c:76"
+      - run:
+          command: |
+            echo "export GIT_REPOSITORY_URL=$CIRCLE_REPOSITORY_URL" >> $BASH_ENV
+            echo "export GIT_USERNAME=$CIRCLE_PROJECT_USERNAME" >> $BASH_ENV
+            .circleci/install_tools.sh
+            .circleci/release.sh
+workflows:
+  version: 2
+  lint-and-test:
+    jobs:
+      - lint-scripts:
+          filters:
+            branches:
+              ignore: gh-pages
+      - lint-charts:
+          filters:
+            branches:
+              ignore: gh-pages
+      - install-charts:
+          requires:
+            - lint-charts
+          filters:
+            branches:
+              ignore: gh-pages
+  release:
+    jobs:
+      - release-charts:
+          filters:
+            tags:
+              ignore: /.*/
+            branches:
+              only: master
