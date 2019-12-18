@@ -1,0 +1,29 @@
+# General files
+*.tgz
+.project
+
+# MacOS
+._*
+.DS_Store
+
+# JetBrains
+.idea/
+*.iml
+
+# VSC
+.vscode
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Vim
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+
+# TODO
+TODO
