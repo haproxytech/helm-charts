@@ -17,7 +17,7 @@ For setting up Kubernetes on other cloud platforms or bare-metal servers refer t
 
 Get the latest [Helm release](https://github.com/helm/helm#install).
 
-### Add repo
+### Add Helm chart repo
 
 Once you have Helm installed, add the repo as follows:
 
