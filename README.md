@@ -1,4 +1,6 @@
-# HAProxy Helm Charts
+# ![HAProxy](https://github.com/haproxytech/kubernetes-ingress/raw/master/assets/images/haproxy-weblogo-210x49.png "HAProxy")
+
+## HAProxy Helm Charts
 
 ![GitHub](https://img.shields.io/github/license/haproxytech/helm-charts)
 [![CircleCI](https://circleci.com/gh/haproxytech/helm-charts/tree/master.svg?style=svg)](https://circleci.com/gh/haproxytech/helm-charts/tree/master)
