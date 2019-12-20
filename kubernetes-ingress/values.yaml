@@ -104,6 +104,14 @@ controller:
   service:
     type: NodePort
 
+    ## Service annotations
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    annotations: {}
+
+    ## Service labels
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+    labels: {}
+
     ## Service ports to use for http, https and stat
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ports:
