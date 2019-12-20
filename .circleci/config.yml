@@ -16,10 +16,7 @@ jobs:
     steps:
       - checkout
       - run:
-          command: |
-            git remote add k8s https://github.com/haproxytech/helm-charts
-            git fetch k8s master
-            ct lint --config .circleci/ct.yaml
+          command: ct lint --config .circleci/ct.yaml
   install-charts:
     machine: true
     steps:

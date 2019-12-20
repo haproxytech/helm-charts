@@ -77,15 +77,21 @@ main() {
     readarray -t changed_charts <<< "$(git diff --find-renames --name-only "${latest_tag_rev}" | grep '\.yaml$' | cut -d '/' -f 1 | sort -u)"
 
     if [[ -n "${changed_charts[*]}" ]]; then
+        local release_pending=no
         for chart in "${changed_charts[@]}"; do
             if [[ -f "${chart}/Chart.yaml" ]]; then
+                release_pending=yes
                 echo "Packaging chart ${chart}"
                 package_chart "${chart}"
             fi
         done
 
-        release_charts
-        update_index
+        if [[ "${release_pending}" == "yes" ]]; then
+            release_charts
+            update_index
+        else
+            echo "Nothing to do. No chart changes detected."
+        fi
     else
         echo "Nothing to do. No chart changes detected."
     fi

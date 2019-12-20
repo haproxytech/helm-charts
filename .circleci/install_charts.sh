@@ -62,7 +62,7 @@ main() {
 
     echo "Testing for chart repo changes"
     local changed
-    changed=$(docker_exec ct list-changed 2>/dev/null | grep -v "is not a valid chart directory")
+    changed=$(docker_exec ct list-changed | grep -v "is not a valid chart directory")
     if [[ -z "${changed}" ]]; then
         echo "No chart changes detected"
         return
