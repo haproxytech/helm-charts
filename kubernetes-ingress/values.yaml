@@ -48,19 +48,21 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/#using-multiple-ingress-controllers
   ingressClass: null   # typically "haproxy" or null to receive all events
 
-  ## Ingress TLS secret, if left null then controller will use auto-generated TLS secret
+  ## Ingress TLS secret, if enabled is true and secret is null then controller will use auto-generated secret otherwise provided secret is used
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  defaultTLSSecret: null
+  defaultTLSSecret:
+    enabled: true
+    secret: null
 
   ## Compute Resources for controller container
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  resources: {}
+  resources:
   #  limits:
   #    cpu: 100m
   #    memory: 64Mi
-  #  requests:
-  #    cpu: 100m
-  #    memory: 64Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
 
   ## Pod Node assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
@@ -141,13 +143,13 @@ defaultBackend:
 
   ## Compute Resources
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  resources: {}
+  resources:
   #  limits:
-  #    cpu: 100m
-  #    memory: 64Mi
-  #  requests:
-  #    cpu: 100m
-  #    memory: 64Mi
+  #    cpu: 10m
+  #    memory: 16Mi
+    requests:
+      cpu: 10m
+      memory: 16Mi
 
   ## Listener port configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/

@@ -66,6 +66,8 @@ main() {
     if [[ -z "${changed}" ]]; then
         echo "No chart changes detected"
         return
+    else
+        echo "Detected changes in charts: ${changed}"
     fi
 
     create_kind_cluster

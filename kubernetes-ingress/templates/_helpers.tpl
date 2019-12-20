@@ -70,6 +70,6 @@ Create a default fully qualified default backend name.
 {{/*
 Create a default fully qualified default cert secret name.
 */}}
-{{- define "kubernetes-ingress.defaultCertSecret.fullname" -}}
+{{- define "kubernetes-ingress.defaultTLSSecret.fullname" -}}
 {{- printf "%s-%s" (include "kubernetes-ingress.fullname" .) "default-cert" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
