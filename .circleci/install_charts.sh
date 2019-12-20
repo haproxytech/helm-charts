@@ -20,11 +20,11 @@ create_ct_container() {
 
 cleanup() {
     echo "Removing ct container"
-    docker kill ct > /dev/null 2>&1
+    docker kill ct >/dev/null 2>&1 || true
 }
 
 docker_exec() {
-    docker exec --interactive ct "$@"
+    docker exec --interactive --tty ct "$@"
 }
 
 create_kind_cluster() {
@@ -62,7 +62,7 @@ main() {
 
     echo "Testing for chart repo changes"
     local changed
-    changed=$(docker_exec ct list-changed)
+    changed=$(docker_exec ct list-changed 2>/dev/null | grep -v "is not a valid chart directory")
     if [[ -z "${changed}" ]]; then
         echo "No chart changes detected"
         return

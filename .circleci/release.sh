@@ -16,7 +16,7 @@ readonly CHARTS_URL=https://haproxytech.github.io/helm-charts
 readonly REPO_ROOT="${REPO_ROOT:-$(git rev-parse --show-toplevel)}"
 
 find_latest_tag() {
-    if ! git describe --tags --abbrev=0 2> /dev/null; then
+    if ! git describe --tags --abbrev=0 2>/dev/null; then
         git rev-list --max-parents=0 --first-parent HEAD
     fi
 }
@@ -47,7 +47,7 @@ update_index() {
 }
 
 main() {
-    pushd "${REPO_ROOT}" > /dev/null
+    pushd "${REPO_ROOT}" >/dev/null
 
     echo "Fetching tags"
     git fetch --tags
@@ -90,7 +90,7 @@ main() {
         echo "Nothing to do. No chart changes detected."
     fi
 
-    popd > /dev/null
+    popd >/dev/null
 }
 
 main
