@@ -52,7 +52,7 @@ install_local_path_provisioner() {
 }
 
 install_charts() {
-    docker_exec ct install
+    docker_exec ct install --all
     echo
 }
 

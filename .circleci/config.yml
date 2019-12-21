@@ -16,7 +16,7 @@ jobs:
     steps:
       - checkout
       - run:
-          command: ct lint --config .circleci/ct.yaml
+          command: ct lint --all --config .circleci/ct.yaml
   install-charts:
     machine: true
     steps:
