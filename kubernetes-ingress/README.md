@@ -98,6 +98,21 @@ helm install my-ingress3 haproxytech/kubernetes-ingress \
 
 ***NOTE***: make sure your Ingress routes have corresponding `ingress.class: haproxy` annotation.
 
+### Installing with service annotations
+
+On some environments like EKS and GKE there might be a need to pass service annotations. Syntax can become a little tedious however:
+
+```console
+helm install my-ingress3 haproxytech/kubernetes-ingress \
+  --set controller.kind=DaemonSet \
+  --set controller.ingressClass=haproxy \
+  --set controller.service.type=LoadBalancer \
+  --set controller.service.annotations."service\.beta\.kubernetes\.io/aws-load-balancer-internal"="0.0.0.0/0" \
+  --set controller.service.annotations."service\.beta\.kubernetes\.io/aws-load-balancer-cross-zone-load-balancing-enabled"="true"
+```
+
+Note the use of quotes and the need to escape dots in the annotation key.
+
 ## Upgrading the chart
 
 To upgrade the *my-release* deployment:
