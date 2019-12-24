@@ -111,7 +111,30 @@ helm install my-ingress3 haproxytech/kubernetes-ingress \
   --set controller.service.annotations."service\.beta\.kubernetes\.io/aws-load-balancer-cross-zone-load-balancing-enabled"="true"
 ```
 
-Note the use of quotes and the need to escape dots in the annotation key.
+***NOTE***: With helm `--set` it is needed to put quotes and escape dots in the annotation key. 
+
+### Using values from YAML file
+
+As opposed to using many `--set` invocations, much simpler approach is to define value overrides in a separate YAML file and specify them when invoking Helm:
+
+*mylb.yaml*:
+
+```yaml
+controller:
+  kind: DaemonSet
+  ingressClass: haproxy
+  service:
+    type: LoadBalancer
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
+      service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
+```
+
+And invoking Helm becomes (compare to the previous example):
+
+```console
+helm install my-ingress4 -f mylb.yml haproxytech/kubernetes-ingress
+```
 
 ## Upgrading the chart
 
