@@ -85,8 +85,6 @@ main() {
         exit
     fi
 
-    mkdir -p "${PACKAGE_PATH}"
-
     echo "Identifying changed charts since tag ${latest_tag}"
 
     local changed_charts=()
