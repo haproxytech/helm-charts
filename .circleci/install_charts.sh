@@ -57,22 +57,58 @@ install_charts() {
 }
 
 main() {
-    create_ct_container
-    trap cleanup EXIT
+    pushd "${REPO_ROOT}" >/dev/null
 
-    echo "Testing for chart repo changes"
-    local changed
-    changed=$(docker_exec ct list-changed | grep -v "is not a valid chart directory" | grep -c '^[a-zA-Z0-9]' || true)
-    if [[ ${changed} -eq 0 ]]; then
-        echo "No chart changes detected"
-        return
-    else
-        echo "Detected changes in charts: ${changed}"
+    echo "Fetching tags"
+    git fetch --tags
+
+    local latest_tag
+    latest_tag=$(find_latest_tag)
+
+    local latest_tag_rev
+    latest_tag_rev=$(git rev-parse --verify "${latest_tag}")
+    echo "${latest_tag_rev} ${latest_tag} (latest tag)"
+
+    local head_rev
+    head_rev=$(git rev-parse --verify HEAD)
+    echo "${head_rev} HEAD"
+
+    if [[ "${latest_tag_rev}" == "${head_rev}" ]]; then
+        echo "No code changes. Nothing to release."
+        exit
     fi
 
-    create_kind_cluster
-    install_local_path_provisioner
-    install_charts
+    mkdir -p "${PACKAGE_PATH}"
+
+    echo "Identifying changed charts since tag ${latest_tag}"
+
+    local changed_charts=()
+    readarray -t changed_charts <<< "$(git diff --find-renames --name-only "${latest_tag_rev}" | grep '\.yaml$' | cut -d '/' -f 1 | sort -u)"
+
+    if [[ -n "${changed_charts[*]}" ]]; then
+        local changes_pending=no
+        for chart in "${changed_charts[@]}"; do
+            if [[ -f "${chart}/Chart.yaml" ]]; then
+                changes_pending=yes
+                break
+            fi
+        done
+
+        if [[ "${changes_pending}" == "yes" ]]; then
+            create_ct_container
+            trap cleanup EXIT
+
+            create_kind_cluster
+            install_local_path_provisioner
+            install_charts
+        else
+            echo "Nothing to do. No chart changes detected."
+        fi
+    else
+        echo "Nothing to do. No chart changes detected."
+    fi
+
+    popd >/dev/null
 }
 
 main

@@ -38,7 +38,6 @@ update_index() {
     git config user.name "${GIT_USERNAME}"
     git checkout gh-pages
 
-    #rm -f index.yaml
     cr index -i index.yaml -o "${OWNER}" -r "${GIT_REPO}" -c "${CHARTS_URL}" -p "${PACKAGE_PATH}"
 
     git add index.yaml
@@ -68,7 +67,6 @@ main() {
         exit
     fi
 
-    #rm -rf "${PACKAGE_PATH}"
     mkdir -p "${PACKAGE_PATH}"
 
     echo "Identifying changed charts since tag ${latest_tag}"
