@@ -102,7 +102,7 @@ controller:
   ## Controller Service configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   service:
-    type: NodePort
+    type: NodePort    # can be 'NodePort' or 'LoadBalancer'
 
     ## Service annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -128,6 +128,18 @@ controller:
 
     ## Expose service via external IPs that route to one or more cluster nodes
     externalIPs: []
+
+    ## LoadBalancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
+    loadBalancerIP: ""
+
+    ## Source IP ranges permitted to access Network Load Balancer
+    # ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/
+    loadBalancerSourceRanges: []
+
+    ## Service ClusterIP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    # clusterIP: ""
 
   ## Controller DaemonSet configuration
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
