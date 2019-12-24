@@ -9,6 +9,12 @@ readonly KIND_VERSION=v0.6.1
 readonly CLUSTER_NAME=chart-testing
 readonly REPO_ROOT="${REPO_ROOT:-$(git rev-parse --show-toplevel)}"
 
+find_latest_tag() {
+    if ! git describe --tags --abbrev=0 2>/dev/null; then
+        git rev-list --max-parents=0 --first-parent HEAD
+    fi
+}
+
 create_ct_container() {
     echo "Starting Chart Testing container"
     docker run --rm --interactive --detach --network host --name ct \
