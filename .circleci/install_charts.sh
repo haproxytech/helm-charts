@@ -7,6 +7,7 @@ set -o pipefail
 readonly CT_VERSION=v3.0.0-beta.1
 readonly KIND_VERSION=v0.6.1
 readonly CLUSTER_NAME=chart-testing
+readonly REPO_ROOT="${REPO_ROOT:-$(git rev-parse --show-toplevel)}"
 
 create_ct_container() {
     echo "Starting Chart Testing container"
