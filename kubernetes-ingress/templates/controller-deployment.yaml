@@ -57,6 +57,9 @@ spec:
 {{- if .Values.controller.ingressClass }}
           - --ingress.class={{ .Values.controller.ingressClass }}
 {{- end }}
+{{- if .Values.controller.publishService.enabled }}
+          - --publish-service={{ template "kubernetes-ingress.publishServicePath" . }}
+{{- end }}
 {{- range .Values.controller.extraArgs }}
           - {{ . }}
 {{- end }}
