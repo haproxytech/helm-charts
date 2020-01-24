@@ -111,7 +111,7 @@ helm install my-ingress3 haproxytech/kubernetes-ingress \
   --set controller.service.annotations."service\.beta\.kubernetes\.io/aws-load-balancer-cross-zone-load-balancing-enabled"="true"
 ```
 
-***NOTE***: With helm `--set` it is needed to put quotes and escape dots in the annotation key. 
+***NOTE***: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string. 
 
 ### Using values from YAML file
 
