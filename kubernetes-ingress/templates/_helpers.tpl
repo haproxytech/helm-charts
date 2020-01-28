@@ -90,3 +90,17 @@ Create a default fully qualified default cert secret name.
 {{/*
 Expand the name of the chart.
 */}}
+
+{{/*
+Construct the path for the publish-service.
+
+By default this will use the <namespace>/<service-name> matching the controller's service name.
+
+Users can provide an override for an explicit service they want to use via `.Values.controller.publishService.pathOverride`
+
+*/}}
+{{- define "kubernetes-ingress.publishServicePath" -}}
+{{- $defServicePath := printf "%s/%s" .Release.Namespace (include "kubernetes-ingress.fullname" .) -}}
+{{- $servicePath := default $defServicePath .Values.controller.publishService.pathOverride }}
+{{- print $servicePath | trunc 63 |trimSuffix "-" -}}
+{{- end -}}

@@ -112,6 +112,15 @@ controller:
   #   rate-limit-size: "100k"
   #   syslogServer: "port:514, address:192.168.122.1, facility:local0"
 
+  ## Mirrors the address of the service's endpoints to the
+  ## load-balancer status of all Ingress objects it satisfies.
+  publishService:
+    enabled: false
+    ##
+    ## Override of the publish service
+    ## Must be <namespace>/<service_name>
+    pathOverride: ""
+
   ## Controller Service configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   service:
