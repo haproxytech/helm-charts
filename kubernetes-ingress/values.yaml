@@ -166,6 +166,7 @@ controller:
   ## Controller DaemonSet configuration
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
   daemonset:
+    useHostPort: false
     hostPorts:
       http: 80
       https: 443
