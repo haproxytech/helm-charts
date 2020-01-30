@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */}}
 
+{{/*
+Expand the name of the chart.
+*/}}
 {{- define "kubernetes-ingress.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
@@ -43,7 +46,7 @@ Create chart name and version as used by the chart label.
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{/*
+{kubernetes-ingress.publishServicePath{/*
 Encode an imagePullSecret string.
 */}}
 {{- define "kubernetes-ingress.imagePullSecret" }}
@@ -86,21 +89,15 @@ Create a default fully qualified default cert secret name.
 {{- printf "%s-%s" (include "kubernetes-ingress.fullname" .) "default-cert" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{/* vim: set filetype=mustache: */}}
-{{/*
-Expand the name of the chart.
-*/}}
-
 {{/*
 Construct the path for the publish-service.
-
 By default this will use the <namespace>/<service-name> matching the controller's service name.
-
 Users can provide an override for an explicit service they want to use via `.Values.controller.publishService.pathOverride`
-
 */}}
 {{- define "kubernetes-ingress.publishServicePath" -}}
 {{- $defServicePath := printf "%s/%s" .Release.Namespace (include "kubernetes-ingress.fullname" .) -}}
 {{- $servicePath := default $defServicePath .Values.controller.publishService.pathOverride }}
-{{- print $servicePath | trunc 63 |trimSuffix "-" -}}
+{{- print $servicePath | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/* vim: set filetype=mustache: */}}
