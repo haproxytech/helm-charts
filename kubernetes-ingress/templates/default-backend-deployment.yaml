@@ -35,6 +35,9 @@ spec:
       labels:
         app.kubernetes.io/name: {{ template "kubernetes-ingress.defaultBackend.fullname" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- if .Values.defaultBackend.podLabels }}
+{{ toYaml .Values.defaultBackend.podLabels | indent 8 }}
+        {{- end }}
     spec:
       containers:
         - name: {{ template "kubernetes-ingress.name" . }}-{{ .Values.defaultBackend.name }}

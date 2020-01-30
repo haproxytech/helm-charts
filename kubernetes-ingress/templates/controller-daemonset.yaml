@@ -42,6 +42,9 @@ spec:
       labels:
         app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- if .Values.controller.podLabels }}
+{{ toYaml .Values.controller.podLabels | indent 8 }}
+        {{- end }}
     spec:
       serviceAccountName: {{ template "kubernetes-ingress.serviceAccountName" . }}
       hostNetwork: true

@@ -61,6 +61,11 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/#using-multiple-ingress-controllers
   ingressClass: null   # typically "haproxy" or null to receive all events
 
+  ## Additional labels to add to the pod container metadata
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  podLabels: {}
+  #  key: value
+
   ## Ingress TLS secret, if enabled is true and secret is null then controller will use auto-generated secret otherwise provided secret is used
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   defaultTLSSecret:
@@ -213,6 +218,11 @@ defaultBackend:
   ## Node Affinity for pod-node scheduling constraints
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
+
+  ## Additional labels to add to the pod container metadata
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  podLabels: {}
+  #  key: value
 
   service:
     ## Service ports
