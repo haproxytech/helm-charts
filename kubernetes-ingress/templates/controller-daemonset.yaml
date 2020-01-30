@@ -44,7 +44,9 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ template "kubernetes-ingress.serviceAccountName" . }}
+      {{- if $useHostPort }}
       hostNetwork: true
+      {{- end }}
 {{- if .Values.controller.imageCredentials.registry }}
       imagePullSecrets:
       - name: {{ template "kubernetes-ingress.fullname" . }}
