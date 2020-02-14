@@ -86,6 +86,14 @@ spec:
               hostPort: {{ index $hostPorts $key | default $value }}
               {{- end }}
           {{- end }}
+          {{- range .Values.controller.service.tcpPorts }}
+            - name: {{ . }}-tcp
+              containerPort: {{ . }}
+              protocol: TCP
+              {{- if $useHostPort }}
+              hostPort: {{ . }}
+              {{- end }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /healthz
