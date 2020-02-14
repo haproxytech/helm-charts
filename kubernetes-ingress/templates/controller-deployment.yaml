@@ -73,7 +73,7 @@ spec:
               protocol: TCP
           {{- end }}
           {{- range .Values.controller.service.tcpPorts }}
-            - name: "{{ . }}-tcp"
+            - name: {{ . }}-tcp
               containerPort: {{ . }}
               protocol: TCP
           {{- end }}

@@ -48,7 +48,7 @@ spec:
       protocol: TCP
       targetPort: {{ .Values.controller.service.targetPorts.stat }}
   {{- range .Values.controller.service.tcpPorts }}
-    - name: "{{ . }}-tcp"
+    - name: {{ . }}-tcp
       port: {{ . }}
       protocol: TCP
       targetPort: {{ . }}
