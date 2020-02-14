@@ -72,6 +72,11 @@ spec:
               containerPort: {{ $value }}
               protocol: TCP
           {{- end }}
+          {{- range .Values.controller.service.tcpPorts }}
+            - name: "{{ . }}-tcp"
+              containerPort: {{ . }}
+              protocol: TCP
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /healthz

@@ -153,6 +153,11 @@ controller:
       https: https
       stat: stat
 
+    # Additional tcp ports to expose
+    # This is especially useful for TCP services:
+    # https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/controller.md
+    tcpPorts: []
+
     ## Expose service via external IPs that route to one or more cluster nodes
     externalIPs: []
 

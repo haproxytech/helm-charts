@@ -47,6 +47,12 @@ spec:
       port: {{ .Values.controller.service.ports.stat }}
       protocol: TCP
       targetPort: {{ .Values.controller.service.targetPorts.stat }}
+  {{- range .Values.controller.service.tcpPorts }}
+    - name: "{{ . }}-tcp"
+      port: {{ . }}
+      protocol: TCP
+      targetPort: {{ . }}
+  {{- end }}
   selector:
     app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
