@@ -161,7 +161,7 @@ controller:
     ## Set external traffic policy
     ## Default is "Cluster", setting it to "Local" preserves source IP
     ## Ref: https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typeloadbalancer
-    externalTrafficPolicy: ""
+    # externalTrafficPolicy: "Local"
 
     ## Expose service via external IPs that route to one or more cluster nodes
     externalIPs: []
