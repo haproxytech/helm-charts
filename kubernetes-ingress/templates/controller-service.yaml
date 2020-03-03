@@ -34,6 +34,9 @@ metadata:
 spec:
   {{ with .Values.controller.service.clusterIP }}clusterIP: {{ . }}{{ end }}
   type: {{ .Values.controller.service.type }}
+  {{- if .Values.controller.service.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.controller.service.externalTrafficPolicy }}
+  {{- end }}
   ports:
     - name: http
       port: {{ .Values.controller.service.ports.http }}
