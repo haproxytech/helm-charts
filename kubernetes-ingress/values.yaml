@@ -158,6 +158,11 @@ controller:
     # https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/controller.md
     tcpPorts: []
 
+    ## Set external traffic policy
+    ## Default is "Cluster", setting it to "Local" preserves source IP
+    ## Ref: https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typeloadbalancer
+    externalTrafficPolicy: ""
+
     ## Expose service via external IPs that route to one or more cluster nodes
     externalIPs: []
 
