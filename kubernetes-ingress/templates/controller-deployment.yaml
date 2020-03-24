@@ -81,6 +81,12 @@ spec:
             httpGet:
               path: /healthz
               port: 1042
+              scheme: HTTP
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 1042
+              scheme: HTTP
           env:
           - name: POD_NAME
             valueFrom:

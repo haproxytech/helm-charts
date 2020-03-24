@@ -37,6 +37,9 @@ spec:
   {{- if .Values.controller.service.externalTrafficPolicy }}
   externalTrafficPolicy: {{ .Values.controller.service.externalTrafficPolicy }}
   {{- end }}
+  {{- if .Values.controller.service.healthCheckNodePort }}
+  healthCheckNodePort: {{ .Values.controller.service.healthCheckNodePort }}
+  {{- end }}
   ports:
     - name: http
       port: {{ .Values.controller.service.ports.http }}
