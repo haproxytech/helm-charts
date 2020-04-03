@@ -21,6 +21,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ template "kubernetes-ingress.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
     helm.sh/chart: {{ template "kubernetes-ingress.chart" . }}
