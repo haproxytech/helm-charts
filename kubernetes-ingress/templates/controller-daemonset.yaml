@@ -88,11 +88,11 @@ spec:
               {{- end }}
           {{- end }}
           {{- range .Values.controller.service.tcpPorts }}
-            - name: {{ . }}-tcp
-              containerPort: {{ . }}
+            - name: {{ .name }}-tcp
+              containerPort: {{ .port }}
               protocol: TCP
               {{- if $useHostPort }}
-              hostPort: {{ . }}
+              hostPort: {{ .port }}
               {{- end }}
           {{- end }}
           livenessProbe:
