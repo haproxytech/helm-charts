@@ -169,10 +169,10 @@ controller:
     # This is especially useful for TCP services:
     # https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/controller.md
     tcpPorts: []
-    #- name: http-alt
-    #  port: 8080
-    #  targetPort: http-alt
-    #  nodePort: 32080
+    #  - name: http-alt
+    #    port: 8080
+    #    targetPort: http-alt
+    #    nodePort: 32080
 
     ## Set external traffic policy
     ## Default is "Cluster", setting it to "Local" preserves source IP
