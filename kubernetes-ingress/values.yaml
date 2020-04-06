@@ -143,6 +143,14 @@ controller:
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     healthCheckNodePort: 0
 
+    ## Service nodePorts to use for http, https and stat
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    ## If empty, random ports will be used
+    nodePorts: {}
+    #  http: 31080
+    #  https: 31443
+    #  stat: 31024
+
     ## Service ports to use for http, https and stat
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ports:
@@ -161,6 +169,10 @@ controller:
     # This is especially useful for TCP services:
     # https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/controller.md
     tcpPorts: []
+    #- name: http-alt
+    #  port: 8080
+    #  targetPort: http-alt
+    #  nodePort: 32080
 
     ## Set external traffic policy
     ## Default is "Cluster", setting it to "Local" preserves source IP
