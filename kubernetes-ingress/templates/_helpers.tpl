@@ -76,6 +76,17 @@ Create the name of the controller service account to use.
 {{- end -}}
 
 {{/*
+Create the name of the backend service account to use - only used when podsecuritypolicy is also enabled
+*/}}
+{{- define "kubernetes-ingress.defaultBackend.serviceAccountName" -}}
+{{- if or .Values.serviceAccount.create .Values.defaultBackend.serviceAccount.create -}}
+    {{ default (printf "%s-%s" (include "kubernetes-ingress.fullname" .) .Values.defaultBackend.name) .Values.defaultBackend.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.defaultBackend.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified default backend name.
 */}}
 {{- define "kubernetes-ingress.defaultBackend.fullname" -}}

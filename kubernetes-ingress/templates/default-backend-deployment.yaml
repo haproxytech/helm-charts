@@ -58,6 +58,7 @@ spec:
       affinity:
         {{- toYaml . | nindent 8 }}
     {{- end }}
+      serviceAccountName: {{ template "kubernetes-ingress.defaultBackend.serviceAccountName" . }}
     {{- with .Values.defaultBackend.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}

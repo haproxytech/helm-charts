@@ -15,6 +15,18 @@
 ## Default values for kubernetes-ingress Chart for HAProxy Ingress Controller
 ## ref: https://github.com/haproxytech/kubernetes-ingress/tree/master/documentation
 
+podSecurityPolicy:
+  annotations: {}
+    ## Specify pod annotations
+    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor
+    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp
+    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#sysctl
+    ##
+    # apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default
+    # apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default
+    # seccomp.security.alpha.kubernetes.io/allowedProfileNames: runtime/default
+    # seccomp.security.alpha.kubernetes.io/defaultProfileName: runtime/default
+  enabled: false
 
 ## Enable RBAC Authorization
 ## ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
@@ -254,3 +266,8 @@ defaultBackend:
     ## Service ports
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     port: 8080
+
+  ## Configure Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  serviceAccount:
+    create: true
