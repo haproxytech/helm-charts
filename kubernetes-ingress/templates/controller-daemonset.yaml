@@ -96,15 +96,25 @@ spec:
               {{- end }}
           {{- end }}
           livenessProbe:
+            failureThreshold: {{ .Values.controller.livenessProbe.failureThreshold }}
             httpGet:
-              path: /healthz
-              port: 1042
-              scheme: HTTP
+              path: {{ .Values.controller.livenessProbe.path }}
+              port: {{ .Values.controller.livenessProbe.port }}
+              scheme: {{ .Values.controller.livenessProbe.scheme }}
+            initialDelaySeconds: {{ .Values.controller.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.controller.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.controller.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.controller.livenessProbe.timeoutSeconds }}
           readinessProbe:
+            failureThreshold: {{ .Values.controller.readinessProbe.failureThreshold }}
             httpGet:
-              path: /healthz
-              port: 1042
-              scheme: HTTP
+              path: {{ .Values.controller.readinessProbe.path }}
+              port: {{ .Values.controller.readinessProbe.port }}
+              scheme: {{ .Values.controller.readinessProbe.scheme }}
+            initialDelaySeconds: {{ .Values.controller.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.controller.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.controller.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.controller.readinessProbe.timeoutSeconds }}
           env:
           - name: POD_NAME
             valueFrom:

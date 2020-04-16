@@ -69,6 +69,28 @@ controller:
     https: 443
     stat: 1024
 
+  ## Controller Container liveness/readiness probe configuration
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+  livenessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 0
+    path: /healthz
+    periodSeconds: 10
+    port: 1042
+    scheme: HTTP
+    successThreshold: 1
+    timeoutSeconds: 1
+
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 0
+    path: /healthz
+    periodSeconds: 10
+    port: 1042
+    scheme: HTTP
+    successThreshold: 1
+    timeoutSeconds: 1
+
   ## Ingress Class used for ingress.class annotation in multi-ingress environments
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/#using-multiple-ingress-controllers
   ingressClass: null   # typically "haproxy" or null to receive all events
