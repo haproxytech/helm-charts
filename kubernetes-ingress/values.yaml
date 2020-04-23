@@ -55,6 +55,19 @@ controller:
   kind: Deployment    # can be 'Deployment' or 'DaemonSet'
   replicaCount: 2   # used only for Deployment mode
 
+  ## Init Containers
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  initContainers: []
+  # - name: sysctl
+  #   image: "busybox:1.31.1-musl"
+  #   command:
+  #   - /bin/sh
+  #   - -xc
+  #   - |-
+  #     sysctl -w net.core.somaxconn=65536
+  #   securityContext:
+  #     privileged: true
+
   ## Private Registry configuration
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
   imageCredentials:
