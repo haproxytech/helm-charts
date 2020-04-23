@@ -109,6 +109,10 @@ spec:
                 fieldPath: metadata.namespace
           resources:
             {{- toYaml .Values.controller.resources | nindent 12 }}
+      {{- with.Values.controller.initContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.controller.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
