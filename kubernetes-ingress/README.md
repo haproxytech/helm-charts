@@ -136,6 +136,19 @@ And invoking Helm becomes (compare to the previous example):
 helm install my-ingress4 -f mylb.yml haproxytech/kubernetes-ingress
 ```
 
+A typical YAML file for TCP services looks like (provided that configmap "[default/tcp](https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/controller.md)" was created) :
+
+```yaml
+controller:
+  service:
+    tcpPorts:
+      - name: mysql
+        port: 3306
+        targetPort: 3306
+  extraArgs:
+    - --configmap-tcp-services=default/tcp
+```
+
 ## Upgrading the chart
 
 To upgrade the *my-release* deployment:
