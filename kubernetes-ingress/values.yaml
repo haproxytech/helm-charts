@@ -208,6 +208,7 @@ controller:
     ## The controller service ports for http, https and stat can be disabled by
     ## setting below to false - this could be useful when only deploying haproxy
     ## as a TCP loadbalancer
+    ## Note: At least one port (http, https, stat or from tcpPorts) has to be enabled
     enablePorts:
       http: true
       https: true
@@ -220,9 +221,9 @@ controller:
       https: https
       stat: stat
 
-    # Additional tcp ports to expose
-    # This is especially useful for TCP services:
-    # https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/controller.md
+    ## Additional tcp ports to expose
+    ## This is especially useful for TCP services:
+    ## https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/controller.md
     tcpPorts: []
     #  - name: http-alt
     #    port: 8080
