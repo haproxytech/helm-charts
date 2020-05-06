@@ -205,6 +205,14 @@ controller:
       https: 443
       stat: 1024
 
+    ## The controller service ports for http, https and stat can be disabled by
+    ## setting below to false - this could be useful when only deploying haproxy
+    ## as a TCP loadbalancer
+    enablePorts:
+      http: true
+      https: true
+      stat: true
+
     ## Target port mappings for http, https and stat
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     targetPorts:
