@@ -75,6 +75,9 @@ spec:
 {{- if .Values.controller.publishService.enabled }}
           - --publish-service={{ template "kubernetes-ingress.publishServicePath" . }}
 {{- end }}
+{{- if .Values.controller.logging.level }}
+          - --log={{ .Values.controller.logging.level }}
+{{- end }}
 {{- range .Values.controller.extraArgs }}
           - {{ . }}
 {{- end }}
