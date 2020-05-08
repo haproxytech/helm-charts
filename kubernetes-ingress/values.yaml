@@ -162,7 +162,19 @@ controller:
   #   rate-limit-expire: "1m"
   #   rate-limit-interval: "10s"
   #   rate-limit-size: "100k"
-  #   syslogServer: "port:514, address:192.168.122.1, facility:local0"
+
+  ## Controller Logging configuration
+  logging:
+    ## Controller logging level
+    ## This only relevant to Controller logs
+    level: info
+
+    ## HAProxy traffic logs
+    ## ref: https://github.com/haproxytech/kubernetes-ingress/tree/master/documentation#logging
+    traffic: {}
+      #      address:  "stdout"
+      #      fromat:   "raw"
+      #      facility: "daemon"
 
   ## Mirrors the address of the service's endpoints to the
   ## load-balancer status of all Ingress objects it satisfies.
