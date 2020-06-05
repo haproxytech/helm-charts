@@ -271,6 +271,14 @@ controller:
       https: 443
       stat: 1024
 
+  ## Controller deployment strategy definition
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  strategy: {}
+  #  rollingUpdate:
+  #    maxSurge: 25%
+  #    maxUnavailable: 25%
+  #  type: RollingUpdate
+
 
 ## Default 404 backend
 defaultBackend:
