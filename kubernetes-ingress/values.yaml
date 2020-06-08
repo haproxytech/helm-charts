@@ -173,7 +173,7 @@ controller:
     ## ref: https://github.com/haproxytech/kubernetes-ingress/tree/master/documentation#logging
     traffic: {}
       #      address:  "stdout"
-      #      fromat:   "raw"
+      #      format:   "raw"
       #      facility: "daemon"
 
   ## Mirrors the address of the service's endpoints to the
