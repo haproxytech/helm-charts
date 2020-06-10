@@ -32,7 +32,7 @@ helm repo update
 
 ```console
 helm search repo haproxytech/
-helm install haproxytech/<chart>
+helm install my-release haproxytech/<chart>
 ```
 
 ***NOTE***: For instructions on how to install a chart follow instructions in its `README.md`.
