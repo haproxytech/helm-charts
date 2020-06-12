@@ -53,7 +53,7 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
   kind: Deployment    # can be 'Deployment' or 'DaemonSet'
-  replicaCount: 2   # used only for Deployment mode
+  # replicaCount: 2   # used only for Deployment mode. Do not use if also using an HPA
 
   ## Init Containers
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
@@ -283,7 +283,7 @@ controller:
 ## Default 404 backend
 defaultBackend:
   name: default-backend
-  replicaCount: 2
+  # replicaCount: 2    # do not use if also using an HPA
 
   image:
     repository: k8s.gcr.io/defaultbackend-amd64

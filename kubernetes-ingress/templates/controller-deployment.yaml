@@ -27,7 +27,9 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
 spec:
-  replicas: {{ .Values.controller.replicaCount }}
+  {{- with .Values.controller.replicaCount }}
+  replicas: {{ . }}
+  {{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
