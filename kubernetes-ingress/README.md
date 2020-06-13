@@ -113,6 +113,16 @@ helm install my-ingress3 haproxytech/kubernetes-ingress \
 
 ***NOTE***: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string. 
 
+### Installing with Horizontal Pod Autoscaler 
+
+[HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) automatically scales number of replicas in Deployment or Replication Controller and adjusts replica count. Therefore we want to unset default replicaCount for controller and defaultBackend by setting corresponding key values to null:
+
+```console
+helm install my-ingress4 haproxytech/kubernetes-ingress \
+  --set controller.replicaCount=null \
+  --set defaultBackend.replicaCount=null
+```
+
 ### Using values from YAML file
 
 As opposed to using many `--set` invocations, much simpler approach is to define value overrides in a separate YAML file and specify them when invoking Helm:
