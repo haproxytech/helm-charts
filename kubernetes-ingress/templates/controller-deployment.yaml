@@ -27,8 +27,8 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
 spec:
-  {{- with .Values.controller.replicaCount }}
-  replicas: {{ . }}
+  {{- if not ( kindIs "invalid" .Values.controller.replicaCount) }}
+  replicas: {{ .Values.controller.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
