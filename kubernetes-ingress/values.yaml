@@ -113,6 +113,11 @@ controller:
   podLabels: {}
   #  key: value
 
+  ## Additional annotations to add to the pod container metadata
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  podAnnotations: {}
+  #  key: value
+
   ## Ingress TLS secret, if enabled is true and secret is null then controller will use auto-generated secret otherwise provided secret is used
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   defaultTLSSecret:
@@ -324,6 +329,11 @@ defaultBackend:
   ## Additional labels to add to the pod container metadata
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   podLabels: {}
+  #  key: value
+
+  ## Additional annotations to add to the pod container metadata
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  podAnnotations: {}
   #  key: value
 
   service:
