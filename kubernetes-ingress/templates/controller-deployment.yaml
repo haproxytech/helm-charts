@@ -46,6 +46,10 @@ spec:
         {{- if .Values.controller.podLabels }}
 {{ toYaml .Values.controller.podLabels | indent 8 }}
         {{- end }}
+      {{- if .Values.controller.podAnnotations }}
+      annotations:
+{{ toYaml .Values.controller.podAnnotations | indent 8 }}
+      {{- end }}
     spec:
       serviceAccountName: {{ template "kubernetes-ingress.serviceAccountName" . }}
 {{- if .Values.controller.imageCredentials.registry }}
