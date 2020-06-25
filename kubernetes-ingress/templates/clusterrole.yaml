@@ -71,4 +71,5 @@ rules:
   - get
   - list
   - watch
+  - update
 {{- end -}}
