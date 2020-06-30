@@ -81,6 +81,9 @@ spec:
   selector:
     app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+  {{- if .Values.controller.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.controller.service.sessionAffinity }}
+  {{- end }}
   externalIPs:
 {{- if .Values.controller.service.externalIPs }}
 {{ toYaml .Values.controller.service.externalIPs | indent 4 }}
