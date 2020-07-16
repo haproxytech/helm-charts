@@ -15,6 +15,7 @@ limitations under the License.
 */}}
 
 {{- if eq .Values.controller.kind "DaemonSet" }}
+{{- $useHostNetwork := .Values.controller.daemonset.useHostNetwork -}}
 {{- $useHostPort := .Values.controller.daemonset.useHostPort -}}
 {{- $hostPorts := .Values.controller.daemonset.hostPorts -}}
 apiVersion: apps/v1
@@ -52,7 +53,7 @@ spec:
       {{- end }}
     spec:
       serviceAccountName: {{ template "kubernetes-ingress.serviceAccountName" . }}
-      {{- if $useHostPort }}
+      {{- if $useHostNetwork }}
       hostNetwork: true
       {{- end }}
 {{- if .Values.controller.imageCredentials.registry }}
