@@ -289,6 +289,9 @@ controller:
   #    maxUnavailable: 25%
   #  type: RollingUpdate
 
+  env: {}
+    ## Set timezone for controller containers
+    # timezone: "Etc/UTC"
 
 ## Default 404 backend
 defaultBackend:
