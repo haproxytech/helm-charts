@@ -289,6 +289,11 @@ controller:
   #    maxUnavailable: 25%
   #  type: RollingUpdate
 
+  ## Set additional env
+  extraEnvs: []
+    ## Set TZ env to configure timezone on controller containers
+    # - name: TZ
+    #   value: "Etc/UTC"
 
 ## Default 404 backend
 defaultBackend:
@@ -350,3 +355,6 @@ defaultBackend:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   serviceAccount:
     create: true
+
+  ## Set additional env 
+  extraEnvs: []
