@@ -46,6 +46,9 @@ spec:
 {{ toYaml .Values.defaultBackend.podAnnotations | indent 8 }}
       {{- end }}
     spec:
+{{- if .Values.controller.priorityClassName }}
+      priorityClassName: {{ .Values.controller.priorityClassName }}
+{{- end }}
       containers:
         - name: {{ template "kubernetes-ingress.name" . }}-{{ .Values.defaultBackend.name }}
           image: "{{ .Values.defaultBackend.image.repository }}:{{ .Values.defaultBackend.image.tag }}"

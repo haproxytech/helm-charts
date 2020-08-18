@@ -302,6 +302,10 @@ controller:
   #    maxUnavailable: 25%
   #  type: RollingUpdate
 
+  ## Controller Pod PriorityClass
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ""
+
 
 ## Default 404 backend
 defaultBackend:
@@ -363,3 +367,7 @@ defaultBackend:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   serviceAccount:
     create: true
+
+  ## Pod PriorityClass
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ""

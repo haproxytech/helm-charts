@@ -61,6 +61,9 @@ spec:
       imagePullSecrets:
       - name: {{ template "kubernetes-ingress.fullname" . }}
 {{- end }}
+{{- if .Values.controller.priorityClassName }}
+      priorityClassName: {{ .Values.controller.priorityClassName }}
+{{- end }}
       containers:
         - name: {{ template "kubernetes-ingress.name" . }}-{{ .Values.controller.name }}
           image: "{{ .Values.controller.image.repository }}:{{ tpl .Values.controller.image.tag . }}"
