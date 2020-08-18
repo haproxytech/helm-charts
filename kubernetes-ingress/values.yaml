@@ -204,6 +204,8 @@ controller:
   ## Controller Service configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   service:
+    enabled: true     # set to false when controller.kind is 'DaemonSet' and controller.daemonset.useHostPorts is true
+
     type: NodePort    # can be 'NodePort' or 'LoadBalancer'
 
     ## Service annotations
