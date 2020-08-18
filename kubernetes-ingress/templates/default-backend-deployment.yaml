@@ -59,10 +59,10 @@ spec:
               protocol: TCP
           {{- if .Values.defaultBackend.extraEnvs }}
           env:
-          {{- end }}
           {{- range .Values.defaultBackend.extraEnvs }}
           - name: "{{ .name }}"
             value: "{{ .value }}"
+          {{- end }}
           {{- end }}
           resources:
             {{- toYaml .Values.defaultBackend.resources | nindent 12 }}
