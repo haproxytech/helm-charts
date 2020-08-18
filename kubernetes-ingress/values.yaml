@@ -118,8 +118,10 @@ controller:
   podAnnotations: {}
   #  key: value
 
-  ## Ingress TLS secret, if enabled is true and secret is null then controller will use auto-generated secret otherwise provided secret is used
+  ## Ingress TLS secret, if it is enabled and secret is null then controller will use auto-generated secret, otherwise
+  ## secret needs to contain name of the Secret object which has been created manually
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## ref: https://kubernetes.io/docs/concepts/configuration/secret/
   defaultTLSSecret:
     enabled: true
     secret: null
