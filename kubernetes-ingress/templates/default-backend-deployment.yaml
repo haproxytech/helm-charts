@@ -57,6 +57,13 @@ spec:
             - name: http
               containerPort: {{ .Values.defaultBackend.containerPort }}
               protocol: TCP
+          {{- if .Values.defaultBackend.extraEnvs }}
+          env:
+          {{- range .Values.defaultBackend.extraEnvs }}
+          - name: "{{ .name }}"
+            value: "{{ .value }}"
+          {{- end }}
+          {{- end }}
           resources:
             {{- toYaml .Values.defaultBackend.resources | nindent 12 }}
       {{- with .Values.defaultBackend.nodeSelector }}

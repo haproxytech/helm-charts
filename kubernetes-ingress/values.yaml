@@ -306,6 +306,12 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   priorityClassName: ""
 
+  ## Set additional environment variables
+  extraEnvs: []
+    ## Set TZ env to configure timezone on controller containers
+    # - name: TZ
+    #   value: "Etc/UTC"
+
 
 ## Default 404 backend
 defaultBackend:
@@ -371,4 +377,9 @@ defaultBackend:
   ## Pod PriorityClass
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   priorityClassName: ""
-  
+
+  ## Set additional environment variables
+  extraEnvs: []
+    ## Set TZ env to configure timezone on controller containers
+    # - name: TZ
+    #   value: "Etc/UTC"
