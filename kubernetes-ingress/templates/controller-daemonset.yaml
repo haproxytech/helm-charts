@@ -56,6 +56,11 @@ spec:
       {{- if $useHostNetwork }}
       hostNetwork: true
       {{- end }}
+{{- if .Values.controller.dnsConfig }}
+      dnsConfig:
+{{ toYaml .Values.controller.dnsConfig | indent 8 }}
+{{- end }}
+      dnsPolicy: {{ .Values.controller.dnsPolicy }}
 {{- if .Values.controller.imageCredentials.registry }}
       imagePullSecrets:
       - name: {{ template "kubernetes-ingress.fullname" . }}
