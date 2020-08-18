@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */}}
 
+{{- if .Values.controller.service.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -97,4 +98,4 @@ spec:
 {{ toYaml .Values.controller.service.loadBalancerSourceRanges | indent 4 }}
 {{- end }}
 {{- end }}
-
+{{- end }}

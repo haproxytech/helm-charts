@@ -118,8 +118,10 @@ controller:
   podAnnotations: {}
   #  key: value
 
-  ## Ingress TLS secret, if enabled is true and secret is null then controller will use auto-generated secret otherwise provided secret is used
+  ## Ingress TLS secret, if it is enabled and secret is null then controller will use auto-generated secret, otherwise
+  ## secret needs to contain name of the Secret object which has been created manually
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## ref: https://kubernetes.io/docs/concepts/configuration/secret/
   defaultTLSSecret:
     enabled: true
     secret: null
@@ -149,6 +151,15 @@ controller:
   ## Node Affinity for pod-node scheduling constraints
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
+
+  ## Pod DNS Config
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  dnsConfig: {}
+
+  ## Pod DNS Policy
+  ## Change this to ClusterFirstWithHostNet in case you have useHostNetwork set to true
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+  dnsPolicy: ClusterFirst
 
   ## Additional command line arguments to pass to Controller
   ## ref: https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/controller.md
@@ -193,6 +204,8 @@ controller:
   ## Controller Service configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   service:
+    enabled: true     # set to false when controller.kind is 'DaemonSet' and controller.daemonset.useHostPorts is true
+
     type: NodePort    # can be 'NodePort' or 'LoadBalancer'
 
     ## Service annotations
@@ -274,7 +287,7 @@ controller:
   ## Controller DaemonSet configuration
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
   daemonset:
-    useHostNetwork: false
+    useHostNetwork: false  # also modify dnsPolicy accordingly
     useHostPort: false
     hostPorts:
       http: 80
@@ -289,11 +302,16 @@ controller:
   #    maxUnavailable: 25%
   #  type: RollingUpdate
 
-  ## Set additional env
+  ## Controller Pod PriorityClass
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ""
+
+  ## Set additional environment variables
   extraEnvs: []
     ## Set TZ env to configure timezone on controller containers
     # - name: TZ
     #   value: "Etc/UTC"
+
 
 ## Default 404 backend
 defaultBackend:
@@ -356,5 +374,12 @@ defaultBackend:
   serviceAccount:
     create: true
 
-  ## Set additional env 
+  ## Pod PriorityClass
+  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+  priorityClassName: ""
+
+  ## Set additional environment variables
   extraEnvs: []
+    ## Set TZ env to configure timezone on controller containers
+    # - name: TZ
+    #   value: "Etc/UTC"

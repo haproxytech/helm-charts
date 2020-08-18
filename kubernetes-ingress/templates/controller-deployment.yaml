@@ -52,9 +52,17 @@ spec:
       {{- end }}
     spec:
       serviceAccountName: {{ template "kubernetes-ingress.serviceAccountName" . }}
+{{- if .Values.controller.dnsConfig }}
+      dnsConfig:
+{{ toYaml .Values.controller.dnsConfig | indent 8 }}
+{{- end }}
+      dnsPolicy: {{ .Values.controller.dnsPolicy }}
 {{- if .Values.controller.imageCredentials.registry }}
       imagePullSecrets:
       - name: {{ template "kubernetes-ingress.fullname" . }}
+{{- end }}
+{{- if .Values.controller.priorityClassName }}
+      priorityClassName: {{ .Values.controller.priorityClassName }}
 {{- end }}
       containers:
         - name: {{ template "kubernetes-ingress.name" . }}-{{ .Values.controller.name }}
@@ -62,7 +70,7 @@ spec:
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
           args:
 {{- if .Values.controller.defaultTLSSecret.secret }}
-          - --default-ssl-certificate={{ .Values.controller.defaultTLSSecret.secret }}
+          - --default-ssl-certificate={{ .Release.Namespace }}/{{ .Values.controller.defaultTLSSecret.secret }}
 {{- else }}
           - --default-ssl-certificate={{ .Release.Namespace }}/{{ template "kubernetes-ingress.defaultTLSSecret.fullname" . }}
 {{- end }}
