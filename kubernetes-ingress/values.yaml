@@ -312,6 +312,21 @@ controller:
     # - name: TZ
     #   value: "Etc/UTC"
 
+  ## Add additional containers
+  extraContainers: []
+    ## Example sidecar
+    # - name: sidecar
+    #   image: alpine # alpine is a simple Linux OS image
+    #   command: ["/bin/sh"]
+    #   args: ["-c", "while true; do date; sleep 5;done"]
+
+  ## Volumes required by additional containers
+  extraVolumes: []
+    ## Example configmap
+    # - name: sidecar-config
+    #   configMap:
+    #     name: sidecar-config
+
 
 ## Default 404 backend
 defaultBackend:
