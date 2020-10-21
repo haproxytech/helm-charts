@@ -119,6 +119,16 @@ spec:
             periodSeconds: {{ .Values.controller.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.controller.readinessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.controller.readinessProbe.timeoutSeconds }}
+          startupProbe:
+            failureThreshold: {{ .Values.controller.startupProbe.failureThreshold }}
+            httpGet:
+              path: {{ .Values.controller.startupProbe.path }}
+              port: {{ .Values.controller.startupProbe.port }}
+              scheme: {{ .Values.controller.startupProbe.scheme }}
+            initialDelaySeconds: {{ .Values.controller.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.controller.startupProbe.periodSeconds }}
+            successThreshold: {{ .Values.controller.startupProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.controller.startupProbe.timeoutSeconds }}
           env:
           - name: POD_NAME
             valueFrom:
