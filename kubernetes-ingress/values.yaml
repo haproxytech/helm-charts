@@ -104,6 +104,16 @@ controller:
     successThreshold: 1
     timeoutSeconds: 1
 
+  startupProbe:
+    failureThreshold: 20
+    initialDelaySeconds: 0
+    path: /healthz
+    periodSeconds: 1
+    port: 1042
+    scheme: HTTP
+    successThreshold: 1
+    timeoutSeconds: 1
+
   ## Ingress Class used for ingress.class annotation in multi-ingress environments
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/#using-multiple-ingress-controllers
   ingressClass: null   # typically "haproxy" or null to receive all events
