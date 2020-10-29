@@ -96,7 +96,7 @@ spec:
           {{- end }}
           {{- range .Values.controller.service.tcpPorts }}
             - name: {{ .name }}-tcp
-              containerPort: {{ .port }}
+              containerPort: {{ .targetPort }}
               protocol: TCP
           {{- end }}
           livenessProbe:
