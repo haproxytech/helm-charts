@@ -85,7 +85,7 @@ main() {
         done
 
         if [[ "${release_pending}" == "yes" ]]; then
-            release_charts
+            release_charts || true
             update_index
         else
             echo "Nothing to do. No chart changes detected."
