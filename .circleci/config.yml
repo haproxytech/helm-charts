@@ -12,7 +12,7 @@ jobs:
             shellcheck -x .circleci/release.sh
   lint-charts:
     docker:
-      - image: quay.io/helmpack/chart-testing:v3.0.0-beta.1
+      - image: quay.io/helmpack/chart-testing:latest
     steps:
       - checkout
       - run:

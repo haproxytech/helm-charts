@@ -1,8 +1,6 @@
 #!/bin/bash
 
-set -o errexit
 set -o nounset
-set -o pipefail
 
 : "${CR_TOKEN:?Environment variable CR_TOKEN must be set}"
 : "${GIT_REPOSITORY_URL:?Environment variable GIT_REPOSITORY_URL must be set}"
@@ -46,7 +44,7 @@ update_index() {
 }
 
 main() {
-    pushd "${REPO_ROOT}" >/dev/null
+    pushd "${REPO_ROOT}" >/dev/null || exit 1
 
     echo "Fetching tags"
     git fetch --tags
@@ -85,7 +83,7 @@ main() {
         done
 
         if [[ "${release_pending}" == "yes" ]]; then
-            release_charts || true
+            release_charts
             update_index
         else
             echo "Nothing to do. No chart changes detected."
@@ -94,7 +92,7 @@ main() {
         echo "Nothing to do. No chart changes detected."
     fi
 
-    popd >/dev/null
+    popd >/dev/null || exit 1
 }
 
 main
