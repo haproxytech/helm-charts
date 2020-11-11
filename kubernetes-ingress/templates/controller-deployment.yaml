@@ -144,6 +144,21 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.controller.resources | nindent 12 }}
+        {{- if .Values.controller.extraContainers }}
+          {{- if eq "string" (printf "%T" .Values.controller.extraContainers) }}
+{{ tpl .Values.controller.extraContainers . | indent 8 }}
+          {{- else }}
+{{ toYaml .Values.controller.extraContainers | indent 8 }}
+          {{- end }}
+        {{- end }}
+      {{- if .Values.controller.extraVolumes }}
+      volumes:
+        {{- if eq "string" (printf "%T" .Values.controller.extraVolumes) }}
+{{ tpl .Values.controller.extraVolumes . | indent 8 }}
+        {{- else }}
+{{ toYaml .Values.controller.extraVolumes | indent 8 }}
+        {{- end }}
+      {{- end }}
       {{- with.Values.controller.initContainers }}
       initContainers:
         {{- toYaml . | nindent 8 }}
