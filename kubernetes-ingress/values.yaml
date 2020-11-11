@@ -53,7 +53,7 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
   kind: Deployment    # can be 'Deployment' or 'DaemonSet'
-  replicaCount: 2   # used only for Deployment mode. Unset if also using an HPA
+  replicaCount: 2   # used only for Deployment mode. Unset if also using HPA
 
   ## Init Containers
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/

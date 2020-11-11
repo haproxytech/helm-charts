@@ -172,7 +172,7 @@ helm upgrade my-release haproxytech/kubernetes-ingress
 To uninstall/delete the *my-release* deployment:
 
 ```console
-helm delete kubernetes-ingress
+helm delete my-release
 ```
 
 ## Debugging
