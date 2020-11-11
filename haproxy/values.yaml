@@ -55,6 +55,10 @@ initContainers: []
 #   securityContext:
 #     privileged: true
 
+## Pod termination grace period
+## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
+terminationGracePeriodSeconds: 60
+
 ## Private Registry configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imageCredentials:

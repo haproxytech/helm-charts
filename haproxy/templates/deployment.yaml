@@ -46,6 +46,7 @@ spec:
       {{- end }}
     spec:
       serviceAccountName: {{ include "haproxy.serviceAccountName" . }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
 {{- if .Values.dnsConfig }}

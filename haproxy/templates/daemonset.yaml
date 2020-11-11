@@ -47,6 +47,7 @@ spec:
       {{- end }}
     spec:
       serviceAccountName: {{ include "haproxy.serviceAccountName" . }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- if $useHostNetwork }}
       hostNetwork: true
       {{- end }}

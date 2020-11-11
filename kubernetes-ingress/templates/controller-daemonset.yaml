@@ -53,6 +53,7 @@ spec:
       {{- end }}
     spec:
       serviceAccountName: {{ template "kubernetes-ingress.serviceAccountName" . }}
+      terminationGracePeriodSeconds: {{ .Values.controller.terminationGracePeriodSeconds }}
       {{- if $useHostNetwork }}
       hostNetwork: true
       {{- end }}
