@@ -1,4 +1,4 @@
-# ![HAProxy](http://www.haproxy.org/img/HAProxyCommunityEdition_60px.png "HAProxy")
+# ![HAProxy](https://github.com/haproxytech/kubernetes-ingress/raw/master/assets/images/haproxy-weblogo-210x49.png "HAProxy")
 
 ## HAProxy Helm Chart
 
