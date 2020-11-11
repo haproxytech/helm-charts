@@ -27,4 +27,3 @@ maintainers:
   - name: Dinko Korunic
     email: dkorunic@haproxy.com
 appVersion: 2.2.4
-tillerVersion: ">=2.9.0"
