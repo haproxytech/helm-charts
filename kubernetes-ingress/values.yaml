@@ -320,6 +320,14 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   priorityClassName: ""
 
+  ## Controller container lifecycle handlers
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
+  lifecycle: {}
+    ## Example preStop for graceful shutdown
+    # preStop:
+    #   exec:
+    #     command: ["/bin/sh", "-c", "kill -USR1 $(pidof haproxy); while killall -0 haproxy; do sleep 1; done"]
+
   ## Set additional environment variables
   extraEnvs: []
     ## Set TZ env to configure timezone on controller containers
