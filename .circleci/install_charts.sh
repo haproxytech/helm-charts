@@ -44,10 +44,11 @@ create_kind_cluster() {
     kind create cluster --name "${CLUSTER_NAME}" --wait 5m -q
 
     echo "Copying kubeconfig to container"
-    sudo mkdir -p /root/.kube
-    kind get kubeconfig --name "${CLUSTER_NAME}" | sudo tee /root/.kube/config
+    local kubeconfig
+    kubeconfig="$(pwd)/kube-config"
+    kind get kubeconfig --name "${CLUSTER_NAME}" | tee "${kubeconfig}"
     docker_exec mkdir -p /root/.kube
-    docker cp /root/.kube/config ct:/root/.kube/config
+    docker cp "${kubeconfig}" ct:/root/.kube/config
 
     docker_exec kubectl cluster-info
     docker_exec kubectl get nodes
