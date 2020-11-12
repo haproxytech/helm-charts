@@ -14,13 +14,32 @@ Service ports mapped are:
 {{- end }}
 {{- if eq .Values.kind "DaemonSet" }}
 {{- $hostPorts := .Values.daemonset.hostPorts -}}
-{{- range $key, $value := .Values.containerPort }}
+{{- $useHostPort := .Values.daemonset.useHostPort -}}
+{{- range $key, $value := .Values.containerPorts }}
   - name: {{ $key }}
     containerPort: {{ $value }}
     protocol: TCP
+    {{- if $useHostPort }}
     hostPort: {{ index $hostPorts $key | default $value }}
+    {{- end }}
 {{- end }}
 {{- end }}
+
+To be able to bind to privileged ports as non-root, the following is required:
+
+securityContext:
+  enabled: true
+  runAsUser: 1000
+  runAsGroup: 1000
+initContainers:
+  - name: sysctl
+    image: "busybox:musl"
+    command:
+      - /bin/sh
+      - -c
+      - sysctl -w net.ipv4.ip_unprivileged_port_start=0
+    securityContext:
+      privileged: true
 
 Node IP can be found with:
   $ kubectl --namespace {{ .Release.Namespace }} get nodes -o jsonpath="{.items[0].status.addresses[1].address}"

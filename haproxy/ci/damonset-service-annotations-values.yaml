@@ -1,6 +1,0 @@
-kind: DaemonSet
-service:
-  type: LoadBalancer
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
-    service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0

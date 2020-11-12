@@ -32,16 +32,21 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
   name: {{ template "kubernetes-ingress.fullname" . }}
+  annotations:
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'docker/default,runtime/default'
+    apparmor.security.beta.kubernetes.io/allowedProfileNames: 'runtime/default'
+    seccomp.security.alpha.kubernetes.io/defaultProfileName:  'runtime/default'
+    apparmor.security.beta.kubernetes.io/defaultProfileName:  'runtime/default'
 spec:
   allowPrivilegeEscalation: false
   allowedCapabilities:
-  - NET_BIND_SERVICE
+    - NET_BIND_SERVICE
   defaultAllowPrivilegeEscalation: false
   fsGroup:
-    ranges:
-    - max: 65535
-      min: 1
     rule: MustRunAs
+    ranges:
+      - max: 65535
+        min: 1
 {{- if $useHostNetwork }}
   hostNetwork: true
 {{- end }}
@@ -64,12 +69,12 @@ spec:
   seLinux:
     rule: RunAsAny
   supplementalGroups:
-    ranges:
-    - max: 65535
-      min: 1
     rule: MustRunAs
+    ranges:
+      - max: 65535
+        min: 1
   volumes:
-  - configMap
-  - downwardAPI
-  - secret
+    - configMap
+    - downwardAPI
+    - secret
 {{- end }}

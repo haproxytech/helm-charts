@@ -124,17 +124,14 @@ config: |
     log stdout format raw local0
     daemon
     maxconn 1024
-
   defaults
     log global
     timeout client 60s
     timeout connect 60s
     timeout server 60s
-
   frontend fe_main
     bind :80
     default_backend be_main
-
   backend be_main
     server web1 10.0.0.1:8080 check
 service:
@@ -148,6 +145,52 @@ And invoking Helm becomes (compare to the previous example):
 
 ```console
 helm install my-haproxy5 -f mylb.yml haproxytech/haproxy
+```
+
+## Installing as non-root with binding to privileged ports
+
+To be able to bind to privileged ports such as tcp/80 and tcp/443 without root privileges (UID and GID are set to 1000 in the example, as HAProxy Docker image has UID/GID of 1000 reserved for HAProxy), there is a special workaround required as `NET_BIND_SERVICE` capability is [not propagated](https://github.com/kubernetes/kubernetes/issues/56374), so we need to use `initContainers` feature as well:
+
+```yaml
+kind: DaemonSet
+containerPorts:
+  http: 80
+  https: 443
+  stat: 1024
+daemonset:
+  useHostNetwork: true
+  useHostPort: true
+  hostPorts:
+    http: 80
+    https: 443
+    stat: 1024
+config: |
+  global
+    log stdout format raw local0
+    maxconn 1024
+  defaults
+    log global
+    timeout client 60s
+    timeout connect 60s
+    timeout server 60s
+  frontend fe_main
+    bind :80
+    default_backend be_main
+  backend be_main
+    server web1 127.0.0.1:8080 check
+securityContext:
+  enabled: true
+  runAsUser: 1000
+  runAsGroup: 1000
+initContainers:
+  - name: sysctl
+    image: "busybox:musl"
+    command:
+      - /bin/sh
+      - -c
+      - sysctl -w net.ipv4.ip_unprivileged_port_start=0
+    securityContext:
+      privileged: true
 ```
 
 ## Upgrading the chart

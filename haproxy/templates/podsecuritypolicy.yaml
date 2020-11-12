@@ -1,5 +1,5 @@
 {{/*
-Copyright 2019 HAProxy Technologies LLC
+Copyright 2020 HAProxy Technologies LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,40 +14,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */}}
 
-{{- if and .Values.rbac.create .Values.podSecurityPolicy.enabled }}
+{{- $useHostNetwork := .Values.daemonset.useHostNetwork -}}
+{{- $useHostPort := .Values.daemonset.useHostPort -}}
+{{- $hostPorts := .Values.daemonset.hostPorts -}}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
-{{- if .Values.podSecurityPolicy.annotations }}
-  annotations:
-{{ toYaml .Values.podSecurityPolicy.annotations | indent 4 }}
-{{- end }}
+  name: {{ include "haproxy.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
-    helm.sh/chart: {{ template "kubernetes-ingress.chart" . }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
-  name: {{ template "kubernetes-ingress.defaultBackend.fullname" . }}
+    {{- include "haproxy.labels" . | nindent 4 }}
   annotations:
     seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'docker/default,runtime/default'
     apparmor.security.beta.kubernetes.io/allowedProfileNames: 'runtime/default'
     seccomp.security.alpha.kubernetes.io/defaultProfileName:  'runtime/default'
     apparmor.security.beta.kubernetes.io/defaultProfileName:  'runtime/default'
 spec:
-  allowPrivilegeEscalation: false
+  allowPrivilegeEscalation: true    # to be able to use privileged containers for initContainers
   allowedCapabilities:
     - NET_BIND_SERVICE
-  defaultAllowPrivilegeEscalation: false
   fsGroup:
     rule: MustRunAs
     ranges:
       - max: 65535
         min: 1
-  hostNetwork: false
+{{- if $useHostNetwork }}
+  hostNetwork: true
+{{- end }}
+{{- if or $useHostPort $useHostNetwork }}
+  hostPorts:
+{{- range $key, $value := .Values.containerPorts }}
+  - min: {{ $value }}
+    max: {{ $value }}
+{{- end }}
+{{- end }}
   hostIPC: false
   hostPID: false
-  privileged: false
+  privileged: true
   runAsUser:
     rule: RunAsAny
   seLinux:
@@ -59,6 +61,6 @@ spec:
         min: 1
   volumes:
     - configMap
-    - downwardAPI
+    - emptyDir
+    - projected
     - secret
-{{- end }}

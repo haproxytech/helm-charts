@@ -59,12 +59,11 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   initContainers: []
   # - name: sysctl
-  #   image: "busybox:1.31.1-musl"
+  #   image: "busybox:musl"
   #   command:
-  #   - /bin/sh
-  #   - -xc
-  #   - |-
-  #     sysctl -w net.core.somaxconn=65536
+  #     - /bin/sh
+  #     - -c
+  #     - sysctl -w net.core.somaxconn=65536
   #   securityContext:
   #     privileged: true
 

@@ -46,12 +46,11 @@ daemonset:
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 initContainers: []
 # - name: sysctl
-#   image: "busybox:1.31.1-musl"
+#   image: "busybox:musl"
 #   command:
-#   - /bin/sh
-#   - -xc
-#   - |-
-#     sysctl -w net.core.somaxconn=65536
+#     - /bin/sh
+#     - -c
+#     - sysctl -w net.core.somaxconn=65536
 #   securityContext:
 #     privileged: true
 
@@ -90,7 +89,6 @@ priorityClassName: ""
 config: |
   global
     log stdout format raw local0
-    daemon
     maxconn 1024
 
   defaults
@@ -148,10 +146,10 @@ podSecurityContext: {}
 
 ## Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-securityContext: {}
-#  runAsUser: 1000
-#  runAsGroup: 3000
-#  fsGroup: 2000
+securityContext:
+  enabled: false
+  runAsUser: 1000
+  runAsGroup: 1000
 
 ## Compute Resources
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
