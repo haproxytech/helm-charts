@@ -151,6 +151,14 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.controller.resources | nindent 12 }}
+          {{- if .Values.controller.lifecycle }}
+          lifecycle:
+            {{- if eq "string" (printf "%T" .Values.controller.lifecycle) }}
+{{ tpl .Values.controller.lifecycle . | indent 12 }}
+            {{- else }}
+{{ toYaml .Values.controller.lifecycle | indent 12 }}
+            {{- end }}
+          {{- end }}
         {{- if .Values.controller.extraContainers }}
           {{- if eq "string" (printf "%T" .Values.controller.extraContainers) }}
 {{ tpl .Values.controller.extraContainers . | indent 8 }}
