@@ -3,6 +3,25 @@ entries:
   haproxy:
   - apiVersion: v1
     appVersion: 2.2.4
+    created: "2020-11-12T19:17:56.847986021Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: b68d3d830a05108fef431602c0a02eff8853a98da7d6c3e948c772cd60598da3
+    home: https://github.com/haproxytech/helm-charts/tree/master/haproxy
+    icon: http://www.haproxy.org/img/HAProxyCommunityEdition_60px.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.12.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.1.1/haproxy-1.1.1.tgz
+    version: 1.1.1
+  - apiVersion: v1
+    appVersion: 2.2.4
     created: "2020-11-11T20:09:13.537896797Z"
     description: A Helm chart for HAProxy on Kubernetes
     digest: 8cda8f7d1fe143f9dcd7382c9d909549a2abc039c8af8ef2c76ec0bb04faa744
@@ -40,6 +59,30 @@ entries:
     - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.0.1/haproxy-1.0.1.tgz
     version: 1.0.1
   kubernetes-ingress:
+  - apiVersion: v1
+    appVersion: 1.4.9
+    created: "2020-11-12T19:17:56.948298741Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 12f7e58a4503baa1218fe0a14536ce145c2a504a93f3d5d224f87ba4acbc7ac3
+    home: https://github.com/haproxytech/helm-charts/tree/master/kubernetes-ingress
+    icon: http://www.haproxy.org/img/HAProxyCommunityEdition_60px.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.12.0-0'
+    maintainers:
+    - email: mmhedhbi@haproxy.com
+      name: Moemen Mhedhbi
+    - email: bassmann@haproxy.com
+      name: Baptiste Assmann
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.8.1/kubernetes-ingress-1.8.1.tgz
+    version: 1.8.1
   - apiVersion: v1
     appVersion: 1.4.9
     created: "2020-11-11T20:09:13.665294501Z"
