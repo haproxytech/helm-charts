@@ -29,6 +29,9 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    {{- if .Values.controller.extraLabels }}
+{{ toYaml .Values.controller.extraLabels | indent 4 }}
+    {{- end }}
 spec:
   minReadySeconds: 0
   updateStrategy:

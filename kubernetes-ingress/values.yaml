@@ -121,6 +121,11 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/#using-multiple-ingress-controllers
   ingressClass: null   # typically "haproxy" or null to receive all events
 
+  ## Additional labels to add to the deployment or daemonset metadata
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  extraLabels: {}
+  #  key: value
+
   ## Additional labels to add to the pod container metadata
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   podLabels: {}
