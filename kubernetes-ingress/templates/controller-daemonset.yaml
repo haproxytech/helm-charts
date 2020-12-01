@@ -98,12 +98,16 @@ spec:
 {{- range .Values.controller.extraArgs }}
           - {{ . }}
 {{- end }}
+          {{- if .Values.controller.unprivileged }}
           securityContext:
+            runAsUser:  1000
+            runAsGroup: 1000
             capabilities:
               drop:
                 - ALL
               add:
                 - NET_BIND_SERVICE
+          {{- end }}
           ports:
           {{- range $key, $value := .Values.controller.containerPort }}
             - name: {{ $key }}
@@ -189,9 +193,21 @@ spec:
 {{ toYaml .Values.controller.extraVolumes | indent 8 }}
         {{- end }}
       {{- end }}
-      {{- with.Values.controller.initContainers }}
+      {{- if or .Values.controller.unprivileged .Values.controller.initContainers }}
       initContainers:
-        {{- toYaml . | nindent 8 }}
+        {{- if .Values.controller.unprivileged }}
+        - name: sysctl
+          image: busybox:musl
+          command:
+            - /bin/sh
+            - -c
+            - sysctl -w net.ipv4.ip_unprivileged_port_start=0
+          securityContext:
+            privileged: true
+        {{- end }}
+        {{- with.Values.controller.initContainers }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- end }}
       {{- with .Values.controller.nodeSelector }}
       nodeSelector:
