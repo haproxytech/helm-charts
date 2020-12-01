@@ -55,11 +55,9 @@ controller:
   kind: Deployment    # can be 'Deployment' or 'DaemonSet'
   replicaCount: 2   # used only for Deployment mode. Unset if also using HPA
 
-
   ## Running container without root privileges
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   unprivileged: false
-
 
   ## Init Containers
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
