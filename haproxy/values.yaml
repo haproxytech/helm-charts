@@ -157,6 +157,17 @@ resources:
 #  limits:
 #    cpu: 100m
 #    memory: 64Mi
+
+#If you need another volume. Including secrets to store certificates
+volumes:
+#  configMap:
+#    haproxy-config: haproxy-config
+  secrets:
+    certificate: certificate
+
+volumeMounts:
+  haproxy-config: /usr/local/etc/haproxy
+  certificate: /path/to/cert/
 requests:
   cpu: 100m
   memory: 64Mi
