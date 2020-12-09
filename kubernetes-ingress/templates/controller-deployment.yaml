@@ -30,7 +30,7 @@ metadata:
 {{ toYaml .Values.controller.extraLabels | indent 4 }}
     {{- end }}
 spec:
-  {{- if not ( kindIs "invalid" .Values.controller.replicaCount) }}
+  {{- if not .Values.controller.autoscaling.enabled }}
   replicas: {{ .Values.controller.replicaCount }}
   {{- end }}
   selector:

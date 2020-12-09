@@ -53,7 +53,7 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
   kind: Deployment    # can be 'Deployment' or 'DaemonSet'
-  replicaCount: 2   # used only for Deployment mode. Unset if also using HPA
+  replicaCount: 2
 
   ## Running container without root privileges
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
@@ -157,6 +157,16 @@ controller:
     requests:
       cpu: 100m
       memory: 64Mi
+
+  ## Horizontal Pod Scaler
+  ## Only to be used with Deployment kind
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 20
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
 
   ## Pod Node assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
@@ -361,7 +371,7 @@ controller:
 ## Default 404 backend
 defaultBackend:
   name: default-backend
-  replicaCount: 2    # unset if also using an HPA
+  replicaCount: 2
 
   image:
     repository: k8s.gcr.io/defaultbackend-amd64
@@ -378,6 +388,16 @@ defaultBackend:
     requests:
       cpu: 10m
       memory: 16Mi
+
+  ## Horizontal Pod Scaler
+  ## Only to be used with Deployment kind
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
 
   ## Listener port configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/

@@ -30,7 +30,7 @@ image:
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
 kind: Deployment    # can be 'Deployment' or 'DaemonSet'
-replicaCount: 1   # used only for Deployment mode. Unset if also using HPA
+replicaCount: 1   # used only for Deployment mode
 
 ## DaemonSet configuration
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
@@ -162,12 +162,12 @@ requests:
   memory: 64Mi
 
 ## Horizontal Pod Scaler
-## Only to be used with Deployment kind and make sure to unset replicaCount.
+## Only to be used with Deployment kind
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 autoscaling:
   enabled: false
   minReplicas: 1
-  maxReplicas: 100
+  maxReplicas: 7
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 

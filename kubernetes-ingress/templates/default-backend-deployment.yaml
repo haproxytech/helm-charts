@@ -26,7 +26,7 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
 spec:
-  {{- if not (kindIs "invalid" .Values.defaultBackend.replicaCount) }}
+  {{- if not .Values.defaultBackend.autoscaling.enabled }}
   replicas: {{ .Values.defaultBackend.replicaCount }}
   {{- end }}
   selector:

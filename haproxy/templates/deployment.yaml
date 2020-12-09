@@ -22,7 +22,7 @@ metadata:
   labels:
     {{- include "haproxy.labels" . | nindent 4 }}
 spec:
-  {{- if not ( kindIs "invalid" .Values.replicaCount) }}
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
