@@ -129,7 +129,7 @@ If you're using the [Prometheus Operator](https://github.com/prometheus-operator
 
 ```console
 helm install my-ingress5 haproxytech/kubernetes-ingress \
-  --set "serviceMonitor.enabled=true"
+  --set "controller.serviceMonitor.enabled=true"
 ```
 
 ### Using values from YAML file
