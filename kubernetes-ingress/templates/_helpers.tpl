@@ -120,4 +120,11 @@ Construct the syslog-server annotation
 {{- end -}}
 {{- end -}}
 
+{{/*
+Create a default fully qualified ServiceMonitor name.
+*/}}
+{{- define "kubernetes-ingress.serviceMonitorName" -}}
+{{- default (include "kubernetes-ingress.fullname" .) .Values.controller.serviceMonitor.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
 {{/* vim: set filetype=mustache: */}}

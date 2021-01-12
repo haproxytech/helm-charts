@@ -123,6 +123,15 @@ helm install my-ingress4 haproxytech/kubernetes-ingress \
   --set defaultBackend.replicaCount=null
 ```
 
+### Installing the ServiceMonitor
+
+If you're using the [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator), you can automatically install the `ServiceMonitor` definition in order to automate the scraping options according to your needs.
+
+```console
+helm install my-ingress5 haproxytech/kubernetes-ingress \
+  --set "serviceMonitor.enabled=true"
+```
+
 ### Using values from YAML file
 
 As opposed to using many `--set` invocations, much simpler approach is to define value overrides in a separate YAML file and specify them when invoking Helm:
