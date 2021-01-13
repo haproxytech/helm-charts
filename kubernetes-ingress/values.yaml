@@ -385,6 +385,7 @@ controller:
 
 ## Default 404 backend
 defaultBackend:
+  enabled: true
   name: default-backend
   replicaCount: 2
 

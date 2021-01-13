@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */}}
 
+{{- if .Values.defaultBackend.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -27,7 +28,7 @@ metadata:
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
 spec:
   type: ClusterIP
-  clusterIP: None 
+  clusterIP: None
   ports:
     - name: http
       port: {{ .Values.defaultBackend.service.port }}
@@ -36,3 +37,4 @@ spec:
   selector:
     app.kubernetes.io/name: {{ template "kubernetes-ingress.defaultBackend.fullname" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */}}
 
-{{- if .Values.defaultBackend.autoscaling.enabled }}
+{{- if and .Values.defaultBackend.autoscaling.enabled .Values.defaultBackend.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
