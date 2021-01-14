@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */}}
 
-{{- if and .Values.rbac.create .Values.podSecurityPolicy.enabled }}
+{{- if and .Values.rbac.create .Values.podSecurityPolicy.enabled .Values.defaultBackend.enabled }}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
