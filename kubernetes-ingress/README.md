@@ -14,8 +14,8 @@ This chart bootstraps an HAProxy kubernetes-ingress deployment/daemonset on a [K
 
 ### Prerequisites
 
-  - Kubernetes 1.12+
-  - Helm 2.9+
+- Kubernetes 1.12+
+- Helm 2.9+
 
 ## Before you begin
 
@@ -111,9 +111,9 @@ helm install my-ingress3 haproxytech/kubernetes-ingress \
   --set controller.service.annotations."service\.beta\.kubernetes\.io/aws-load-balancer-cross-zone-load-balancing-enabled"="true"
 ```
 
-***NOTE***: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string. 
+***NOTE***: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string.
 
-### Installing with Horizontal Pod Autoscaler 
+### Installing with Horizontal Pod Autoscaler
 
 [HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) automatically scales number of replicas in Deployment or Replication Controller and adjusts replica count. Therefore we want to unset default replicaCount for controller and defaultBackend by setting corresponding key values to null:
 

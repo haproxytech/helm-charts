@@ -360,12 +360,25 @@ controller:
     #   command: ["/bin/sh"]
     #   args: ["-c", "while true; do date; sleep 5;done"]
 
-  ## Volumes required by additional containers
+  ## Additional volumeMounts to the controller main container
+  extraVolumeMounts: []
+    ## Example empty volume mounts when using securityContext->readOnlyRootFilesystem
+    # - name: etc-haproxy
+    #   mountPath: /etc/haproxy
+    # - name: tmp
+    #   mountPath: /tmp
+    # - name: var-state-haproxy
+    #   mountPath: /var/state/haproxy
+
+  ## Additional volumes to the controller pod
   extraVolumes: []
-    ## Example configmap
-    # - name: sidecar-config
-    #   configMap:
-    #     name: sidecar-config
+    ## Example empty volumes when using securityContext->readOnlyRootFilesystem
+    # - name: etc-haproxy
+    #   emptyDir: {}
+    # - name: tmp
+    #   emptyDir: {}
+    # - name: var-state-haproxy
+    #   emptyDir: {}
 
   ## ServiceMonitor
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/getting-started.md

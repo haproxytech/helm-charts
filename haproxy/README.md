@@ -8,8 +8,8 @@ This chart bootstraps an HAProxy load balancer as deployment/daemonset on a [Kub
 
 ### Prerequisites
 
-  - Kubernetes 1.12+
-  - Helm 2.9+
+- Kubernetes 1.12+
+- Helm 2.9+
 
 ## Before you begin
 
@@ -81,7 +81,7 @@ helm install my-haproxy2 haproxytech/haproxy \
   --set kind=DaemonSet
 ```
 
-***NOTE***: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string. 
+***NOTE***: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string.
 
 ### Installing with Horizontal Pod Autoscaler
 
