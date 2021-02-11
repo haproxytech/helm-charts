@@ -72,8 +72,7 @@ helm install my-haproxy haproxytech/haproxy  \
   --set imageCredentials.password=MYPASSWORD
 ```
 
-Alternatively, use a pre-configured (existing) imagePullSecret in the same namespace
-
+Alternatively, use a pre-configured (existing) imagePullSecret in the same namespace:
 
 ```console
 helm install my-ingress haproxytech/haproxy  \
@@ -81,7 +80,6 @@ helm install my-ingress haproxytech/haproxy  \
   --set image.tag=SOMETAG \
   --set existingImagePullSecret name-of-existing-image-pull-secret
 ```
-
 
 ### Installing as DaemonSet
 
