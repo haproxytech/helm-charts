@@ -79,7 +79,7 @@ Alternatively, use a pre-configured (existing) imagePullSecret in the same names
 helm install my-ingress haproxytech/haproxy  \
   --namespace prod \
   --set image.tag=SOMETAG \
-  --set eexistingImagePullSecret name-of-existing-image-pull-secret
+  --set existingImagePullSecret name-of-existing-image-pull-secret
 ```
 
 
