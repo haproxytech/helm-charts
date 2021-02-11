@@ -84,7 +84,7 @@ Alternatively, use a pre-configured (existing) imagePullSecret in the same names
 helm install my-ingress haproxytech/kubernetes-ingress  \
   --namespace prod \
   --set controller.image.tag=SOMETAG \
-  --set controller.eexistingImagePullSecret name-of-existing-image-pull-secret
+  --set controller.existingImagePullSecret name-of-existing-image-pull-secret
 ```
 
 ### Installing as DaemonSet
