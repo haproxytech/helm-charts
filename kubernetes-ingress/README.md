@@ -77,8 +77,7 @@ helm install my-ingress haproxytech/kubernetes-ingress  \
   --set controller.imageCredentials.password=MYPASSWORD
 ```
 
-Alternatively, use a pre-configured (existing) imagePullSecret in the same namespace
-
+Alternatively, use a pre-configured (existing) imagePullSecret in the same namespace:
 
 ```console
 helm install my-ingress haproxytech/kubernetes-ingress  \
