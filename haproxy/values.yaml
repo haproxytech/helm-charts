@@ -64,6 +64,7 @@ imageCredentials:
   registry: null    ## EE images require setting this
   username: null    ## EE images require setting this
   password: null    ## EE images require setting this
+existingImagePullSecret: null
 
 ## Container listener port configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/

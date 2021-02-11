@@ -72,6 +72,15 @@ helm install my-haproxy haproxytech/haproxy  \
   --set imageCredentials.password=MYPASSWORD
 ```
 
+Alternatively, use a pre-configured (existing) imagePullSecret in the same namespace:
+
+```console
+helm install my-ingress haproxytech/haproxy  \
+  --namespace prod \
+  --set image.tag=SOMETAG \
+  --set existingImagePullSecret name-of-existing-image-pull-secret
+```
+
 ### Installing as DaemonSet
 
 Default image mode is [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/), but it is possible to use [DaemonSet](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/) as well:
