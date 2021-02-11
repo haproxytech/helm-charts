@@ -81,6 +81,7 @@ controller:
     registry: null
     username: null
     password: null
+  existingImagePullSecret: null
 
   ## Controller Container listener port configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/

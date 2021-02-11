@@ -64,6 +64,9 @@ spec:
 {{- if .Values.controller.imageCredentials.registry }}
       imagePullSecrets:
       - name: {{ template "kubernetes-ingress.fullname" . }}
+{{- else if .Values.controller.existingImagePullSecret }}
+      imagePullSecrets:
+      - name: {{ .Values.controller.existingImagePullSecret }}
 {{- end }}
 {{- if .Values.controller.priorityClassName }}
       priorityClassName: {{ .Values.controller.priorityClassName }}
