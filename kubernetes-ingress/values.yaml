@@ -171,8 +171,9 @@ controller:
 
   ## Pod Disruption Budget
   ## Only to be used with Deployment kind
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   PodDisruptionBudget:
-    enable: true
+    enable: false
     # maxUnavailable: 1
     # minAvailable: 1
 
