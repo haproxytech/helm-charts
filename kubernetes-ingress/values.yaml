@@ -169,6 +169,13 @@ controller:
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
 
+  ## Pod Disruption Budget
+  ## Only to be used with Deployment kind
+  PodDisruptionBudget:
+    enable: true
+    # maxUnavailable: 1
+    # minAvailable: 1
+
   ## Pod Node assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
   nodeSelector: {}
