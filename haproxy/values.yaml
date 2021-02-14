@@ -174,9 +174,10 @@ autoscaling:
 
 ## Pod Disruption Budget
 ## Only to be used with Deployment kind
+## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
 PodDisruptionBudget:
-  enable: true
-  maxUnavailable: 1
+  enable: false
+  # maxUnavailable: 1
   # minAvailable: 1
 
 ## Service configuration
