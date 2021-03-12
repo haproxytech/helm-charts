@@ -70,7 +70,7 @@ main() {
     echo "Identifying changed charts since tag ${latest_tag}"
 
     local changed_charts=()
-    readarray -t changed_charts <<< "$(git diff --find-renames --name-only "${latest_tag_rev}" | grep '\.yaml$' | cut -d '/' -f 1 | sort -u)"
+    readarray -t changed_charts <<< "$(git diff --find-renames --name-only "${latest_tag_rev}" | grep 'Chart.yaml$' | cut -d '/' -f 1 | sort -u)"
 
     if [[ -n "${changed_charts[*]}" ]]; then
         local release_pending=no
