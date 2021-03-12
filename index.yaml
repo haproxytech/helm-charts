@@ -2,6 +2,25 @@ apiVersion: v1
 entries:
   haproxy:
   - apiVersion: v1
+    appVersion: 2.3.6
+    created: "2021-03-12T16:23:40.246838938Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: cdedf73423db7c46510801a8390e4695eb59b0e10d7086ab592d40a24fa2b420
+    home: https://github.com/haproxytech/helm-charts/tree/master/haproxy
+    icon: http://www.haproxy.org/img/HAProxyCommunityEdition_60px.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.12.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.1.4/haproxy-1.1.4.tgz
+    version: 1.1.4
+  - apiVersion: v1
     appVersion: 2.3.4
     created: "2021-01-21T13:09:42.041771113Z"
     description: A Helm chart for HAProxy on Kubernetes
@@ -97,6 +116,30 @@ entries:
     - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.0.1/haproxy-1.0.1.tgz
     version: 1.0.1
   kubernetes-ingress:
+  - apiVersion: v1
+    appVersion: 1.5.3
+    created: "2021-03-12T16:23:40.337665907Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 4237843b7817922c703b60f4f86358a0ac39088bf4be380886ffafea3522a41b
+    home: https://github.com/haproxytech/helm-charts/tree/master/kubernetes-ingress
+    icon: http://www.haproxy.org/img/HAProxyCommunityEdition_60px.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.12.0-0'
+    maintainers:
+    - email: mmhedhbi@haproxy.com
+      name: Moemen Mhedhbi
+    - email: bassmann@haproxy.com
+      name: Baptiste Assmann
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.12.3/kubernetes-ingress-1.12.3.tgz
+    version: 1.12.3
   - apiVersion: v1
     appVersion: 1.5.1
     created: "2021-02-11T15:43:07.182949938Z"
