@@ -141,6 +141,11 @@ podAnnotations: {}
 #  key: value
 #
 
+## Disableable use of Pod Security Policy
+## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+podSecurityPolicy: 
+  create: true
+
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 podSecurityContext: {}
