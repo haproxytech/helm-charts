@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */}}
 
+{{- if .Values.podSecurityPolicy.create -}}
 {{- $useHostNetwork := .Values.daemonset.useHostNetwork -}}
 {{- $useHostPort := .Values.daemonset.useHostPort -}}
 {{- $hostPorts := .Values.daemonset.hostPorts -}}
@@ -64,3 +65,4 @@ spec:
     - emptyDir
     - projected
     - secret
+{{- end }}
