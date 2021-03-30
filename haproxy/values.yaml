@@ -163,9 +163,9 @@ resources:
 #  limits:
 #    cpu: 100m
 #    memory: 64Mi
-requests:
-  cpu: 100m
-  memory: 64Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi
 
 ## Horizontal Pod Scaler
 ## Only to be used with Deployment kind
