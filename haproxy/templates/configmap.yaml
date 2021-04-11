@@ -25,3 +25,15 @@ data:
   haproxy.cfg: |
   {{ .Values.config | nindent 4 }}
 {{- end }}
+
+{{- if .Values.includes }}
+{{- range $key, $val := .Values.includes }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $key }}
+data:
+  {{ $key }}: | {{ $val | nindent 4 }}
+{{- end }}
+{{- end }}

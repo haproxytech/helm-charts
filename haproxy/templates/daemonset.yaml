@@ -46,6 +46,7 @@ spec:
 {{ toYaml .Values.podAnnotations | indent 8 }}
       {{- end }}
     spec:
+      shareProcessNamespace: true
       serviceAccountName: {{ include "haproxy.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- if $useHostNetwork }}
@@ -70,9 +71,36 @@ spec:
 {{- end }}
       volumes:
         - name: haproxy-config
-          configMap:
-            name: {{ include "haproxy.fullname" . }}
+          projected:
+            sources:
+            - configMap:
+                name: {{ include "haproxy.fullname" . }}
+            {{- if .Values.includes }}
+            {{- range $key, $val := .Values.includes }}
+            - configMap:
+                name: {{ $key }}
+            {{- end }}
+            {{- end }}
       containers:
+        - name: reflex
+          image: acim/go-reflex:1.16.3
+          command: ["reflex", "-d", "fancy"] 
+          workingDir: /usr/local/etc/haproxy
+          args:
+            - -svr 
+            - '..data'
+            - --
+            - sh
+            - -c
+            - "pkill -SIGUSR2 hapee-lb"
+          ports: 
+            - name: tcp
+              containerPort: 3000
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: haproxy-config
+              mountPath: /usr/local/etc/haproxy
         - name: {{ .Chart.Name }}
           {{- if .Values.securityContext.enabled }}
           securityContext:

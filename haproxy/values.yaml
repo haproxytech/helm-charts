@@ -105,6 +105,22 @@ config: |
   backend be_main
     server web1 10.0.0.1:8080 check
 
+includes:
+  routes.map: |
+    www.example.com/v1     www.example2.com/v2
+    api.example.com/v1     api.example2.com/v2
+    static.example.com/v1  static.example2.com/v2
+
+  200.http: |
+    HTTP/1.1 200 OK
+    Cache-Control: no-cache
+    Connection: close
+    Content-Type: text/html
+
+    <html><body><h1>200 OK</h1>
+    Check passed.
+    </body></html>
+
 ## Pod Node assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
 nodeSelector: {}
