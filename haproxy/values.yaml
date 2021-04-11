@@ -193,6 +193,23 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
+livenessProbe:
+  failureThreshold: 5
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+  port: 1024
+readinessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 1
+  port: 1024
+
+healthCheckPath: "/metrics"
+
 ## Pod Disruption Budget
 ## Only to be used with Deployment kind
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
