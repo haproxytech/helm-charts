@@ -56,6 +56,10 @@ spec:
     spec:
       serviceAccountName: {{ template "kubernetes-ingress.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.controller.terminationGracePeriodSeconds }}
+{{- with .Values.controller.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+{{- end }}
 {{- if .Values.controller.dnsConfig }}
       dnsConfig:
 {{ toYaml .Values.controller.dnsConfig | indent 8 }}
