@@ -201,7 +201,8 @@ controller:
   #   whenUnsatisfiable: DoNotSchedule
   #   labelSelector:
   #     matchLabels:
-  #       app: foo
+  #       app.kubernetes.io/name: kubernetes-ingress
+  #       app.kubernetes.io/instance: kubernetes-ingress
 
   ## Pod DNS Config
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
@@ -475,7 +476,8 @@ defaultBackend:
   #   whenUnsatisfiable: DoNotSchedule
   #   labelSelector:
   #     matchLabels:
-  #       app: foo
+  #       app.kubernetes.io/name: kubernetes-ingress-kubernetes-ingress-default-backend
+  #       app.kubernetes.io/instance: haproxy-ingress
 
   ## Additional labels to add to the pod container metadata
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
