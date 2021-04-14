@@ -193,6 +193,17 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
 
+  ## Topology spread constraints (only used in kind: Deployment)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: kubernetes.io/zone
+  #   whenUnsatisfiable: DoNotSchedule
+  #   labelSelector:
+  #     matchLabels:
+  #       app.kubernetes.io/name: kubernetes-ingress
+  #       app.kubernetes.io/instance: kubernetes-ingress
+
   ## Pod DNS Config
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
   dnsConfig: {}
@@ -456,6 +467,17 @@ defaultBackend:
   ## Node Affinity for pod-node scheduling constraints
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
+
+  ## Topology spread constraints
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: kubernetes.io/zone
+  #   whenUnsatisfiable: DoNotSchedule
+  #   labelSelector:
+  #     matchLabels:
+  #       app.kubernetes.io/name: kubernetes-ingress-kubernetes-ingress-default-backend
+  #       app.kubernetes.io/instance: haproxy-ingress
 
   ## Additional labels to add to the pod container metadata
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/

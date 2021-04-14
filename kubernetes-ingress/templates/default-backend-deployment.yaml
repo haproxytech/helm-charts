@@ -47,6 +47,10 @@ spec:
 {{ toYaml .Values.defaultBackend.podAnnotations | indent 8 }}
       {{- end }}
     spec:
+{{- with .Values.defaultBackend.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+{{- end }}
 {{- if .Values.controller.priorityClassName }}
       priorityClassName: {{ .Values.controller.priorityClassName }}
 {{- end }}
