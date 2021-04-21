@@ -147,6 +147,7 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/configuration/secret/
   defaultTLSSecret:
     enabled: true
+    secretNamespace: "{{ .Release.Namespace }}"
     secret: null
 
   ## Compute Resources for controller container
