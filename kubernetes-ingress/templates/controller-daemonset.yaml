@@ -81,8 +81,8 @@ spec:
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
           args:
 {{- if and .Values.controller.defaultTLSSecret.enabled -}}
-{{- if .Values.controller.defaultTLSSecret.secret }}
-          - --default-ssl-certificate={{ .Release.Namespace }}/{{ .Values.controller.defaultTLSSecret.secret }}
+{{- if and .Values.controller.defaultTLSSecret.secret .Values.controller.defaultTLSSecret.secretNamespace }}
+          - --default-ssl-certificate={{ .Values.controller.defaultTLSSecret.secretNamespace }}/{{ .Values.controller.defaultTLSSecret.secret }}
 {{- else }}
           - --default-ssl-certificate={{ .Release.Namespace }}/{{ template "kubernetes-ingress.defaultTLSSecret.fullname" . }}
 {{- end }}
