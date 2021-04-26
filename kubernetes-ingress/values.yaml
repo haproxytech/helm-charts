@@ -248,7 +248,7 @@ controller:
   ## Mirrors the address of the service's endpoints to the
   ## load-balancer status of all Ingress objects it satisfies.
   publishService:
-    enabled: false
+    enabled: true
     ##
     ## Override of the publish service
     ## Must be <namespace>/<service_name>
