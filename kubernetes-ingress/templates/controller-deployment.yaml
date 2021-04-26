@@ -80,7 +80,7 @@ spec:
           image: "{{ .Values.controller.image.repository }}:{{ tpl .Values.controller.image.tag . }}"
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
           args:
-{{- if and .Values.controller.defaultTLSSecret.enabled -}}
+{{- if .Values.controller.defaultTLSSecret.enabled -}}
 {{- if and .Values.controller.defaultTLSSecret.secret .Values.controller.defaultTLSSecret.secretNamespace }}
           - --default-ssl-certificate={{ .Values.controller.defaultTLSSecret.secretNamespace }}/{{ .Values.controller.defaultTLSSecret.secret }}
 {{- else }}
@@ -124,6 +124,7 @@ spec:
               containerPort: {{ .targetPort }}
               protocol: TCP
           {{- end }}
+          {{- if .Values.controller.livenessProbe.enabled }}
           livenessProbe:
             failureThreshold: {{ .Values.controller.livenessProbe.failureThreshold }}
             httpGet:
@@ -134,6 +135,8 @@ spec:
             periodSeconds: {{ .Values.controller.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.controller.livenessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.controller.livenessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- if .Values.controller.readinessProbe.enabled }}
           readinessProbe:
             failureThreshold: {{ .Values.controller.readinessProbe.failureThreshold }}
             httpGet:
@@ -144,6 +147,8 @@ spec:
             periodSeconds: {{ .Values.controller.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.controller.readinessProbe.successThreshold }}
             timeoutSeconds: {{ .Values.controller.readinessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- if .Values.controller.startupProbe.enabled }}
           startupProbe:
             failureThreshold: {{ .Values.controller.startupProbe.failureThreshold }}
             httpGet:
@@ -154,6 +159,7 @@ spec:
             periodSeconds: {{ .Values.controller.startupProbe.periodSeconds }}
             successThreshold: {{ .Values.controller.startupProbe.successThreshold }}
             timeoutSeconds: {{ .Values.controller.startupProbe.timeoutSeconds }}
+          {{- end }}
           env:
           - name: POD_NAME
             valueFrom:

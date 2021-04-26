@@ -93,6 +93,7 @@ controller:
   ## Controller Container liveness/readiness probe configuration
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
   livenessProbe:
+    enabled: true
     failureThreshold: 3
     initialDelaySeconds: 0
     path: /healthz
@@ -103,6 +104,7 @@ controller:
     timeoutSeconds: 1
 
   readinessProbe:
+    enabled: true
     failureThreshold: 3
     initialDelaySeconds: 0
     path: /healthz
@@ -113,6 +115,7 @@ controller:
     timeoutSeconds: 1
 
   startupProbe:
+    enabled: true
     failureThreshold: 20
     initialDelaySeconds: 0
     path: /healthz
