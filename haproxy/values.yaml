@@ -101,7 +101,22 @@ config: |
   frontend fe_main
     bind :80
     default_backend be_main
+  
+  # https://www.haproxy.com/documentation/hapee/2-2r1/observability/metrics/prometheus/
+  frontend stats
+    bind *:1024
+    no log
+    option http-use-htx
+    http-request use-service prometheus-exporter if { path /metrics }
+    stats enable
+    stats uri /stats
+    stats refresh 10s
+    use_backend ok if { path /health }
 
+  backend ok
+    errorfile 503 /usr/local/etc/haproxy/200.http
+    no log
+    
   backend be_main
     server web1 10.0.0.1:8080 check
 
@@ -120,6 +135,11 @@ includes:
     <html><body><h1>200 OK</h1>
     Check passed.
     </body></html>
+
+# Reflex tag image
+# https://github.com/cespare/reflex
+# https://hub.docker.com/r/acim/go-reflex
+reflex_image: 1.16.3
 
 ## Pod Node assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
@@ -193,6 +213,9 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
+## Liveness,readiness and startup probe values
+## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
 livenessProbe:
   failureThreshold: 5
   initialDelaySeconds: 10
@@ -215,7 +238,7 @@ startupProbe:
   timeoutSeconds: 1
   port: 1024
 
-healthCheckPath: "/metrics"
+healthCheckPath: "/health"
 
 ## Pod Disruption Budget
 ## Only to be used with Deployment kind

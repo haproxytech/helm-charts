@@ -27,13 +27,13 @@ data:
 {{- end }}
 
 {{- if .Values.includes }}
-{{- range $key, $val := .Values.includes }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $key }}
+  name: includes
 data:
+{{- range $key, $val := .Values.includes }}
   {{ $key }}: | {{ $val | nindent 4 }}
 {{- end }}
 {{- end }}

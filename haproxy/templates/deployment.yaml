@@ -41,7 +41,7 @@ spec:
         {{- end }}
       {{- if .Values.podAnnotations }}
       annotations:
-        checksum/environment: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        # checksum/environment: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
 {{ toYaml .Values.podAnnotations | indent 8 }}
       {{- end }}
     spec:
@@ -72,23 +72,21 @@ spec:
             - configMap:
                 name: {{ include "haproxy.fullname" . }}
             {{- if .Values.includes }}
-            {{- range $key, $val := .Values.includes }}
             - configMap:
-                name: {{ $key }}
-            {{- end }}
+                name: includes
             {{- end }}
       containers:
         - name: reflex
-          image: acim/go-reflex:1.16.3
+          image: acim/go-reflex:{{ .Values.reflex_image }}
           command: ["reflex", "-d", "fancy"] 
           workingDir: /usr/local/etc/haproxy
           args:
             - -svr 
             - '..data'
             - --
-            - sh
+            - bash
             - -c
-            - "pkill -SIGUSR2 hapee-lb"
+            - 'pkill -SIGUSR2 "haproxy|hapee-lb"'
           ports: 
             - name: tcp
               containerPort: 3000
