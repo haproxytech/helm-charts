@@ -173,6 +173,14 @@ controller:
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
 
+    ## Custom metrics (example)
+    ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/#autoscaling-on-multiple-metrics-and-custom-metrics
+    # custom:
+    #   - type: Pods
+    #     pods:
+    #       metricName: haproxy_backend_current_sessions
+    #       targetAverageValue: 2000
+
   ## Pod Disruption Budget
   ## Only to be used with Deployment kind
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -451,6 +459,14 @@ defaultBackend:
     maxReplicas: 2
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
+
+    ## Custom metrics (example)
+    ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/#autoscaling-on-multiple-metrics-and-custom-metrics
+    # custom:
+    #   - type: Pods
+    #     pods:
+    #       metricName: haproxy_backend_current_sessions
+    #       targetAverageValue: 2000
 
   ## Listener port configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/
