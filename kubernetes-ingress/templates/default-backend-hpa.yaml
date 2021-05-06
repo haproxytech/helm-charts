@@ -46,4 +46,7 @@ spec:
         name: memory
         targetAverageUtilization: {{ .Values.defaultBackend.autoscaling.targetMemoryUtilizationPercentage }}
   {{- end }}
+  {{- if .Values.defaultBackend.autoscaling.custom }}
+  {{- toYaml .Values.defaultBackend.autoscaling.custom | nindent 4 }}
+  {{- end }}
 {{- end }}
