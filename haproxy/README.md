@@ -156,6 +156,42 @@ And invoking Helm becomes (compare to the previous example):
 helm install my-haproxy5 -f mylb.yml haproxytech/haproxy
 ```
 
+### Using secrets in additional volume mounts
+
+In order to e.g. support SSL certificates, you can mount additional volumes from secrets:
+
+*mylb.yaml*:
+
+```yaml
+service:
+  type: LoadBalancer
+config: |
+  global
+    log stdout format raw local0
+    daemon
+    maxconn 1024
+  defaults
+    log global
+    timeout client 60s
+    timeout connect 60s
+    timeout server 60s
+  frontend fe_main
+    mode http
+    bind :80
+    bind :443 ssl crt /usr/local/etc/ssl/tls.crt
+    http-request redirect scheme https code 301 unless { ssl_fc }
+    default_backend be_main
+  backend be_main
+    mode http
+    server web1 10.0.0.1:8080 check
+mountedSecrets:
+  - volumeName: ssl-certificate
+    secretName: star-example-com
+    mountPath: /usr/local/etc/ssl
+```
+
+The above example assumes that there is a certificate in key `tls.crt` of a secret called `star-example-com`.
+
 ## Installing as non-root with binding to privileged ports
 
 To be able to bind to privileged ports such as tcp/80 and tcp/443 without root privileges (UID and GID are set to 1000 in the example, as HAProxy Docker image has UID/GID of 1000 reserved for HAProxy), there is a special workaround required as `NET_BIND_SERVICE` capability is [not propagated](https://github.com/kubernetes/kubernetes/issues/56374), so we need to use `initContainers` feature as well:

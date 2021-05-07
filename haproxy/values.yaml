@@ -105,6 +105,13 @@ config: |
   backend be_main
     server web1 10.0.0.1:8080 check
 
+## Additional secrets to mount as volumes
+## This is expected to be an array of dictionaries specifying the volume name, secret name and mount path
+mountedSecrets: []
+#  - volumeName: ssl-certificate
+#    secretName: star-example-com
+#    mountPath: /usr/local/etc/ssl
+
 ## Pod Node assignment
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
 nodeSelector: {}
