@@ -131,6 +131,9 @@ spec:
               path: {{ .Values.controller.livenessProbe.path }}
               port: {{ .Values.controller.livenessProbe.port }}
               scheme: {{ .Values.controller.livenessProbe.scheme }}
+              {{- if .Values.controller.livenessProbe.httpHeaders }}
+              httpHeaders: {{ toYaml .Values.controller.livenessProbe.httpHeaders | nindent 16 }}
+              {{- end }}
             initialDelaySeconds: {{ .Values.controller.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.controller.livenessProbe.periodSeconds }}
             successThreshold: {{ .Values.controller.livenessProbe.successThreshold }}
@@ -143,6 +146,9 @@ spec:
               path: {{ .Values.controller.readinessProbe.path }}
               port: {{ .Values.controller.readinessProbe.port }}
               scheme: {{ .Values.controller.readinessProbe.scheme }}
+              {{- if .Values.controller.readinessProbe.httpHeaders }}
+              httpHeaders: {{ toYaml .Values.controller.readinessProbe.httpHeaders | nindent 16 }}
+              {{- end }}
             initialDelaySeconds: {{ .Values.controller.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.controller.readinessProbe.periodSeconds }}
             successThreshold: {{ .Values.controller.readinessProbe.successThreshold }}
@@ -155,6 +161,9 @@ spec:
               path: {{ .Values.controller.startupProbe.path }}
               port: {{ .Values.controller.startupProbe.port }}
               scheme: {{ .Values.controller.startupProbe.scheme }}
+              {{- if .Values.controller.startupProbe.httpHeaders }}
+              httpHeaders: {{ toYaml .Values.controller.startupProbe.httpHeaders | nindent 16 }}
+              {{- end }}
             initialDelaySeconds: {{ .Values.controller.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.controller.startupProbe.periodSeconds }}
             successThreshold: {{ .Values.controller.startupProbe.successThreshold }}
