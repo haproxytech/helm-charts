@@ -179,7 +179,7 @@ spec:
               fieldRef:
                 fieldPath: metadata.namespace
           {{- if .Values.controller.extraEnvs -}}
-            {{- toYaml .Values.controller.extraEnvs | nindent 12 }}
+          {{- toYaml .Values.controller.extraEnvs | nindent 10 }}
           {{- end }}
           resources:
             {{- toYaml .Values.controller.resources | nindent 12 }}
