@@ -179,15 +179,7 @@ spec:
               fieldRef:
                 fieldPath: metadata.namespace
           {{- if .Values.controller.extraEnvs -}}
-          {{- toYaml .Values.controller.extraEnvs | nindent 10 }}
-{{/*      {{- range .Values.controller.extraEnvs }}*/}}
-{{/*      - name: {{ .name }}*/}}
-{{/*        {{- if hasKey . "value" }}*/}}
-{{/*        value: {{ .value }}*/}}
-{{/*        {{- else if hasKey . "valueFrom" }}*/}}
-{{/*        valueFrom: {{- toYaml .valueFrom | nindent 14 }}*/}}
-{{/*        {{- end }}*/}}
-{{/*      {{- end }}*/}}
+            {{- toYaml .Values.controller.extraEnvs | nindent 12 }}
           {{- end }}
           resources:
             {{- toYaml .Values.controller.resources | nindent 12 }}
