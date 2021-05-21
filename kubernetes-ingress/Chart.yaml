@@ -14,13 +14,13 @@
 
 apiVersion: v1
 name: kubernetes-ingress
-version: 1.15.0
+version: 1.15.1
 kubeVersion: ">=1.12.0-0"
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 keywords:
   - ingress
   - haproxy
-home: https://github.com/haproxytech/helm-charts/tree/master/kubernetes-ingress
+home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
 sources:
   - https://github.com/haproxytech/kubernetes-ingress
 icon: http://www.haproxy.org/img/HAProxyCommunityEdition_60px.png
@@ -31,4 +31,4 @@ maintainers:
     email: bassmann@haproxy.com
   - name: Dinko Korunic
     email: dkorunic@haproxy.com
-appVersion: 1.6.0
+appVersion: 1.6.1

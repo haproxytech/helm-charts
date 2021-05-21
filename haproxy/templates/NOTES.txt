@@ -45,6 +45,6 @@ Node IP can be found with:
   $ kubectl --namespace {{ .Release.Namespace }} get nodes -o jsonpath="{.items[0].status.addresses[1].address}"
 
 For more examples and up to date documentation, please visit:
-  * Helm chart documentation: https://github.com/haproxytech/helm-charts/tree/master/haproxy
+  * Helm chart documentation: https://github.com/haproxytech/helm-charts/tree/main/haproxy
   * HAProxy Alpine Docker container documentation: https://github.com/haproxytech/haproxy-docker-alpine
   * HAProxy documentation: https://www.haproxy.org/download/2.2/doc/configuration.txt

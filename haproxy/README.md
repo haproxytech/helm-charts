@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This chart bootstraps an HAProxy load balancer as deployment/daemonset on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager. As oposed to [HAProxy Kubernetes Ingress Controller](https://github.com/haproxytech/helm-charts/tree/master/kubernetes-ingress) Chart, HAProxy is installed as a regular application and not as an Ingress Controller.
+This chart bootstraps an HAProxy load balancer as deployment/daemonset on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager. As oposed to [HAProxy Kubernetes Ingress Controller](https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress) Chart, HAProxy is installed as a regular application and not as an Ingress Controller.
 
 ### Prerequisites
 
@@ -34,13 +34,13 @@ helm repo update
 
 ## Install the chart
 
-To install the chart with Helm v3 as *my-release* deployment:
+To install the chart with Helm v3 as _my-release_ deployment:
 
 ```console
 helm install my-release haproxytech/haproxy
 ```
 
-***NOTE***: To install the chart with Helm v2 (legacy Helm) the syntax requires adding deployment name to `--name` parameter:
+**_NOTE_**: To install the chart with Helm v2 (legacy Helm) the syntax requires adding deployment name to `--name` parameter:
 
 ```console
 helm install haproxytech/haproxy \
@@ -58,9 +58,9 @@ helm install haproxytech/haproxy \
 
 ### Installing from a private registry
 
-To install the chart using a private registry for HAProxy (for instance to use a HAPEE image) into a separate namespace *prod*.
+To install the chart using a private registry for HAProxy (for instance to use a HAPEE image) into a separate namespace _prod_.
 
-***NOTE***: Helm v3 requires namespace to be precreated (eg. with ```kubectl create namespace prod```)
+**_NOTE_**: Helm v3 requires namespace to be precreated (eg. with `kubectl create namespace prod`)
 
 ```console
 helm install my-haproxy haproxytech/haproxy  \
@@ -90,7 +90,7 @@ helm install my-haproxy2 haproxytech/haproxy \
   --set kind=DaemonSet
 ```
 
-***NOTE***: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string.
+**_NOTE_**: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string.
 
 ### Installing with Horizontal Pod Autoscaler
 
@@ -104,7 +104,7 @@ helm install my-haproxy3 haproxytech/haproxy \
   --set autoscaling.targetCPUUtilizationPercentage=80
 ```
 
-***NOTE***: Make sure to look into other tunable values for HPA documented in [values.yaml](values.yaml).
+**_NOTE_**: Make sure to look into other tunable values for HPA documented in [values.yaml](values.yaml).
 
 ### Installing with service annotations
 
@@ -118,13 +118,13 @@ helm install my-haproxy4 haproxytech/haproxy \
   --set service.annotations."service\.beta\.kubernetes\.io/aws-load-balancer-cross-zone-load-balancing-enabled"="true"
 ```
 
-***NOTE***: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string.
+**_NOTE_**: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string.
 
 ### Using values from YAML file
 
 As opposed to using many `--set` invocations, much simpler approach is to define value overrides in a separate YAML file and specify them when invoking Helm:
 
-*mylb.yaml*:
+_mylb.yaml_:
 
 ```yaml
 kind: DaemonSet
@@ -146,7 +146,7 @@ config: |
 service:
   type: LoadBalancer
   annotations:
-    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
     service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
 ```
 
@@ -160,7 +160,7 @@ helm install my-haproxy5 -f mylb.yml haproxytech/haproxy
 
 In order to e.g. support SSL certificates, you can mount additional volumes from secrets:
 
-*mylb.yaml*:
+_mylb.yaml_:
 
 ```yaml
 service:
@@ -240,7 +240,7 @@ initContainers:
 
 ## Upgrading the chart
 
-To upgrade the *my-release* deployment:
+To upgrade the _my-release_ deployment:
 
 ```console
 helm upgrade my-release haproxytech/haproxy
@@ -248,7 +248,7 @@ helm upgrade my-release haproxytech/haproxy
 
 ## Uninstalling the chart
 
-To uninstall/delete the *my-release* deployment:
+To uninstall/delete the _my-release_ deployment:
 
 ```console
 helm delete my-release
