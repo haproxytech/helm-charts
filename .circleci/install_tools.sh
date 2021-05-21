@@ -13,7 +13,6 @@ install_helm() {
     sudo ln -s "/usr/local/helm-v${HELM_VERSION}/linux-amd64/helm" /usr/local/bin/helm
     sudo chmod +x /usr/local/helm-v${HELM_VERSION}/linux-amd64/helm
     rm -f "helm-v${HELM_VERSION}-linux-amd64.tar.gz"
-    helm init
 }
 
 install_cr() {
