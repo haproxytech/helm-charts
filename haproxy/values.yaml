@@ -44,15 +44,26 @@ daemonset:
 
 ## Init Containers
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## System Tuning
+## ref: https://www.haproxy.com/documentation/hapee/2-2r1/getting-started/system-tuning/
 initContainers: []
-# - name: sysctl
-#   image: "busybox:musl"
-#   command:
-#     - /bin/sh
-#     - -c
-#     - sysctl -w net.core.somaxconn=65536
-#   securityContext:
-#     privileged: true
+  # - name: sysctl
+  #   image: "busybox:musl"
+  #   command:
+  #     - /bin/sh
+  #     - -c
+  #     - >-
+  #       sysctl -w net.ipv4.tcp_rmem="4096 16060 262144"
+  #       net.ipv4.tcp_wmem="4096 16384 262144"
+  #       net.ipv4.tcp_tw_reuse=1
+  #       net.ipv4.ip_local_port_range="1024 65023"
+  #       net.ipv4.tcp_max_syn_backlog=60000
+  #       net.ipv4.tcp_fin_timeout=30
+  #       net.ipv4.tcp_synack_retries=3
+  #       net.ipv4.ip_nonlocal_bind=1
+  #       net.core.somaxconn=60000
+  #   securityContext:
+  #     privileged: true
 
 ## Pod termination grace period
 ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
