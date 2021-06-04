@@ -23,5 +23,5 @@ metadata:
   {{- include "haproxy.labels" . | nindent 4 }}
 data:
   haproxy.cfg: |
-  {{ .Values.config | nindent 4 }}
+  {{ tpl .Values.config . | nindent 4 }}
 {{- end }}

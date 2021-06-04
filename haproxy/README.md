@@ -122,7 +122,8 @@ helm install my-haproxy4 haproxytech/haproxy \
 
 ### Using values from YAML file
 
-As opposed to using many `--set` invocations, much simpler approach is to define value overrides in a separate YAML file and specify them when invoking Helm:
+As opposed to using many `--set` invocations, much simpler approach is to define value overrides in a separate YAML file and specify them when invoking Helm.
+The `config` block can also support using helm templates to populate dynamic values, e.g. `{{ .Release.Name }}`.
 
 _mylb.yaml_:
 
@@ -137,12 +138,13 @@ config: |
     log global
     timeout client 60s
     timeout connect 60s
-    timeout server 60s
+    timeout server {{ .Values.global.serverTimeout }}
   frontend fe_main
     bind :80
     default_backend be_main
   backend be_main
     server web1 10.0.0.1:8080 check
+    server web2 {{ .Release.Name }}-web:8080 check
 service:
   type: LoadBalancer
   annotations:
@@ -191,6 +193,25 @@ mountedSecrets:
 ```
 
 The above example assumes that there is a certificate in key `tls.crt` of a secret called `star-example-com`.
+
+### Using additional volumes and volumeMounts
+
+In order to load data from other sources (e.g. to preload something inside an init-container) you can mount additional volumes to the container:
+
+```yaml
+extraVolumes:
+  - name: tls
+    emptyDir: {}
+  - name: tmp
+    emptyDir:
+      medium: Memory
+
+extraVolumeMounts:
+  - name: tls
+    mountPath: /etc/tls
+  - name: tmp
+    mountPath: /tmp
+```
 
 ## Installing as non-root with binding to privileged ports
 
