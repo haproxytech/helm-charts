@@ -85,6 +85,26 @@ strategy: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
 priorityClassName: ""
 
+## Additional volumeMounts to the controller main container
+extraVolumeMounts: []
+## Example empty volume mounts when using securityContext->readOnlyRootFilesystem
+# - name: etc-haproxy
+#   mountPath: /etc/haproxy
+# - name: tmp
+#   mountPath: /tmp
+# - name: var-state-haproxy
+#   mountPath: /var/state/haproxy
+
+## Additional volumes to the controller pod
+extraVolumes: []
+## Example empty volumes when using securityContext->readOnlyRootFilesystem
+# - name: etc-haproxy
+#   emptyDir: {}
+# - name: tmp
+#   emptyDir: {}
+# - name: var-state-haproxy
+#   emptyDir: {}
+
 ## HAProxy daemon configuration
 # ref: https://www.haproxy.org/download/2.2/doc/configuration.txt
 config: |

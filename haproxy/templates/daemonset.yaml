@@ -40,9 +40,9 @@ spec:
         {{- if .Values.podLabels }}
 {{ toYaml .Values.podLabels | indent 8 }}
         {{- end }}
-      {{- if .Values.podAnnotations }}
       annotations:
         checksum/environment: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- if .Values.podAnnotations }}
 {{ toYaml .Values.podAnnotations | indent 8 }}
       {{- end }}
     spec:
@@ -77,6 +77,9 @@ spec:
           secret:
             secretName: {{ $mountedSecret.secretName }}
         {{- end }}
+        {{- with.Values.extraVolumes }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           {{- if .Values.securityContext.enabled }}
@@ -108,6 +111,9 @@ spec:
           volumeMounts:
             - name: haproxy-config
               mountPath: /usr/local/etc/haproxy
+            {{- with.Values.extraVolumeMounts }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
             {{- range $mountedSecret := .Values.mountedSecrets }}
             - name: {{ $mountedSecret.volumeName }}
               mountPath: {{ $mountedSecret.mountPath }}
