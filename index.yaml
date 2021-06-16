@@ -3,6 +3,25 @@ entries:
   haproxy:
   - apiVersion: v1
     appVersion: 2.4.0
+    created: "2021-06-16T17:16:02.123451177Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 524339abb4df74ada1e3e7383271546d8e11eb9d6d7be24bd4b83210cee01c89
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: http://www.haproxy.org/img/HAProxyCommunityEdition_60px.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.12.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.4.0/haproxy-1.4.0.tgz
+    version: 1.4.0
+  - apiVersion: v1
+    appVersion: 2.4.0
     created: "2021-05-21T08:16:11.040495813Z"
     description: A Helm chart for HAProxy on Kubernetes
     digest: e0e286f7c4ab911a83bc4c7176657cb806b16aef279c2673003d57e1442aeb68
@@ -1762,4 +1781,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2021-05-27T08:29:38.330190801Z"
+generated: "2021-06-16T17:16:02.131942263Z"
