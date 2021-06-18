@@ -174,6 +174,30 @@ entries:
     version: 1.0.1
   kubernetes-ingress:
   - apiVersion: v1
+    appVersion: 1.6.3
+    created: "2021-06-18T11:18:32.161297978Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 4ce3284e0465c82b76185828ea3b2b5d691b8e7310e69d56033d397c2601600b
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: http://www.haproxy.org/img/HAProxyCommunityEdition_60px.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.12.0-0'
+    maintainers:
+    - email: mmhedhbi@haproxy.com
+      name: Moemen Mhedhbi
+    - email: bassmann@haproxy.com
+      name: Baptiste Assmann
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.15.3/kubernetes-ingress-1.15.3.tgz
+    version: 1.15.3
+  - apiVersion: v1
     appVersion: 1.6.2
     created: "2021-05-27T08:29:38.329378098Z"
     description: A Helm chart for HAProxy Kubernetes Ingress Controller
@@ -1781,4 +1805,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2021-06-16T17:16:02.131942263Z"
+generated: "2021-06-18T11:18:32.162170597Z"
