@@ -127,7 +127,16 @@ controller:
 
   ## Ingress Class used for ingress.class annotation in multi-ingress environments
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/#using-multiple-ingress-controllers
-  ingressClass: null   # typically "haproxy" or null to receive all events
+  ingressClass: haproxy   # typically "haproxy" or null to receive all events
+
+  ## Ingress Class resource with additional configuration and name of the controller
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#default-ingress-class
+  ## Note: Uses ingressClass as name for the Ingress Class object if enabled
+  ingressClassResource:
+    enabled: false
+    default: false
+    parameters: {}
 
   ## Additional labels to add to the deployment or daemonset metadata
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
