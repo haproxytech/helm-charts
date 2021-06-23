@@ -27,7 +27,7 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
 {{- if .Values.defaultBackend.service.annotations }}
-      annotations:
+  annotations:
 {{ toYaml .Values.defaultBackend.service.annotations | indent 8 }}
 {{- end }}
 spec:
