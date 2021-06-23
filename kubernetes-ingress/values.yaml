@@ -510,6 +510,11 @@ defaultBackend:
   #  key: value
 
   service:
+    ## Annotations for the default backend service object. 
+    annotations: {}
+    # Use the controller as default backend
+    # haproxy.org/backend-config-snippet: http-request return status 404
+    
     ## Service ports
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     port: 8080
