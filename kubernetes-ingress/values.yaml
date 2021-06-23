@@ -510,6 +510,8 @@ defaultBackend:
   #  key: value
 
   service:
+    ## Annotations for the default backend service object. 
+    annotations: {}
     ## Service ports
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     port: 8080
