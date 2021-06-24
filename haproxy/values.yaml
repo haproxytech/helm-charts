@@ -31,6 +31,9 @@ image:
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
 kind: Deployment    # can be 'Deployment' or 'DaemonSet'
 replicaCount: 1   # used only for Deployment mode
+deploymentAnnotations: {}
+  # deployment.annotation.1: value
+  # deployment.annotation.2: value
 
 ## DaemonSet configuration
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
@@ -41,6 +44,9 @@ daemonset:
     http: 80
     https: 443
     stat: 1024
+daemonsetAnnotations: {}
+  # daemonset.annotation.1: value
+  # daemonset.annotation.2: value
 
 ## Init Containers
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
