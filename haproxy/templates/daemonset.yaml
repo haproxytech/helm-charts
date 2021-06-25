@@ -24,6 +24,10 @@ metadata:
   name: {{ include "haproxy.fullname" . }}
   labels:
     {{- include "haproxy.labels" . | nindent 4 }}
+  {{- if .Values.podAnnotations }}
+  annotations:
+{{ toYaml .Values.podAnnotations | indent 4 }}
+  {{- end }}
 spec:
   minReadySeconds: 0
   updateStrategy:
