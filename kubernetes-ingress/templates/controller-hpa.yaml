@@ -15,7 +15,8 @@ limitations under the License.
 */}}
 
 {{- if and (eq .Values.controller.kind "Deployment") .Values.controller.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+{{- if not .Values.controller.keda.enabled }}
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "kubernetes-ingress.fullname" . }}
@@ -38,15 +39,20 @@ spec:
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.controller.autoscaling.targetCPUUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.controller.autoscaling.targetCPUUtilizationPercentage }}
   {{- end }}
   {{- if .Values.controller.autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.controller.autoscaling.targetMemoryUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.controller.autoscaling.targetMemoryUtilizationPercentage }}
   {{- end }}
   {{- if .Values.controller.autoscaling.custom }}
   {{- toYaml .Values.controller.autoscaling.custom | nindent 4 }}
   {{- end }}
+{{- end }}
 {{- end }}

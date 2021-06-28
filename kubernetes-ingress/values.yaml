@@ -190,6 +190,34 @@ controller:
     #       metricName: haproxy_backend_current_sessions
     #       targetAverageValue: 2000
 
+  ## Kubernetes Event-driven Autoscaling: KEDA 2.x
+  ## ref: https://keda.sh/docs/2.3/concepts/scaling-deployments/
+  ## Note: mutually exclusive with HPA, enabling KEDA disables HPA
+  ## Node: requires serviceMonitor enabled
+  keda:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 20
+    pollingInterval: 30
+    cooldownPeriod: 300
+    restoreToOriginalReplicaCount: false
+    scaledObject:
+      annotations: {}
+    behaviour: {}
+    #  scaleDown:
+    #    stabilizationWindowSeconds: 300
+    #    policies:
+    #    - type: Percent
+    #      value: 100
+    #      periodSeconds: 15
+    triggers: []
+    #  - type: prometheus
+    #    metadata:
+    #      serverAddress: http://<prometheus-host>:9090
+    #      metricName: haproxy_process_idle_time_percent
+    #      threshold: '50'
+    #      query: avg(100-avg_over_time(haproxy_process_idle_time_percent{container="kubernetes-ingress-controller",service="mytest-kubernetes-ingress"}[2m]))
+
   ## Pod Disruption Budget
   ## Only to be used with Deployment kind
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
@@ -423,8 +451,12 @@ controller:
 
   ## ServiceMonitor
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/getting-started.md
+  ## Note: requires Prometheus Operator to be able to work, for example:
+  ## helm install prometheus prometheus-community/kube-prometheus-stack \
+  ##   --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false \
+  ##   --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false
   serviceMonitor:
-    ## Toggle the ServiceMonitor, true if you have Prometheus Operator installed and configured
+    ## Toggle the ServiceMonitor true if you have Prometheus Operator installed and configured
     enabled: false
 
     ## Specify the labels to add to the ServiceMonitors to be selected for target discovery

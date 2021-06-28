@@ -15,7 +15,7 @@ limitations under the License.
 */}}
 
 {{- if and .Values.defaultBackend.autoscaling.enabled .Values.defaultBackend.enabled }}
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "kubernetes-ingress.defaultBackend.fullname" . }}
@@ -38,13 +38,17 @@ spec:
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.defaultBackend.autoscaling.targetCPUUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.defaultBackend.autoscaling.targetCPUUtilizationPercentage }}
   {{- end }}
   {{- if .Values.defaultBackend.autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.defaultBackend.autoscaling.targetMemoryUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.defaultBackend.autoscaling.targetMemoryUtilizationPercentage }}
   {{- end }}
   {{- if .Values.defaultBackend.autoscaling.custom }}
   {{- toYaml .Values.defaultBackend.autoscaling.custom | nindent 4 }}

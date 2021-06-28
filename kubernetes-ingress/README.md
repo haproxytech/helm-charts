@@ -35,6 +35,7 @@ Once you have Helm installed, add the repo as follows:
 
 ```console
 helm repo add haproxytech https://haproxytech.github.io/helm-charts
+
 helm repo update
 ```
 
@@ -86,61 +87,6 @@ helm install my-ingress haproxytech/kubernetes-ingress  \
   --set controller.existingImagePullSecret name-of-existing-image-pull-secret
 ```
 
-### Installing as DaemonSet
-
-Default controller mode is [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/), but it is possible to use [DaemonSet](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/) as well:
-
-```console
-helm install my-ingress2 haproxytech/kubernetes-ingress \
-  --set controller.kind=DaemonSet
-```
-
-### Installing in multi-ingress environment
-
-It is also possible to set controller ingress class to be used in [multi-ingress environments](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/#using-multiple-ingress-controllers):
-
-```console
-helm install my-ingress3 haproxytech/kubernetes-ingress \
-  --set controller.kind=DaemonSet \
-  --set controller.ingressClass=haproxy
-```
-
-**_NOTE_**: make sure your Ingress routes have corresponding `ingress.class: haproxy` annotation.
-
-### Installing with service annotations
-
-On some environments like EKS and GKE there might be a need to pass service annotations. Syntax can become a little tedious however:
-
-```console
-helm install my-ingress3 haproxytech/kubernetes-ingress \
-  --set controller.kind=DaemonSet \
-  --set controller.ingressClass=haproxy \
-  --set controller.service.type=LoadBalancer \
-  --set controller.service.annotations."service\.beta\.kubernetes\.io/aws-load-balancer-internal"="0.0.0.0/0" \
-  --set controller.service.annotations."service\.beta\.kubernetes\.io/aws-load-balancer-cross-zone-load-balancing-enabled"="true"
-```
-
-**_NOTE_**: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string.
-
-### Installing with Horizontal Pod Autoscaler
-
-[HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) automatically scales number of replicas in Deployment or Replication Controller and adjusts replica count. Therefore we want to unset default replicaCount for controller and defaultBackend by setting corresponding key values to null:
-
-```console
-helm install my-ingress4 haproxytech/kubernetes-ingress \
-  --set controller.replicaCount=null \
-  --set defaultBackend.replicaCount=null
-```
-
-### Installing the ServiceMonitor
-
-If you're using the [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator), you can automatically install the `ServiceMonitor` definition in order to automate the scraping options according to your needs.
-
-```console
-helm install my-ingress5 haproxytech/kubernetes-ingress \
-  --set "controller.serviceMonitor.enabled=true"
-```
-
 ### Using values from YAML file
 
 As opposed to using many `--set` invocations, much simpler approach is to define value overrides in a separate YAML file and specify them when invoking Helm:
@@ -161,7 +107,7 @@ controller:
 And invoking Helm becomes (compare to the previous example):
 
 ```console
-helm install my-ingress4 -f mylb.yml haproxytech/kubernetes-ingress
+helm install my-ingress -f mylb.yml haproxytech/kubernetes-ingress
 ```
 
 A typical YAML file for TCP services looks like (provided that configmap "[default/tcp](https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/controller.md)" was created) :
@@ -175,6 +121,116 @@ controller:
         targetPort: 3306
   extraArgs:
     - --configmap-tcp-services=default/tcp
+```
+
+### Installing as DaemonSet
+
+Default controller mode is [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/), but it is possible to use [DaemonSet](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/) as well:
+
+```console
+helm install my-ingress haproxytech/kubernetes-ingress \
+  --set controller.kind=DaemonSet
+```
+
+### Installing in multi-ingress environment
+
+It is also possible to set controller ingress class to be used in [multi-ingress environments](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/#using-multiple-ingress-controllers):
+
+```console
+helm install my-ingress haproxytech/kubernetes-ingress \
+  --set controller.kind=DaemonSet \
+  --set controller.ingressClass=haproxy
+```
+
+**_NOTE_**: make sure your Ingress routes have corresponding `ingress.class: haproxy` annotation.
+
+### Installing with service annotations
+
+On some environments like EKS and GKE there might be a need to pass service annotations. Syntax can become a little tedious however:
+
+```console
+helm install my-ingress haproxytech/kubernetes-ingress \
+  --set controller.kind=DaemonSet \
+  --set controller.ingressClass=haproxy \
+  --set controller.service.type=LoadBalancer \
+  --set controller.service.annotations."service\.beta\.kubernetes\.io/aws-load-balancer-internal"="0.0.0.0/0" \
+  --set controller.service.annotations."service\.beta\.kubernetes\.io/aws-load-balancer-cross-zone-load-balancing-enabled"="true"
+```
+
+**_NOTE_**: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string.
+
+### Installing with Horizontal Pod Autoscaler (HPA)
+
+[HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) automatically scales number of replicas in Deployment or Replication Controller and adjusts replica count for the controller:
+
+```console
+helm install my-ingress haproxytech/kubernetes-ingress \
+  --set controller.autoscaling.enabled=true
+```
+
+### Installing the ServiceMonitor
+
+If you're using the [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator), you can automatically install the `ServiceMonitor` definition in order to automate the scraping options according to your needs.
+
+```console
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+helm install prometheus prometheus-community/kube-prometheus-stack \
+  --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false \
+  --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false
+
+helm install my-ingress haproxytech/kubernetes-ingress \
+  --set controller.serviceMonitor.enabled=true
+```
+
+### Installing with Kubernetes Event-driven Autoscaling (KEDA)
+
+[KEDA](https://keda.sh/docs/2.3/concepts/scaling-deployments/) is an improved scaling solution built on top of HPA which allows autoscaling criteria based on information from any event source including Prometheus metrics collected from HAProxy native Prometheus Exporter.
+
+To enable KEDA, you will also need to install Prometheus Operator and ServiceMonitor enabled (serverAddress has to match `prometheus-kube-prometheus-prometheus` service IP):
+
+_mykeda.yaml_:
+
+```yaml
+controller:
+  kind: Deployment
+  serviceMonitor:
+    enabled: true
+  keda:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    triggers:
+      - type: prometheus
+        metadata:
+          serverAddress: http://10.96.206.247:9090
+          metricName: haproxy_frontend_current_sessions
+          threshold: "100"
+          query: sum(rate(haproxy_frontend_current_sessions{proxy="http"}[2m]))
+```
+
+Note: Other options to trigger scaling can be found in Prometheus [native exporter documentation](https://github.com/haproxy/haproxy/blob/master/addons/promex/README), but some ideas are:
+
+- `haproxy_process_idle_time_percent`
+- `haproxy_frontend_current_sessions`
+- `haproxy_backend_current_queue`
+
+And to install:
+
+```console
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add kedacore https://kedacore.github.io/charts
+
+helm repo update
+
+helm install prometheus prometheus-community/kube-prometheus-stack \
+  --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false \
+  --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false
+
+kubectl create namespace keda
+helm install keda kedacore/keda --namespace keda
+
+helm install mytest haproxytech/kubernetes-ingress -f mykeda.yaml
 ```
 
 ## Upgrading the chart
