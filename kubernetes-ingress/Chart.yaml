@@ -12,11 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: v1
+apiVersion: v2
 name: kubernetes-ingress
-version: 1.16.1
-kubeVersion: ">=1.12.0-0"
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
+type: application
+version: 1.16.2
+appVersion: 1.6.5
+kubeVersion: ">=1.12.0-0"
 keywords:
   - ingress
   - haproxy
@@ -31,4 +33,7 @@ maintainers:
     email: bassmann@haproxy.com
   - name: Dinko Korunic
     email: dkorunic@haproxy.com
-appVersion: 1.6.5
+engine: gotpl
+annotations:
+  artifacthub.io/changes: |
+    - Require Helm v3
