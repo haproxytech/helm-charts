@@ -1,6 +1,30 @@
 apiVersion: v1
 entries:
   haproxy:
+  - annotations:
+      artifacthub.io/changes: |
+        - Require Helm v3
+        - Update base image to 2.4.2 release
+    apiVersion: v2
+    appVersion: 2.4.2
+    created: "2021-07-29T07:43:47.925310157Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 66f1fc5426ec04bfad0bb7b3d2d39bb3335ef5c73d827274be5019b3cfdc837e
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: http://www.haproxy.org/img/HAProxyCommunityEdition_60px.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.12.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.5.1/haproxy-1.5.1.tgz
+    version: 1.5.1
   - apiVersion: v1
     appVersion: 2.4.1
     created: "2021-06-28T16:27:37.230422999Z"
@@ -192,6 +216,34 @@ entries:
     - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.0.1/haproxy-1.0.1.tgz
     version: 1.0.1
   kubernetes-ingress:
+  - annotations:
+      artifacthub.io/changes: |
+        - Require Helm v3
+    apiVersion: v2
+    appVersion: 1.6.5
+    created: "2021-07-29T07:43:48.046100667Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 82e1761975638074af2e5e4140358fa14c2d49ceba721eb77677baf4d4ff9db3
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: http://www.haproxy.org/img/HAProxyCommunityEdition_60px.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.12.0-0'
+    maintainers:
+    - email: mmhedhbi@haproxy.com
+      name: Moemen Mhedhbi
+    - email: bassmann@haproxy.com
+      name: Baptiste Assmann
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.16.2/kubernetes-ingress-1.16.2.tgz
+    version: 1.16.2
   - apiVersion: v1
     appVersion: 1.6.5
     created: "2021-07-15T09:26:38.535669508Z"
@@ -1896,4 +1948,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2021-07-15T09:26:38.536699771Z"
+generated: "2021-07-29T07:43:48.047422094Z"
