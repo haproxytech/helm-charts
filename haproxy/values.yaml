@@ -32,18 +32,20 @@ image:
 kind: Deployment    # can be 'Deployment' or 'DaemonSet'
 replicaCount: 1   # used only for Deployment mode
 
+# livenessProbe to deployment and daemonset
+livenessProbe:
+  enabled: false
+  failureThreshold: 3
+  successThreshold: 1
+  initialDelaySeconds: 15
+  timeoutSeconds: 1
+  tcpSocket:
+    port: 1024   # modify to your config
+  periodSeconds: 20
+
 ## DaemonSet configuration
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
 daemonset:
-  livenessProbe:
-    enabled: false
-    failureThreshold: 3
-    successThreshold: 1
-    initialDelaySeconds: 15
-    timeoutSeconds: 1
-    tcpSocket:
-      port: 1024   # modify to your config
-    periodSeconds: 20
   useHostNetwork: false   # also modify dnsPolicy accordingly
   useHostPort: false
   hostPorts:
