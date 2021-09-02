@@ -112,6 +112,7 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.lifecycle }}
           lifecycle:
             {{- if eq "string" (printf "%T" .Values.lifecycle) }}
 {{ tpl .Values.lifecycle . | indent 12 }}
