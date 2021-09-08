@@ -4,6 +4,7 @@
 
 ![GitHub](https://img.shields.io/github/license/haproxytech/helm-charts)
 [![CircleCI](https://circleci.com/gh/haproxytech/helm-charts/tree/main.svg?style=svg)](https://circleci.com/gh/haproxytech/helm-charts/tree/main)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/haproxytech)](https://artifacthub.io/packages/search?repo=haproxytech)
 
 This repository hosts official [HAProxy Technologies](https://www.haproxy.com/) Helm Charts for deploying on [Kubernetes](https://kubernetes.io/).
 
@@ -27,6 +28,8 @@ Once you have Helm installed, add the repo as follows:
 helm repo add haproxytech https://haproxytech.github.io/helm-charts
 helm repo update
 ```
+
+HAProxy Helm charts can be also found on [ArtifactHub](https://artifacthub.io/packages/search?repo=haproxytech).
 
 ## Search and install charts
 
