@@ -110,6 +110,16 @@ spec:
               hostPort: {{ index $hostPorts $key | default $value }}
               {{- end }}
           {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            tcpSocket:
+              port: {{ .Values.livenessProbe.tcpSocket.port }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.lifecycle }}
