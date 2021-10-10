@@ -71,6 +71,13 @@ rules:
   - patch
   - update
 - apiGroups:
+  - discovery.k8s.io
+  resources:
+  - endpointslices
+  verbs:
+  - list
+  - watch
+- apiGroups:
   - core.haproxy.org
   resources:
      - '*'
