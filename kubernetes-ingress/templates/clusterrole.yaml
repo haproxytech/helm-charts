@@ -31,10 +31,12 @@ rules:
   resources:
   - configmaps
   - endpoints
+  - nodes
+  - pods
   - services
   - namespaces
   - events
-  - secrets
+  - serviceaccounts
   verbs:
   - get
   - list
@@ -56,5 +58,25 @@ rules:
   resources:
   - ingresses/status
   verbs:
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - patch
+  - update
+- apiGroups:
+  - core.haproxy.org
+  resources:
+     - '*'
+  verbs:
+  - get
+  - list
+  - watch
   - update
 {{- end -}}
