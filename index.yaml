@@ -243,6 +243,35 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Update Changelog for ArtifactHub
+        - Remove nullable false from CRDs to workaround ArgoCD issues
+    apiVersion: v2
+    appVersion: 1.7.0
+    created: "2021-10-11T19:32:19.695631423Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 413af9390a7ef91613558d29cb1d0ed3c015b736ef159e90004dd111ea18f8c8
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.12.0-0'
+    maintainers:
+    - email: mmhedhbi@haproxy.com
+      name: Moemen Mhedhbi
+    - email: bassmann@haproxy.com
+      name: Baptiste Assmann
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.17.4/kubernetes-ingress-1.17.4.tgz
+    version: 1.17.4
+  - annotations:
+      artifacthub.io/changes: |
         - Remove "nullable: false" from CRDs
     apiVersion: v2
     appVersion: 1.7.0
@@ -2114,4 +2143,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2021-10-11T18:51:55.753945246Z"
+generated: "2021-10-11T19:32:19.697195492Z"
