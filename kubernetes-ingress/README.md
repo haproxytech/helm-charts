@@ -19,7 +19,7 @@ This chart bootstraps an HAProxy kubernetes-ingress deployment/daemonset on a [K
 
 ## Before you begin
 
-### Setup a Kubernetes Cluster
+### Setting up a Kubernetes Cluster
 
 The quickest way to setup a Kubernetes cluster is with [Azure Kubernetes Service](https://azure.microsoft.com/en-us/services/kubernetes-service/), [AWS Elastic Kubernetes Service](https://aws.amazon.com/eks/) or [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine/) using their respective quick-start guides.
 
@@ -29,7 +29,7 @@ For setting up Kubernetes on other cloud platforms or bare-metal servers refer t
 
 Get the latest [Helm release](https://github.com/helm/helm#install).
 
-### Add Helm chart repo
+### Adding Helm chart repo
 
 Once you have Helm installed, add the repo as follows:
 
@@ -39,7 +39,7 @@ helm repo add haproxytech https://haproxytech.github.io/helm-charts
 helm repo update
 ```
 
-## Install the chart
+## Installing the chart
 
 To install the chart with Helm v3 as _my-release_ deployment:
 
@@ -53,6 +53,8 @@ helm install my-release haproxytech/kubernetes-ingress
 helm install haproxytech/kubernetes-ingress \
   --name my-release
 ```
+
+By default Helm chart will install several [custom resource definitions](https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress/crds) in the cluster if they are missing.
 
 ### Installing with unique name
 
@@ -239,6 +241,14 @@ To upgrade the _my-release_ deployment:
 
 ```console
 helm upgrade my-release haproxytech/kubernetes-ingress
+```
+
+By default Helm [does not upgrade](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/) CRDs during an upgrade, so before doing an upgrade it is mandatory to upgrade CRDs to the latest version by hand **before** doing a Helm chart upgrade.
+
+```console
+kubectl apply -f https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/crds/core.haproxy.org_defaults.yaml
+kubectl apply -f https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/crds/core.haproxy.org_globals.yaml
+kubectl apply -f https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/crds/core.haproxy.org_backends.yaml
 ```
 
 ## Uninstalling the chart
