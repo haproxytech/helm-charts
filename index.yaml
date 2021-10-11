@@ -243,6 +243,34 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Remove "nullable: false" from CRDs
+    apiVersion: v2
+    appVersion: 1.7.0
+    created: "2021-10-11T18:51:55.753194646Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 94d7e3e4adc3c292476f034529a418d684b2815aaf7a83584511f524d30b5ec5
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.12.0-0'
+    maintainers:
+    - email: mmhedhbi@haproxy.com
+      name: Moemen Mhedhbi
+    - email: bassmann@haproxy.com
+      name: Baptiste Assmann
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.17.3/kubernetes-ingress-1.17.3.tgz
+    version: 1.17.3
+  - annotations:
+      artifacthub.io/changes: |
         - Add missing RBAC roles for 1.7.x Ingress Controller (EndpointSlices)
     apiVersion: v2
     appVersion: 1.7.0
@@ -2086,4 +2114,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2021-10-10T11:59:46.161695607Z"
+generated: "2021-10-11T18:51:55.753945246Z"
