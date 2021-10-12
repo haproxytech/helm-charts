@@ -2,7 +2,7 @@
 
 set -o errexit
 
-readonly HELM_VERSION=3.5.4
+readonly HELM_VERSION=3.6.3
 readonly CHART_RELEASER_VERSION=1.2.1
 
 install_helm() {

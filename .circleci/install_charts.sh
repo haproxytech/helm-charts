@@ -5,7 +5,7 @@ set -o nounset
 set -o pipefail
 
 readonly CT_VERSION=latest
-readonly KIND_VERSION=v0.11.0
+readonly KIND_VERSION=v0.11.1
 readonly CLUSTER_NAME=chart-testing
 readonly REPO_ROOT="${REPO_ROOT:-$(git rev-parse --show-toplevel)}"
 
