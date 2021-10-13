@@ -115,6 +115,14 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          lifecycle:
+            {{- if eq "string" (printf "%T" .Values.lifecycle) }}
+{{ tpl .Values.lifecycle . | indent 12 }}
+            {{- else }}
+{{ toYaml .Values.lifecycle | indent 12 }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.extraVolumeMounts }}
           volumeMounts:
             - name: haproxy-config
               mountPath: /usr/local/etc/haproxy

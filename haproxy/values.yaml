@@ -96,6 +96,14 @@ strategy: {}
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
 priorityClassName: ""
 
+## Container lifecycle handlers
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
+lifecycle: {}
+  ## Example preStop for graceful shutdown
+  # preStop:
+  #   exec:
+  #     command: ["/bin/sh", "-c", "kill -USR1 $(pidof haproxy); while killall -0 haproxy; do sleep 1; done"]
+
 ## Additional volumeMounts to the controller main container
 extraVolumeMounts: []
 ## Example empty volume mounts when using securityContext->readOnlyRootFilesystem
