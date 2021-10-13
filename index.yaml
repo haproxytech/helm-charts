@@ -3,6 +3,30 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Update base image to 2.4.7 release
+        - Add Pod Lifecycle configuration
+    apiVersion: v2
+    appVersion: 2.4.7
+    created: "2021-10-13T16:30:51.729698721Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: b4db67b7900b2616211148bdf2c83eba16da2ee20257f1cd07fe5f28de2c1fb7
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.12.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.7.0/haproxy-1.7.0.tgz
+    version: 1.7.0
+  - annotations:
+      artifacthub.io/changes: |
         - Update base image to 2.4.4 release
         - Add liveness probe
         - Add externalTrafficPolicy
@@ -2143,4 +2167,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2021-10-11T19:32:19.697195492Z"
+generated: "2021-10-13T16:30:51.732333331Z"
