@@ -16,21 +16,20 @@ apiVersion: v2
 name: haproxy
 description: A Helm chart for HAProxy on Kubernetes
 type: application
-version: 1.6.0
-appVersion: 2.4.4
+version: 1.7.0
+appVersion: 2.4.7
 kubeVersion: ">=1.12.0-0"
 keywords:
   - haproxy
 home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
 sources:
   - http://www.haproxy.org/
-icon: http://www.haproxy.org/img/HAProxyCommunityEdition_60px.png
+icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
 maintainers:
   - name: Dinko Korunic
     email: dkorunic@haproxy.com
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Update base image to 2.4.4 release
-    - Add liveness probe
-    - Add externalTrafficPolicy
+    - Update base image to 2.4.7 release
+    - Add Pod Lifecycle configuration
