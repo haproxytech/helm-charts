@@ -16,8 +16,8 @@ apiVersion: v2
 name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
-version: 1.17.4
-appVersion: 1.7.0
+version: 1.17.5
+appVersion: 1.7.1
 kubeVersion: ">=1.12.0-0"
 keywords:
   - ingress
@@ -36,5 +36,4 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Update Changelog for ArtifactHub
-    - Remove nullable false from CRDs to workaround ArgoCD issues
+    - Use Ingress Controller 1.7.1 version for base image
