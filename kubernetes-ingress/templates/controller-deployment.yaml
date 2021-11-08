@@ -170,6 +170,15 @@ spec:
             timeoutSeconds: {{ .Values.controller.startupProbe.timeoutSeconds }}
           {{- end }}
           env:
+          {{- if .Values.aws.licenseConfigSecretName }}
+          - name: AWS_WEB_IDENTITY_REFRESH_TOKEN_FILE
+            value: "/var/run/secrets/product-license/license_token"
+          - name: AWS_ROLE_ARN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.aws.licenseConfigSecretName }}
+                  key: iam_role
+          {{- end }}
           - name: POD_NAME
             valueFrom:
               fieldRef:
@@ -191,8 +200,13 @@ spec:
 {{ toYaml .Values.controller.lifecycle | indent 12 }}
             {{- end }}
           {{- end }}
-          {{- if .Values.controller.extraVolumeMounts }}
+          {{- if or .Values.controller.extraVolumeMounts .Values.aws.licenseConfigSecretName }}
           volumeMounts:
+            {{- if .Values.aws.licenseConfigSecretName }}
+            - name: aws-product-license
+              readOnly: true
+              mountPath: /var/run/secrets/product-license
+            {{- end }}
             {{- if eq "string" (printf "%T" .Values.controller.extraVolumeMounts) }}
 {{ tpl .Values.controller.extraVolumeMounts . | indent 12 }}
             {{- else }}
@@ -206,8 +220,14 @@ spec:
 {{ toYaml .Values.controller.extraContainers | indent 8 }}
           {{- end }}
         {{- end }}
-      {{- if .Values.controller.extraVolumes }}
+      {{- if or .Values.controller.extraVolumes .Values.aws.licenseConfigSecretName }}
       volumes:
+        {{- if .Values.aws.licenseConfigSecretName }}
+        - name: aws-product-license
+          secret:
+            secretName: {{ .Values.aws.licenseConfigSecretName }}
+            optional: true
+        {{- end }}
         {{- if eq "string" (printf "%T" .Values.controller.extraVolumes) }}
 {{ tpl .Values.controller.extraVolumes . | indent 8 }}
         {{- else }}

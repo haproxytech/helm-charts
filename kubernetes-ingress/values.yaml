@@ -40,6 +40,11 @@ serviceAccount:
   create: true
   name:
 
+## AWS Market Place integration
+## Allows installation of the HAPEE Ingress Controller on AWS EKS and EKS-Anywhere.
+aws:
+  ## Name of the Secret deployed in the desired namespace containing the AWS license files.
+  licenseConfigSecretName: ""
 
 ## Controller default values
 controller:
