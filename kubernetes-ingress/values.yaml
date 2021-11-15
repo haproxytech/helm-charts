@@ -125,18 +125,22 @@ controller:
     successThreshold: 1
     timeoutSeconds: 1
 
-  ## Ingress Class used for ingress.class annotation in multi-ingress environments
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/#using-multiple-ingress-controllers
-  ingressClass: haproxy   # typically "haproxy" or null to receive all events
+  ## IngressClass:
+  ## Ref: https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/ingressclass.md
 
-  ## Ingress Class resource with additional configuration and name of the controller
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#default-ingress-class
-  ## Note: Uses ingressClass as name for the Ingress Class object if enabled
+  # k8s >= 1.18: IngressClass resource used, in multi-ingress environments, to select ingress resources to implement.
+  # ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class
+  # ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#default-ingress-class
+  # Note: Uses ingressClass as name for the Ingress Class object if enabled
   ingressClassResource:
-    enabled: false
+    name: haproxy
     default: false
     parameters: {}
+
+  # k8s < 1.18: Ingress Class used, in multi-ingress environments, for ingress.class annotation to select ingress resources to implement.
+  # k8s >= 1.18: Ingress Class used to target specific HAProxy Ingress Controller in multi-ingress envionments
+  # ref: https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/#using-multiple-ingress-controllers
+  ingressClass: haproxy   # typically "haproxy" or null to receive all events
 
   ## Additional labels to add to the deployment or daemonset metadata
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
