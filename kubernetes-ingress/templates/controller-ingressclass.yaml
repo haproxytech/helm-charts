@@ -16,10 +16,8 @@ limitations under the License.
 
 {{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/IngressClass" }}
 apiVersion: networking.k8s.io/v1
-{{- else if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1/IngressClass" }}
-apiVersion: networking.k8s.io/v1beta1
 {{- else }}
-{{- fail "ERROR: You must have at least networking.k8s.io/v1beta1 to use IngressClass" }}
+apiVersion: networking.k8s.io/v1beta1
 {{- end }}
 kind: IngressClass
 metadata:
