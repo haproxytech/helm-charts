@@ -41,7 +41,7 @@ jobs:
             .circleci/release.sh
 workflows:
   version: 2
-  lint-and-test:
+  lint-test-release:
     jobs:
       - lint-scripts:
           filters:
@@ -57,9 +57,10 @@ workflows:
           filters:
             branches:
               ignore: gh-pages
-  release:
-    jobs:
       - release-charts:
+          requires:
+            - lint-charts
+            - install-charts
           filters:
             tags:
               ignore: /.*/
