@@ -16,7 +16,7 @@ apiVersion: v2
 name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
-version: 1.17.7
+version: 1.17.8
 appVersion: 1.7.2
 kubeVersion: ">=1.17.0-0"
 keywords:
@@ -37,7 +37,9 @@ engine: gotpl
 annotations:
   artifacthub.io/changes: |
     - Fixes for IngressClass resource handling in regards to 1.19+ vs 1.14-1.18 K8s
+    - networking.k8s.io/v1 vs networking.k8s.io/v1beta1 handling
+    - policy/v1 vs policy/v1beta1 handling
     - Documentation updates
     - Use appProtocol for 1.21+ K8s
     - Require at minimum 1.17 K8s
-
+    - Lint error fixes

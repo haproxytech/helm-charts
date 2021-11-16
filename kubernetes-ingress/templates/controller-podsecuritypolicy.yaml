@@ -18,7 +18,14 @@ limitations under the License.
 {{- $useHostNetwork := .Values.controller.daemonset.useHostNetwork }}
 {{- $useHostPort := .Values.controller.daemonset.useHostPort }}
 {{- $hostPorts := .Values.controller.daemonset.hostPorts -}}
+{{- if .Capabilities.APIVersions.Has "policy/v1/PodSecurityPolicy" }}
+apiVersion: policy/v1
+{{- else if .Capabilities.APIVersions.Has "policy/v1beta1/PodSecurityPolicy" }}
 apiVersion: policy/v1beta1
+{{- else }}
+{{- fail "ERROR: You must have at least policy/v1beta1 to use PodSecurityPolicy" }}
+{{- end }}
+kind: PodSecurityPolicy
 kind: PodSecurityPolicy
 metadata:
 {{- if .Values.podSecurityPolicy.annotations }}
