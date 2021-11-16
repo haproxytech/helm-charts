@@ -268,6 +268,40 @@ entries:
   - annotations:
       artifacthub.io/changes: |
         - Fixes for IngressClass resource handling in regards to 1.19+ vs 1.14-1.18 K8s
+        - networking.k8s.io/v1 vs networking.k8s.io/v1beta1 handling
+        - policy/v1 vs policy/v1beta1 handling
+        - Documentation updates
+        - Use appProtocol for 1.21+ K8s
+        - Require at minimum 1.17 K8s
+        - Lint error fixes
+    apiVersion: v2
+    appVersion: 1.7.2
+    created: "2021-11-16T17:10:11.105473+01:00"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 494e4c9b8767acf130c90171b8eb2be331f655d984e235c78282c32bb41b763d
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: mmhedhbi@haproxy.com
+      name: Moemen Mhedhbi
+    - email: bassmann@haproxy.com
+      name: Baptiste Assmann
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.17.8/kubernetes-ingress-1.17.8.tgz
+    version: 1.17.8
+  - annotations:
+      artifacthub.io/changes: |
+        - Fixes for IngressClass resource handling in regards to 1.19+ vs 1.14-1.18 K8s
         - Documentation updates
         - Use appProtocol for 1.21+ K8s
         - Require at minimum 1.17 K8s
@@ -2255,4 +2289,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2021-11-16T10:07:15.188118331Z"
+generated: "2021-11-16T17:10:11.106244+01:00"
