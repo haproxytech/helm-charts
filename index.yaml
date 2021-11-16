@@ -267,6 +267,37 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Fixes for IngressClass resource handling in regards to 1.19+ vs 1.14-1.18 K8s
+        - Documentation updates
+        - Use appProtocol for 1.21+ K8s
+        - Require at minimum 1.17 K8s
+    apiVersion: v2
+    appVersion: 1.7.2
+    created: "2021-11-16T10:07:15.187206065Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 5f846799606de9d3b424cb5bf2426e0c1aca9a30086a5283106d62e3fb038352
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: mmhedhbi@haproxy.com
+      name: Moemen Mhedhbi
+    - email: bassmann@haproxy.com
+      name: Baptiste Assmann
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.17.7/kubernetes-ingress-1.17.7.tgz
+    version: 1.17.7
+  - annotations:
+      artifacthub.io/changes: |
         - Use Ingress Controller 1.7.2 version for base image
         - spec.controller field of IngressClass resource can be modified with ingress.class
     apiVersion: v2
@@ -2224,4 +2255,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2021-11-15T18:06:11.717015355Z"
+generated: "2021-11-16T10:07:15.188118331Z"
