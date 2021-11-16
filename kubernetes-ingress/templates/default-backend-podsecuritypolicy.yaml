@@ -15,7 +15,13 @@ limitations under the License.
 */}}
 
 {{- if and .Values.rbac.create .Values.podSecurityPolicy.enabled .Values.defaultBackend.enabled }}
+{{- if .Capabilities.APIVersions.Has "policy/v1/PodSecurityPolicy" }}
+apiVersion: policy/v1
+{{- else if .Capabilities.APIVersions.Has "policy/v1beta1/PodSecurityPolicy" }}
 apiVersion: policy/v1beta1
+{{- else }}
+{{- fail "ERROR: You must have at least policy/v1beta1 to use PodSecurityPolicy" }}
+{{- end }}
 kind: PodSecurityPolicy
 metadata:
 {{- if .Values.podSecurityPolicy.annotations }}
