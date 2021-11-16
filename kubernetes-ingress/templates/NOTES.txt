@@ -61,7 +61,7 @@ with helm chart option controller.ingressClass.
 
 For more examples and up to date documentation, please visit:
   * Helm chart documentation: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
-  * Controller documentation: https://www.haproxy.com/documentation/hapee/2-0r1/traffic-management/kubernetes-ingress-controller/
+  * Controller documentation: https://www.haproxy.com/documentation/kubernetes/latest/
   * Annotation reference: https://github.com/haproxytech/kubernetes-ingress/tree/master/documentation
   * Image parameters reference: https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/controller.md
 
