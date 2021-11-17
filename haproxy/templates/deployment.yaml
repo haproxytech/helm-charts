@@ -101,8 +101,8 @@ spec:
           {{- range .Values.args.extraArgs }}
             - {{ . }}
           {{- end }}
-          ports:
           {{- end }}
+          ports:
           {{- range $key, $value := .Values.containerPorts }}
             - name: {{ $key }}
               containerPort: {{ $value }}
