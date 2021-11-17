@@ -94,10 +94,15 @@ spec:
           {{- end }}
           image: "{{ .Values.image.repository }}:{{ tpl .Values.image.tag . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.args.enabled }}
           args:
             - -f
             - /usr/local/etc/haproxy/haproxy.cfg
+          {{- range .Values.args.extraArgs }}
+            - {{ . }}
+          {{- end }}
           ports:
+          {{- end }}
           {{- range $key, $value := .Values.containerPorts }}
             - name: {{ $key }}
               containerPort: {{ $value }}
