@@ -3,6 +3,31 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Update base image to 2.4.8 release
+        - Allow disabling container args for EE images
+        - Require at least 1.17 K8s
+    apiVersion: v2
+    appVersion: 2.4.8
+    created: "2021-11-17T12:47:13.124627026Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: c4d45776a8dd48248d00c6e8a7ba86bc5334b247ec9662a9f49b4dfe2a03e044
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.7.1/haproxy-1.7.1.tgz
+    version: 1.7.1
+  - annotations:
+      artifacthub.io/changes: |
         - Update base image to 2.4.7 release
         - Add Pod Lifecycle configuration
     apiVersion: v2
@@ -2345,4 +2370,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2021-11-17T09:43:00.245896709Z"
+generated: "2021-11-17T12:47:13.125555682Z"
