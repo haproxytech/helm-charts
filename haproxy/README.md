@@ -8,8 +8,8 @@ This chart bootstraps an HAProxy load balancer as deployment/daemonset on a [Kub
 
 ### Prerequisites
 
-- Kubernetes 1.12+
-- Helm 2.9+
+- Kubernetes 1.17+ (recommended 1.20+)
+- Helm 3.6+ (recommended 3.7+)
 
 ## Before you begin
 
@@ -58,7 +58,7 @@ helm install haproxytech/haproxy \
 
 ### Installing from a private registry
 
-To install the chart using a private registry for HAProxy (for instance to use a HAPEE image) into a separate namespace _prod_.
+To install the chart using a private registry for HAProxy (for instance to use a HAProxy Enterprise image) into a separate namespace _prod_.
 
 **_NOTE_**: Helm v3 requires namespace to be precreated (eg. with `kubectl create namespace prod`)
 
@@ -79,6 +79,13 @@ helm install my-ingress haproxytech/haproxy  \
   --namespace prod \
   --set image.tag=SOMETAG \
   --set existingImagePullSecret name-of-existing-image-pull-secret
+```
+
+**_NOTE_**: Enterprise images using S6 overlay need default CMD arguments disabled (more about YAML configuration file for Helm can be found in a separate paragraph below):
+
+```yaml
+args:
+  enabled: false
 ```
 
 ### Installing as DaemonSet

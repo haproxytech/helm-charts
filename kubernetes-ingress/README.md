@@ -14,8 +14,8 @@ This chart bootstraps an HAProxy kubernetes-ingress deployment/daemonset on a [K
 
 ### Prerequisites
 
-- Kubernetes 1.12+
-- Helm 2.9+
+- Kubernetes 1.17+ (recommended 1.20+)
+- Helm 3.6+ (recommended 3.7+)
 
 ## Before you begin
 
