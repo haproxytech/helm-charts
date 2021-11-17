@@ -32,6 +32,11 @@ image:
 kind: Deployment    # can be 'Deployment' or 'DaemonSet'
 replicaCount: 1   # used only for Deployment mode
 
+## Command line arguments to pass to HAProxy
+args:
+  enabled: true    # EE images require disabling this due to S6-overlay
+  extraArgs: []    # EE images require disabling this due to S6-overlay
+
 # livenessProbe to deployment and daemonset
 livenessProbe:
   enabled: false
@@ -72,9 +77,9 @@ terminationGracePeriodSeconds: 60
 ## Private Registry configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imageCredentials:
-  registry: null    ## EE images require setting this
-  username: null    ## EE images require setting this
-  password: null    ## EE images require setting this
+  registry: null    # EE images require setting this
+  username: null    # EE images require setting this
+  password: null    # EE images require setting this
 existingImagePullSecret: null
 
 ## Container listener port configuration
