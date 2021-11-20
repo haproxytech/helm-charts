@@ -167,6 +167,15 @@ spec:
             timeoutSeconds: {{ .Values.controller.startupProbe.timeoutSeconds }}
           {{- end }}
           env:
+          {{- if .Values.aws.licenseConfigSecretName }}
+          - name: AWS_WEB_IDENTITY_REFRESH_TOKEN_FILE
+            value: "/var/run/secrets/product-license/license_token"
+          - name: AWS_ROLE_ARN
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.aws.licenseConfigSecretName }}
+                key: iam_role
+          {{- end }}
           - name: POD_NAME
             valueFrom:
               fieldRef:
