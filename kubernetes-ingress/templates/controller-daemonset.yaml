@@ -197,11 +197,16 @@ spec:
 {{ toYaml .Values.controller.lifecycle | indent 12 }}
             {{- end }}
           {{- end }}
-          {{- if .Values.controller.extraVolumeMounts }}
+          {{- if or .Values.controller.extraVolumeMounts .Values.aws.licenseConfigSecretName }}
           volumeMounts:
+            {{- if .Values.aws.licenseConfigSecretName }}
+            - name: aws-product-license
+              readOnly: true
+              mountPath: /var/run/secrets/product-license
+            {{- end }}
             {{- if eq "string" (printf "%T" .Values.controller.extraVolumeMounts) }}
 {{ tpl .Values.controller.extraVolumeMounts . | indent 12 }}
-            {{- else }}
+            {{- else if gt (len .Values.controller.extraVolumeMounts) 0 }}
 {{ toYaml .Values.controller.extraVolumeMounts | indent 12 }}
             {{- end }}
           {{- end}}
@@ -212,11 +217,17 @@ spec:
 {{ toYaml .Values.controller.extraContainers | indent 8 }}
           {{- end }}
         {{- end }}
-      {{- if .Values.controller.extraVolumes }}
+      {{- if or .Values.controller.extraVolumes .Values.aws.licenseConfigSecretName }}
       volumes:
+        {{- if .Values.aws.licenseConfigSecretName }}
+        - name: aws-product-license
+          secret:
+            secretName: {{ .Values.aws.licenseConfigSecretName }}
+            optional: true
+        {{- end }}
         {{- if eq "string" (printf "%T" .Values.controller.extraVolumes) }}
 {{ tpl .Values.controller.extraVolumes . | indent 8 }}
-        {{- else }}
+        {{- else if gt (len .Values.controller.extraVolumes) 0 }}
 {{ toYaml .Values.controller.extraVolumes | indent 8 }}
         {{- end }}
       {{- end }}
