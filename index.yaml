@@ -292,6 +292,34 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Use Ingress Controller 1.7.3 version for base image
+    apiVersion: v2
+    appVersion: 1.7.3
+    created: "2021-12-01T13:33:54.638558616Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: a5c08e14883cd0f8b0dd9f2f244a2204883d887c2895706b3d03786c75bcdd5d
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: mmhedhbi@haproxy.com
+      name: Moemen Mhedhbi
+    - email: bassmann@haproxy.com
+      name: Baptiste Assmann
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.17.11/kubernetes-ingress-1.17.11.tgz
+    version: 1.17.11
+  - annotations:
+      artifacthub.io/changes: |
         - Completely disable IngressClass on 1.17 K8s
     apiVersion: v2
     appVersion: 1.7.2
@@ -2370,4 +2398,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2021-11-17T12:47:13.125555682Z"
+generated: "2021-12-01T13:33:54.639442296Z"
