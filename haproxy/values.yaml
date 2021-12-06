@@ -26,6 +26,50 @@ image:
   tag: "{{ .Chart.AppVersion }}"
   pullPolicy: IfNotPresent
 
+## Automatically Roll Deployments
+# ref: https://helm.sh/docs/howto/charts_tips_and_tricks/#automatically-roll-deployments
+checksumConfigMap:
+  enabled: true
+
+## Share Process Namespace between Containers in a Pod
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
+shareProcessNamespace:
+  enabled: false
+
+## Pods: How Pods manage multiple containers
+# ref: https://kubernetes.io/docs/concepts/workloads/pods/#workload-resources-for-managing-pods
+# ref: https://kubernetes.io/docs/concepts/workloads/pods/#how-pods-manage-multiple-containers
+sidecarContainers: []
+## Reflex
+# ref: https://github.com/cespare/reflex
+# ref: https://hub.docker.com/r/acim/go-reflex
+# - name: reflex
+#   image: acim/go-reflex:1.17.3
+#   command: ["reflex", "-d", "fancy"]
+#   workingDir: /usr/local/etc/haproxy
+#   args:
+#     - -svr
+#     - "..data"
+#     - --
+#     - bash
+#     - -c
+#     - 'pkill -SIGUSR2 "haproxy|hapee-lb"'
+#   ports:
+#     - name: tcp
+#       containerPort: 3000
+#       protocol: TCP
+#   imagePullPolicy: IfNotPresent
+#   volumeMounts:
+#     - name: haproxy-config
+#       mountPath: /usr/local/etc/haproxy
+#   resources:
+#     limits:
+#       cpu: 100m
+#       memory: 128Mi
+#     requests:
+#       cpu: 50m
+#       memory: 64Mi
+
 ## Deployment or DaemonSet pod mode
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
@@ -35,18 +79,41 @@ replicaCount: 1   # used only for Deployment mode
 ## Command line arguments to pass to HAProxy
 args:
   enabled: true    # EE images require disabling this due to S6-overlay
+  # ref: http://cbonte.github.io/haproxy-dconv/2.2/management.html#3
+  defaults: ["-f", "/usr/local/etc/haproxy/haproxy.cfg"]
   extraArgs: []    # EE images require disabling this due to S6-overlay
 
-# livenessProbe to deployment and daemonset
+## Controller Container liveness/readiness probe configuration
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
   enabled: false
   failureThreshold: 3
   successThreshold: 1
-  initialDelaySeconds: 15
+  initialDelaySeconds: 0
   timeoutSeconds: 1
   tcpSocket:
-    port: 1024   # modify to your config
-  periodSeconds: 20
+    port: 80
+  periodSeconds: 10
+
+readinessProbe:
+  enabled: false
+  failureThreshold: 3
+  successThreshold: 1
+  initialDelaySeconds: 0
+  timeoutSeconds: 1
+  tcpSocket:
+    port: 80
+  periodSeconds: 10
+
+startupProbe:
+  enabled: false
+  failureThreshold: 20
+  successThreshold: 1
+  initialDelaySeconds: 0
+  timeoutSeconds: 1
+  tcpSocket:
+    port: 80
+  periodSeconds: 1
 
 ## DaemonSet configuration
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
@@ -149,6 +216,23 @@ config: |
   backend be_main
     server web1 10.0.0.1:8080 check
 
+## Basic features : Maps
+# ref: http://cbonte.github.io/haproxy-dconv/2.2/configuration.html#7.3.1-map
+# ref: http://cbonte.github.io/haproxy-dconv/2.2/intro.html#3.3.8
+includes:
+  # routes.map: |
+  #   www.example.com/v1     www.example2.com/v2
+  #   api.example.com/v1     api.example2.com/v2
+  #   static.example.com/v1  static.example2.com/v2
+  # 200.http: |
+  #   HTTP/1.1 200 OK
+  #   Cache-Control: no-cache
+  #   Connection: close
+  #   Content-Type: text/html
+  #   <html><body><h1>200 OK</h1>
+  #   Check passed.
+  #   </body></html>
+
 ## Additional secrets to mount as volumes
 ## This is expected to be an array of dictionaries specifying the volume name, secret name and mount path
 mountedSecrets: []
@@ -171,6 +255,17 @@ tolerations: []
 ## Node Affinity for pod-node scheduling constraints
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}
+
+## Topology spread constraints (only used in kind: Deployment)
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+topologySpreadConstraints: []
+# - maxSkew: 1
+#   topologyKey: kubernetes.io/zone
+#   whenUnsatisfiable: DoNotSchedule
+#   labelSelector:
+#     matchLabels:
+#       app.kubernetes.io/name: kubernetes-ingress
+#       app.kubernetes.io/instance: kubernetes-ingress
 
 ## Pod DNS Config
 ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
