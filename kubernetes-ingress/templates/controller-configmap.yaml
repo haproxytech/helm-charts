@@ -25,6 +25,10 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
+{{- if .Values.controller.configAnnotations }}
+  annotations:
+{{ toYaml .Values.controller.configAnnotations | indent 4 }}
+{{- end }}
 data:
 {{- if .Values.controller.logging.traffic }}
   syslog-server: {{ template "kubernetes-ingress.syslogServer" . }}

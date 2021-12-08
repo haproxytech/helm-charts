@@ -284,6 +284,10 @@ controller:
   #   rate-limit-interval: "10s"
   #   rate-limit-size: "100k"
 
+  ## Extra annotation for custom configmap for Controller
+  configAnnotations: {}
+  #   annotationKey: value
+
   ## Controller Logging configuration
   logging:
     ## Controller logging level
