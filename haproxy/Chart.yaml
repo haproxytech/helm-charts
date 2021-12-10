@@ -16,7 +16,7 @@ apiVersion: v2
 name: haproxy
 description: A Helm chart for HAProxy on Kubernetes
 type: application
-version: 1.7.1
+version: 1.7.2
 appVersion: 2.4.8
 kubeVersion: ">=1.17.0-0"
 keywords:
