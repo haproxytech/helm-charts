@@ -1,0 +1,7 @@
+kind: Deployment
+livenessProbe:
+  enabled: true
+readinessProbe:
+  enabled: true
+startupProbe:
+  enabled: true

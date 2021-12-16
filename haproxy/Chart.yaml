@@ -16,7 +16,7 @@ apiVersion: v2
 name: haproxy
 description: A Helm chart for HAProxy on Kubernetes
 type: application
-version: 1.8.0
+version: 1.9.0
 appVersion: 2.5.0
 kubeVersion: ">=1.17.0-0"
 keywords:
@@ -31,5 +31,9 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Update base image to 2.5.0 release
-    - Use subpath for mounting haproxy.cfg file
+    - Add support for external files as ConfigMap includes (ie. map files, errorfiles etc.)
+    - Add topologySpreadConstraints
+    - Add readinessProbe and startupProbe
+    - Add sidecarContainers support
+    - Allow sharing process namespace between containers
+    - Add checksumming of ConfigMap

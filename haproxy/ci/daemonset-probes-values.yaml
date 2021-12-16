@@ -1,0 +1,8 @@
+kind: DaemonSet
+replicaCount: 2
+livenessProbe:
+  enabled: true
+readinessProbe:
+  enabled: true
+startupProbe:
+  enabled: true
