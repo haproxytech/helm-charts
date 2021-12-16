@@ -45,11 +45,16 @@ spec:
 {{ toYaml .Values.podLabels | indent 8 }}
         {{- end }}
       annotations:
+      {{- if .Values.checksumConfigMap.enabled }}
         checksum/environment: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- end }}
       {{- if .Values.podAnnotations }}
 {{ toYaml .Values.podAnnotations | indent 8 }}
       {{- end }}
     spec:
+      {{- if .Values.shareProcessNamespace.enabled }}
+      shareProcessNamespace: true
+      {{- end }}
       serviceAccountName: {{ include "haproxy.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- if $useHostNetwork }}
@@ -74,8 +79,14 @@ spec:
 {{- end }}
       volumes:
         - name: haproxy-config
-          configMap:
-            name: {{ include "haproxy.fullname" . }}
+          projected:
+            sources:
+            - configMap:
+                name: {{ include "haproxy.fullname" . }}
+            {{- if .Values.includes }}
+            - configMap:
+                name: includes
+            {{- end }}
         {{- range $mountedSecret := .Values.mountedSecrets }}
         - name: {{ $mountedSecret.volumeName }}
           secret:
@@ -85,6 +96,9 @@ spec:
           {{- toYaml . | nindent 8 }}
         {{- end }}
       containers:
+        {{- with.Values.sidecarContainers }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
         - name: {{ .Chart.Name }}
           {{- if .Values.securityContext.enabled }}
           securityContext:
@@ -100,8 +114,9 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.args.enabled }}
           args:
-            - -f
-            - /usr/local/etc/haproxy/haproxy.cfg
+          {{- range .Values.args.defaults }}
+            - {{ . }}
+          {{- end }}
           {{- range .Values.args.extraArgs }}
             - {{ . }}
           {{- end }}
@@ -124,6 +139,25 @@ spec:
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
             tcpSocket:
               port: {{ .Values.livenessProbe.tcpSocket.port }}
+          {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
+          readinessProbe:
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            tcpSocket:
+              port: {{ .Values.readinessProbe.tcpSocket.port }}
+          {{- end }}
+          startupProbe:
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            tcpSocket:
+              port: {{ .Values.startupProbe.tcpSocket.port }}
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
