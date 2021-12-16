@@ -140,7 +140,7 @@ spec:
             tcpSocket:
               port: {{ .Values.livenessProbe.tcpSocket.port }}
           {{- end }}
-          {{- if .Values.livenessProbe.enabled }}
+          {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
@@ -150,6 +150,7 @@ spec:
             tcpSocket:
               port: {{ .Values.readinessProbe.tcpSocket.port }}
           {{- end }}
+          {{- if .Values.startupProbe.enabled }}
           startupProbe:
             failureThreshold: {{ .Values.startupProbe.failureThreshold }}
             successThreshold: {{ .Values.startupProbe.successThreshold }}
