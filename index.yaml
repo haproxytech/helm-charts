@@ -344,6 +344,35 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Add POD_IP environment variable for controller (for use in Enterprise IC)
+        - Add config annotations for controller ConfigMap
+    apiVersion: v2
+    appVersion: 1.7.3
+    created: "2022-01-06T00:37:57.355845717Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 5baeca0cb4442422936f79fd0bc6375fd049e76fc6b344ce004a9abed3585ee1
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: mmhedhbi@haproxy.com
+      name: Moemen Mhedhbi
+    - email: bassmann@haproxy.com
+      name: Baptiste Assmann
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.18.0/kubernetes-ingress-1.18.0.tgz
+    version: 1.18.0
+  - annotations:
+      artifacthub.io/changes: |
         - Use Ingress Controller 1.7.3 version for base image
     apiVersion: v2
     appVersion: 1.7.3
@@ -2450,4 +2479,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2021-12-16T18:06:10.25075839Z"
+generated: "2022-01-06T00:37:57.356763165Z"
