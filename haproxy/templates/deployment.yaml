@@ -169,8 +169,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: haproxy-config
-              mountPath: /usr/local/etc/haproxy/haproxy.cfg
-              subPath: haproxy.cfg
+              mountPath: /usr/local/etc/haproxy
             {{- with.Values.extraVolumeMounts }}
               {{- toYaml . | nindent 12 }}
             {{- end }}
