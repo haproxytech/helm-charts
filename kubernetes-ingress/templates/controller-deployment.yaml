@@ -33,6 +33,7 @@ spec:
   {{- if and (not .Values.controller.autoscaling.enabled) (not .Values.controller.keda.enabled) }}
   replicas: {{ .Values.controller.replicaCount }}
   {{- end }}
+  minReadySeconds: {{ .Values.controller.minReadySeconds }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
