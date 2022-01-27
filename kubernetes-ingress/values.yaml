@@ -55,6 +55,10 @@ controller:
   kind: Deployment    # can be 'Deployment' or 'DaemonSet'
   replicaCount: 2
 
+  ## minReadySeconds setting of Deployment or DaemonSet
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#min-ready-seconds
+  minReadySeconds: 0
+
   ## Running container without root privileges
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   unprivileged: false
@@ -315,7 +319,7 @@ controller:
   service:
     enabled: true     # set to false when controller.kind is 'DaemonSet' and controller.daemonset.useHostPorts is true
 
-    type: NodePort    # can be 'NodePort' or 'LoadBalancer'
+    type: NodePort    # can be 'ClusterIP', 'NodePort' or 'LoadBalancer'
 
     ## Service annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
