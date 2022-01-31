@@ -19,6 +19,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "kubernetes-ingress.serviceMonitorName" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
     helm.sh/chart: {{ template "kubernetes-ingress.chart" . }}
