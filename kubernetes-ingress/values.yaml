@@ -97,37 +97,38 @@ controller:
   ## Controller Container liveness/readiness probe configuration
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
   livenessProbe:
-    enabled: true
     failureThreshold: 3
     initialDelaySeconds: 0
-    path: /healthz
     periodSeconds: 10
-    port: 1042
-    scheme: HTTP
     successThreshold: 1
     timeoutSeconds: 1
+    httpGet:
+      path: /healthz
+      port: 1042
+      scheme: HTTP
 
   readinessProbe:
-    enabled: true
     failureThreshold: 3
     initialDelaySeconds: 0
-    path: /healthz
     periodSeconds: 10
-    port: 1042
-    scheme: HTTP
     successThreshold: 1
     timeoutSeconds: 1
+    httpGet:
+      path: /healthz
+      port: 1042
+      scheme: HTTP
 
   startupProbe:
-    enabled: true
     failureThreshold: 20
     initialDelaySeconds: 0
-    path: /healthz
     periodSeconds: 1
-    port: 1042
-    scheme: HTTP
     successThreshold: 1
     timeoutSeconds: 1
+    httpGet:
+      path: /healthz
+      port: 1042
+      scheme: HTTP
+    
 
   ## IngressClass:
   ## Ref: https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/ingressclass.md

@@ -127,36 +127,12 @@ spec:
               containerPort: {{ $value }}
               protocol: TCP
           {{- end }}
-          {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            tcpSocket:
-              port: {{ .Values.livenessProbe.tcpSocket.port }}
-          {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
+            {{- toYaml .Values.livenessProbe | trim | nindent 12 }}
           readinessProbe:
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            tcpSocket:
-              port: {{ .Values.readinessProbe.tcpSocket.port }}
-          {{- end }}
-          {{- if .Values.startupProbe.enabled }}
+            {{- toYaml .Values.readinessProbe | trim | nindent 12 }}
           startupProbe:
-            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
-            successThreshold: {{ .Values.startupProbe.successThreshold }}
-            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.startupProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
-            tcpSocket:
-              port: {{ .Values.startupProbe.tcpSocket.port }}
-          {{- end }}
+            {{- toYaml .Values.startupProbe | trim | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.lifecycle }}

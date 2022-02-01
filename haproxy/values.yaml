@@ -85,35 +85,36 @@ args:
 
 ## Controller Container liveness/readiness probe configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-livenessProbe:
-  enabled: false
-  failureThreshold: 3
-  successThreshold: 1
-  initialDelaySeconds: 0
-  timeoutSeconds: 1
-  tcpSocket:
-    port: 80
-  periodSeconds: 10
+livenessProbe: 
+  {}
+  # failureThreshold: 3
+  # successThreshold: 1
+  # initialDelaySeconds: 0
+  # timeoutSeconds: 1
+  # tcpSocket:
+  #   port: 80
+  # periodSeconds: 10
 
 readinessProbe:
-  enabled: false
-  failureThreshold: 3
-  successThreshold: 1
-  initialDelaySeconds: 0
-  timeoutSeconds: 1
-  tcpSocket:
-    port: 80
-  periodSeconds: 10
+  {}
+  # failureThreshold: 3
+  # successThreshold: 1
+  # initialDelaySeconds: 0
+  # timeoutSeconds: 1
+  # tcpSocket:
+  #   port: 80
+  # periodSeconds: 10
 
 startupProbe:
-  enabled: false
-  failureThreshold: 20
-  successThreshold: 1
-  initialDelaySeconds: 0
-  timeoutSeconds: 1
-  tcpSocket:
-    port: 80
-  periodSeconds: 1
+  {}
+  # enabled: false
+  # failureThreshold: 20
+  # successThreshold: 1
+  # initialDelaySeconds: 0
+  # timeoutSeconds: 1
+  # tcpSocket:
+  #   port: 80
+  # periodSeconds: 1
 
 ## DaemonSet configuration
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
