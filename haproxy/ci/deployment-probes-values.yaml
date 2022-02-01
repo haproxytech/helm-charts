@@ -1,7 +1,26 @@
 kind: Deployment
 livenessProbe:
-  enabled: true
+  failureThreshold: 3
+  successThreshold: 1
+  initialDelaySeconds: 0
+  timeoutSeconds: 1
+  tcpSocket:
+    port: 80
+  periodSeconds: 10
 readinessProbe:
-  enabled: true
+  failureThreshold: 3
+  successThreshold: 1
+  initialDelaySeconds: 0
+  timeoutSeconds: 1
+  tcpSocket:
+    port: 80
+  periodSeconds: 10
 startupProbe:
-  enabled: true
+  enabled: false
+  failureThreshold: 20
+  successThreshold: 1
+  initialDelaySeconds: 0
+  timeoutSeconds: 1
+  tcpSocket:
+    port: 80
+  periodSeconds: 1
