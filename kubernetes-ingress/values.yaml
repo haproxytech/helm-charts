@@ -128,7 +128,6 @@ controller:
       path: /healthz
       port: 1042
       scheme: HTTP
-    
 
   ## IngressClass:
   ## Ref: https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/ingressclass.md

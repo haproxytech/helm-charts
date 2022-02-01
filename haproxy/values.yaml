@@ -85,7 +85,7 @@ args:
 
 ## Controller Container liveness/readiness probe configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-livenessProbe: 
+livenessProbe:
   {}
   # failureThreshold: 3
   # successThreshold: 1
@@ -107,7 +107,6 @@ readinessProbe:
 
 startupProbe:
   {}
-  # enabled: false
   # failureThreshold: 20
   # successThreshold: 1
   # initialDelaySeconds: 0
