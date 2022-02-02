@@ -79,14 +79,15 @@ spec:
 {{- end }}
       volumes:
         - name: haproxy-config
+          configMap:
+            name: {{ include "haproxy.fullname" . }}
+        {{- if .Values.includes }}
+        - name: includes
           projected:
             sources:
             - configMap:
-                name: {{ include "haproxy.fullname" . }}
-            {{- if .Values.includes }}
-            - configMap:
                 name: includes
-            {{- end }}
+        {{- end }}
         {{- range $mountedSecret := .Values.mountedSecrets }}
         - name: {{ $mountedSecret.volumeName }}
           secret:
@@ -153,6 +154,10 @@ spec:
             - name: haproxy-config
               mountPath: /usr/local/etc/haproxy/haproxy.cfg
               subPath: haproxy.cfg
+            {{- if .Values.includes }}
+            - name: includes
+              mountPath: {{ .Values.includesMountPath }}
+            {{- end }}
             {{- with.Values.extraVolumeMounts }}
               {{- toYaml . | nindent 12 }}
             {{- end }}

@@ -233,6 +233,9 @@ includes:
   #   Check passed.
   #   </body></html>
 
+## Mount path includes file and maps
+includesMountPath: /etc/haproxy
+
 ## Additional secrets to mount as volumes
 ## This is expected to be an array of dictionaries specifying the volume name, secret name and mount path
 mountedSecrets: []
