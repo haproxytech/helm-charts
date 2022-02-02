@@ -125,12 +125,18 @@ spec:
               containerPort: {{ .targetPort }}
               protocol: TCP
           {{- end }}
+          {{- with .Values.controller.livenessProbe }}
           livenessProbe:
-            {{- toYaml .Values.controller.livenessProbe | trim | nindent 12 }}
+            {{- toYaml . | trim | nindent 12 }}
+          {{- end }}
+          {{- with .Values.controller.readinessProbe }}
           readinessProbe:
-            {{- toYaml .Values.controller.readinessProbe | trim | nindent 12 }}
+            {{- toYaml . | trim | nindent 12 }}
+          {{- end }}
+          {{- with .Values.controller.startupProbe }}
           startupProbe:
-            {{- toYaml .Values.controller.startupProbe | trim | nindent 12 }}
+            {{- toYaml . | trim | nindent 12 }}
+          {{- end }}
           env:
           - name: POD_NAME
             valueFrom:

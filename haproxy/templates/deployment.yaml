@@ -127,12 +127,18 @@ spec:
               containerPort: {{ $value }}
               protocol: TCP
           {{- end }}
+          {{- with .Values.livenessProbe }}
           livenessProbe:
-            {{- toYaml .Values.livenessProbe | trim | nindent 12 }}
+            {{- toYaml . | trim | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
           readinessProbe:
-            {{- toYaml .Values.readinessProbe | trim | nindent 12 }}
+            {{- toYaml . | trim | nindent 12 }}
+          {{- end }}
+          {{- with .Values.startupProbe }}
           startupProbe:
-            {{- toYaml .Values.startupProbe | trim | nindent 12 }}
+            {{- toYaml . | trim | nindent 12 }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.lifecycle }}
