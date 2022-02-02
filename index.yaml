@@ -3,6 +3,32 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Update base image to 2.5.1 release
+        - Separate include files and config file
+        - Ingress template option
+        - More flexible probes configuration
+    apiVersion: v2
+    appVersion: 2.5.1
+    created: "2022-02-02T18:37:31.528736562Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: a751b2c35cf1b9a8e5da177ab9a1e74df1fff766824b65e293e497dc50a0cb1c
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.10.0/haproxy-1.10.0.tgz
+    version: 1.10.0
+  - annotations:
+      artifacthub.io/changes: |
         - Add support for external files as ConfigMap includes (ie. map files, errorfiles etc.)
         - Add topologySpreadConstraints
         - Add readinessProbe and startupProbe
@@ -342,6 +368,37 @@ entries:
     - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.0.1/haproxy-1.0.1.tgz
     version: 1.0.1
   kubernetes-ingress:
+  - annotations:
+      artifacthub.io/changes: |
+        - Use Ingress Controller 1.7.5 version for base image
+        - Add configurable minReadySeconds
+        - Fix for missing namespace in Controller ServiceMonitor
+        - More flexible probes configuration
+    apiVersion: v2
+    appVersion: 1.7.5
+    created: "2022-02-02T18:37:31.643865391Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 5b4eda06e0c098c9da479e0283e860d707f3a5f9f74ca6fd60a9141d1dfbc99a
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: mmhedhbi@haproxy.com
+      name: Moemen Mhedhbi
+    - email: bassmann@haproxy.com
+      name: Baptiste Assmann
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.19.0/kubernetes-ingress-1.19.0.tgz
+    version: 1.19.0
   - annotations:
       artifacthub.io/changes: |
         - Fix creating default TLS secret (#124)
@@ -2508,4 +2565,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2022-01-13T18:43:32.301117431Z"
+generated: "2022-02-02T18:37:31.64571936Z"
