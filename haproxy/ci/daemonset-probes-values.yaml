@@ -17,7 +17,6 @@ readinessProbe:
     port: 80
   periodSeconds: 10
 startupProbe:
-  enabled: false
   failureThreshold: 20
   successThreshold: 1
   initialDelaySeconds: 0
