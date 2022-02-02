@@ -354,3 +354,38 @@ service:
   ## Service externalTrafficPolicy
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-traffic-policy
   # externalTrafficPolicy: Cluster
+
+## Configure Ingress
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
+ingress:
+  enabled: false
+  servicePort: 80
+
+  ## Ingress class
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class
+  className: ""
+
+  ## Ingress labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  labels: {}
+
+  ## Ingress annotations
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+
+  ## Ingress hosts
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  hosts:
+    - host: haproxy.domain.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+  ## Ingress TLS
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  tls: []
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - haproxy.domain.com

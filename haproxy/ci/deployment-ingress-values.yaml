@@ -1,0 +1,3 @@
+kind: Deployment
+ingress:
+  enabled: true
