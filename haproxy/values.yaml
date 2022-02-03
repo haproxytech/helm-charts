@@ -350,6 +350,10 @@ service:
   # ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/
   loadBalancerSourceRanges: []
 
+  ## Service ExternalIPs
+  # ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
+  externalIPs: []
+
   ## Service annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   annotations: {}

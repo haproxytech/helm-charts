@@ -41,6 +41,10 @@ spec:
   loadBalancerSourceRanges:
   {{- toYaml . | nindent 2 }}
   {{- end }}
+  {{- with .Values.service.externalIPs }}
+  externalIPs:
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
   {{- with .Values.containerPorts }}
   ports:
   {{- range $key, $port := . }}
