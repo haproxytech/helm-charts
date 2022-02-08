@@ -324,6 +324,18 @@ autoscaling:
   maxReplicas: 7
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
+  # additionalMetrics:
+  #   - type: Object
+  #     object:
+  #       metric:
+  #         name: requests-per-second
+  #       describedObject:
+  #         apiVersion: networking.k8s.io/v1
+  #         kind: Ingress
+  #         name: main-route
+  #       target:
+  #         type: Value
+  #         value: 10k
 
 ## Pod Disruption Budget
 ## Only to be used with Deployment kind
