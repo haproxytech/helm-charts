@@ -108,7 +108,7 @@ Users can provide an override for an explicit service they want to use via `.Val
 {{- define "kubernetes-ingress.publishServicePath" -}}
 {{- $defServicePath := printf "%s/%s" .Release.Namespace (include "kubernetes-ingress.fullname" .) -}}
 {{- $servicePath := default $defServicePath .Values.controller.publishService.pathOverride }}
-{{- print $servicePath | trunc 63 | trimSuffix "-" -}}
+{{- print $servicePath | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
