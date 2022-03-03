@@ -18,6 +18,10 @@ limitations under the License.
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
+{{- if .Values.defaultBackend.autoscaling.annotations }}
+  annotations:
+{{ toYaml .Values.defaultBackend.autoscaling.annotations | indent 4 }}
+{{- end }}
   name: {{ template "kubernetes-ingress.defaultBackend.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
