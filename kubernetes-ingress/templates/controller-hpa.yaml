@@ -19,6 +19,10 @@ limitations under the License.
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
+{{- if .Values.controller.autoscaling.annotations }}
+  annotations:
+{{ toYaml .Values.controller.autoscaling.annotations | indent 4 }}
+{{- end }}
   name: {{ template "kubernetes-ingress.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
