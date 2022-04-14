@@ -220,6 +220,18 @@ extraVolumeMounts:
     mountPath: /tmp
 ```
 
+### Using additional environment variables
+
+In order to expose extra data (e.g. node and pod IP addresses) to haproxy, you can populate extra environment variables on the container:
+
+```yaml
+extraEnvs:
+  - name: POD_IP
+    valueFrom:
+      fieldRef:
+        fieldPath: status.podIP
+```
+
 ## Installing as non-root with binding to privileged ports
 
 To be able to bind to privileged ports such as tcp/80 and tcp/443 without root privileges (UID and GID are set to 1000 in the example, as HAProxy Docker image has UID/GID of 1000 reserved for HAProxy), there is a special workaround required as `NET_BIND_SERVICE` capability is [not propagated](https://github.com/kubernetes/kubernetes/issues/56374), so we need to use `initContainers` feature as well:

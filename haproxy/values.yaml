@@ -176,6 +176,14 @@ lifecycle: {}
   #   exec:
   #     command: ["/bin/sh", "-c", "kill -USR1 $(pidof haproxy); while killall -0 haproxy; do sleep 1; done"]
 
+## Additional envs to the main container
+extraEnvs: []
+## Example passing the pod IP into a container
+# - name: POD_IP
+#   valueFrom:
+#     fieldRef:
+#       fieldPath: status.podIP
+
 ## Additional volumeMounts to the controller main container
 extraVolumeMounts: []
 ## Example empty volume mounts when using securityContext->readOnlyRootFilesystem
