@@ -54,6 +54,13 @@ Encode an imagePullSecret string.
 {{- end }}
 
 {{/*
+Encode an imagePullSecret string for the default backend.
+*/}}
+{{- define "kubernetes-ingress.defaultBackend.imagePullSecret" }}
+{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.defaultBackend.imageCredentials.registry (printf "%s:%s" .Values.defaultBackend.imageCredentials.username .Values.defaultBackend.imageCredentials.password | b64enc) | b64enc }}
+{{- end }}
+
+{{/*
 Generate default certificate for HAProxy.
 */}}
 {{- define "kubernetes-ingress.gen-certs" -}}

@@ -51,6 +51,13 @@ spec:
       topologySpreadConstraints:
         {{- toYaml . | nindent 8 }}
 {{- end }}
+{{- if .Values.defaultBackend.imageCredentials.registry }}
+      imagePullSecrets:
+      - name: {{ template "kubernetes-ingress.defaultBackend.fullname" . }}
+{{- else if .Values.defaultBackend.existingImagePullSecret }}
+      imagePullSecrets:
+      - name: {{ .Values.defaultBackend.existingImagePullSecret }}
+{{- end }}
 {{- if .Values.controller.priorityClassName }}
       priorityClassName: {{ .Values.controller.priorityClassName }}
 {{- end }}
