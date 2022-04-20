@@ -538,7 +538,7 @@ defaultBackend:
     username: null
     password: null
   existingImagePullSecret: null
-  
+
   ## Listener port configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/
   containerPort: 8080
