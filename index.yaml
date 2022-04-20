@@ -3,6 +3,31 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Update base image to 2.5.5 release
+        - Add PullSecret for default backend
+        - Add extraEnvs to the main container
+    apiVersion: v2
+    appVersion: 2.5.5
+    created: "2022-04-20T08:49:38.749741014Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 5826523575ae29ee41287b8b6b1ec886d36e007c8fe349c0480354097cee3893
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.14.0/haproxy-1.14.0.tgz
+    version: 1.14.0
+  - annotations:
+      artifacthub.io/changes: |
         - Update base image to 2.5.4 release
         - Add ServiceMonitor
     apiVersion: v2
@@ -417,6 +442,34 @@ entries:
     - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.0.1/haproxy-1.0.1.tgz
     version: 1.0.1
   kubernetes-ingress:
+  - annotations:
+      artifacthub.io/changes: |
+        - Use Ingress Controller 1.7.9 version for base image
+    apiVersion: v2
+    appVersion: 1.7.9
+    created: "2022-04-20T08:49:38.824671632Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 575e897a5708c9415d0b33c5bf35aa1cbb53a15ffb5e01b3823bd592943f4c3b
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: mmhedhbi@haproxy.com
+      name: Moemen Mhedhbi
+    - email: bassmann@haproxy.com
+      name: Baptiste Assmann
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.21.1/kubernetes-ingress-1.21.1.tgz
+    version: 1.21.1
   - annotations:
       artifacthub.io/changes: |
         - Use Ingress Controller 1.7.6 version for base image
@@ -2644,4 +2697,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2022-03-11T09:04:18.820098637Z"
+generated: "2022-04-20T08:49:38.825491377Z"
