@@ -16,8 +16,8 @@ apiVersion: v2
 name: haproxy
 description: A Helm chart for HAProxy on Kubernetes
 type: application
-version: 1.12.0
-appVersion: 2.5.4
+version: 1.14.0
+appVersion: 2.5.5
 kubeVersion: ">=1.17.0-0"
 keywords:
   - haproxy
@@ -31,5 +31,6 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Update base image to 2.5.4 release
-    - Add ServiceMonitor
+    - Update base image to 2.5.5 release
+    - Add PullSecret for default backend
+    - Add extraEnvs to the main container
