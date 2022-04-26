@@ -191,21 +191,9 @@ spec:
 {{ toYaml .Values.controller.extraVolumes | indent 8 }}
         {{- end }}
       {{- end }}
-      {{- if or .Values.controller.unprivileged .Values.controller.initContainers }}
+      {{- with.Values.controller.initContainers }}
       initContainers:
-        {{- if .Values.controller.unprivileged }}
-        - name: sysctl
-          image: busybox:musl
-          command:
-            - /bin/sh
-            - -c
-            - sysctl -w net.ipv4.ip_unprivileged_port_start=0
-          securityContext:
-            privileged: true
-        {{- end }}
-        {{- with.Values.controller.initContainers }}
           {{- toYaml . | nindent 8 }}
-        {{- end }}
       {{- end }}
       {{- with .Values.controller.nodeSelector }}
       nodeSelector:
