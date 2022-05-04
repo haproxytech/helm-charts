@@ -345,6 +345,30 @@ autoscaling:
   #         type: Value
   #         value: 10k
 
+keda:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 20
+  pollingInterval: 30
+  cooldownPeriod: 300
+  restoreToOriginalReplicaCount: false
+  scaledObject:
+    annotations: {}
+  behaviour: {}
+  #  scaleDown:
+  #    stabilizationWindowSeconds: 300
+  #    policies:
+  #    - type: Percent
+  #      value: 100
+  #      periodSeconds: 15
+  triggers: []
+  #  - type: prometheus
+  #    metadata:
+  #      serverAddress: http://<prometheus-host>:9090
+  #      metricName: haproxy_process_idle_time_percent
+  #      threshold: '50'
+  #      query: avg(100-avg_over_time(haproxy_process_idle_time_percent{container="kubernetes-ingress-controller",service="mytest-kubernetes-ingress"}[2m]))
+
 ## Pod Disruption Budget
 ## Only to be used with Deployment kind
 ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
