@@ -354,7 +354,7 @@ keda:
   restoreToOriginalReplicaCount: false
   scaledObject:
     annotations: {}
-  behaviour: {}
+  behavior: {}
   #  scaleDown:
   #    stabilizationWindowSeconds: 300
   #    policies:
