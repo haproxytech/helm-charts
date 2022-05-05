@@ -485,6 +485,7 @@ controller:
       - port: stat
         path: /metrics
         scheme: http
+        interval: 30s
 
 ## Default 404 backend
 defaultBackend:
