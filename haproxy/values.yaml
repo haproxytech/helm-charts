@@ -419,6 +419,7 @@ serviceMonitor:
   - port: prometheus
     path: /metrics
     scheme: http
+    interval: 30s
 
 ## Configure Ingress
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
