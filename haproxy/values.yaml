@@ -416,10 +416,10 @@ serviceMonitor:
   ## Specify the endpoints
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/design.md#servicemonitor
   endpoints:
-  - port: prometheus
-    path: /metrics
-    scheme: http
-    interval: 30s
+    - port: prometheus
+      path: /metrics
+      scheme: http
+      interval: 30s
 
 ## Configure Ingress
 ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/

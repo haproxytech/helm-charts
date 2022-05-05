@@ -482,9 +482,9 @@ controller:
     ## Specify the endpoints
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/design.md#servicemonitor
     endpoints:
-    - port: stat
-      path: /metrics
-      scheme: http
+      - port: stat
+        path: /metrics
+        scheme: http
 
 ## Default 404 backend
 defaultBackend:
