@@ -17,6 +17,7 @@
 ## Configure Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
+  annotations: {}
   create: true
   name:
 
