@@ -330,24 +330,24 @@ podSecurityContext: {}
   ### ref: https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/
   ### Sysctls enable only when added kublet arg: --allowed-unsafe-sysctls strings
   # sysctls:
-  # - name: net.ipv4.tcp_rmem
-  #   value: 4096 16060 262144
-  # - name: net.ipv4.tcp_wmem
-  #   value: 4096 16384 262144
-  # - name: net.ipv4.tcp_tw_reuse
-  #   value: "1"
-  # - name: net.ipv4.ip_local_port_range
-  #   value: 1024 65023
-  # - name: net.ipv4.tcp_max_syn_backlog
-  #   value: "60000"
-  # - name: net.ipv4.tcp_fin_timeout
-  #   value: "30"
-  # - name: net.ipv4.tcp_synack_retries
-  #   value: "3"
-  # - name: net.ipv4.ip_nonlocal_bind
-  #   value: "1"
-  # - name: net.core.somaxconn
-  #   value: "60000"
+  #   - name: net.ipv4.tcp_rmem
+  #     value: 4096 16060 262144
+  #   - name: net.ipv4.tcp_wmem
+  #     value: 4096 16384 262144
+  #   - name: net.ipv4.tcp_tw_reuse
+  #     value: "1"
+  #   - name: net.ipv4.ip_local_port_range
+  #     value: 1024 65023
+  #   - name: net.ipv4.tcp_max_syn_backlog
+  #     value: "60000"
+  #   - name: net.ipv4.tcp_fin_timeout
+  #     value: "30"
+  #   - name: net.ipv4.tcp_synack_retries
+  #     value: "3"
+  #   - name: net.ipv4.ip_nonlocal_bind
+  #     value: "1"
+  #   - name: net.core.somaxconn
+  #     value: "60000"
 
 ## Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
