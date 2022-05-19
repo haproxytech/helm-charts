@@ -17,6 +17,7 @@
 ## Configure Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
+  annotations: {}
   create: true
   name:
 
@@ -297,14 +298,56 @@ podLabels: {}
 podAnnotations: {}
 #  key: value
 
+## Enable RBAC Authorization
+## ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+rbac:
+  create: true
+
 ## Disableable use of Pod Security Policy
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 podSecurityPolicy:
-  create: true
+  annotations: {}
+    ## Specify pod annotations
+    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor
+    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp
+    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#sysctl
+
+    ### WARNING!!! "Apparmor is only available Ubuntu/Debian distributions of Linux."
+
+    # apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default
+    # apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default
+    # seccomp.security.alpha.kubernetes.io/allowedProfileNames: runtime/default
+    # seccomp.security.alpha.kubernetes.io/defaultProfileName: runtime/default
+  enabled: false
+  # ref: https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/
+  # Enable only when added kublet arg: --allowed-unsafe-sysctls strings
+  allowedUnsafeSysctls:
+    # - net.*
 
 ## Pod Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 podSecurityContext: {}
+  ### ref: https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/
+  ### Sysctls enable only when added kublet arg: --allowed-unsafe-sysctls strings
+  # sysctls:
+  #   - name: net.ipv4.tcp_rmem
+  #     value: 4096 16060 262144
+  #   - name: net.ipv4.tcp_wmem
+  #     value: 4096 16384 262144
+  #   - name: net.ipv4.tcp_tw_reuse
+  #     value: "1"
+  #   - name: net.ipv4.ip_local_port_range
+  #     value: 1024 65023
+  #   - name: net.ipv4.tcp_max_syn_backlog
+  #     value: "60000"
+  #   - name: net.ipv4.tcp_fin_timeout
+  #     value: "30"
+  #   - name: net.ipv4.tcp_synack_retries
+  #     value: "3"
+  #   - name: net.ipv4.ip_nonlocal_bind
+  #     value: "1"
+  #   - name: net.core.somaxconn
+  #     value: "60000"
 
 ## Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
