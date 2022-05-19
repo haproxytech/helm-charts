@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */}}
 
-{{- if .Values.autoscaling.enabled }}
+{{- if and (eq .Values.kind "Deployment") .Values.autoscaling.enabled }}
+{{- if not .Values.keda.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -44,4 +45,5 @@ spec:
   {{- with .Values.autoscaling.additionalMetrics }}
     {{- toYaml . | trim | nindent 4 }}
   {{- end }}
+{{- end }}
 {{- end }}
