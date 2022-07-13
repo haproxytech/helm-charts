@@ -3,6 +3,31 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Update base image to 2.6.1 release
+        - Add HPA Keda support and improvements to ServiceMonitor
+        - Add PSP for sysctl and remove privileged containers use
+    apiVersion: v2
+    appVersion: 2.6.1
+    created: "2022-07-13T13:56:24.66969997Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 93db5a56917064ac4e0932c71d8d90c86b8a046b855ac7acbffa0dfb22602c70
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.15.0/haproxy-1.15.0.tgz
+    version: 1.15.0
+  - annotations:
+      artifacthub.io/changes: |
         - Update base image to 2.5.5 release
         - Add PullSecret for default backend
         - Add extraEnvs to the main container
@@ -2839,4 +2864,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2022-06-21T10:23:31.358133327Z"
+generated: "2022-07-13T13:56:24.670449304Z"
