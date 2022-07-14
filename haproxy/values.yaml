@@ -355,6 +355,10 @@ securityContext:
   enabled: false
   runAsUser: 1000
   runAsGroup: 1000
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
 
 ## Compute Resources
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
