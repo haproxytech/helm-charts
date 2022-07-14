@@ -107,11 +107,17 @@ spec:
           securityContext:
             runAsUser:  1000
             runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
             capabilities:
               drop:
                 - ALL
               add:
                 - NET_BIND_SERVICE
+            {{- if .Values.controller.enableRuntimeDefaultSeccompProfile }}
+            seccompProfile:
+              type: RuntimeDefault
+            {{- end }}
           {{- end }}
           ports:
           {{- range $key, $value := .Values.controller.containerPort }}

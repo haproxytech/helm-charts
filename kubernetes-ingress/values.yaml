@@ -63,6 +63,10 @@ controller:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   unprivileged: true
 
+  ## Restricts container syscalls
+  ## ref: https://kubernetes.io/docs/tutorials/security/seccomp/
+  enableRuntimeDefaultSeccompProfile: true
+
   ## Init Containers
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   initContainers: []
@@ -498,6 +502,10 @@ defaultBackend:
     tag: 1.5
     pullPolicy: IfNotPresent
     runAsUser: 65534
+
+  ## Restricts container syscalls
+  ## ref: https://kubernetes.io/docs/tutorials/security/seccomp/
+  enableRuntimeDefaultSeccompProfile: true
 
   ## Compute Resources
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
