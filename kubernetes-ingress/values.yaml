@@ -94,8 +94,8 @@ controller:
   ## Controller Container listener port configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/
   containerPort:
-    http: 80
-    https: 443
+    http: 8080
+    https: 8443
     stat: 1024
 
   ## Controller Container liveness/readiness probe configuration

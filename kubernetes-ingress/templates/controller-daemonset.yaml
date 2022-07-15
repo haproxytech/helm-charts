@@ -88,6 +88,8 @@ spec:
 {{- end }}
 {{- end }}
           - --configmap={{ .Release.Namespace }}/{{ template "kubernetes-ingress.fullname" . }}
+          - --http-bind-port={{ .Values.controller.containerPort.http }}
+          - --https-bind-port={{ .Values.controller.containerPort.https }}
 {{- if .Values.defaultBackend.enabled }}
           - --default-backend-service={{ .Release.Namespace }}/{{ template "kubernetes-ingress.defaultBackend.fullname" . }}
 {{- end }}
@@ -107,7 +109,7 @@ spec:
           securityContext:
             runAsUser:  1000
             runAsGroup: 1000
-            allowPrivilegeEscalation: true
+            allowPrivilegeEscalation: false
             runAsNonRoot: true
             capabilities:
               drop:
