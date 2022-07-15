@@ -67,7 +67,7 @@ spec:
           imagePullPolicy: {{ .Values.defaultBackend.image.pullPolicy }}
           securityContext:
             runAsUser: {{ .Values.defaultBackend.image.runAsUser }}
-            allowPrivilegeEscalation: false
+            allowPrivilegeEscalation: true
             runAsNonRoot: true
             capabilities:
               drop:

@@ -355,8 +355,13 @@ securityContext:
   enabled: false
   runAsUser: 1000
   runAsGroup: 1000
-  allowPrivilegeEscalation: false
+  allowPrivilegeEscalation: true
   runAsNonRoot: true
+  capabilities:
+    drop:
+      - ALL
+    add:
+      - NET_BIND_SERVICE
   seccompProfile:
     type: RuntimeDefault
 
