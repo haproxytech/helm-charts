@@ -29,7 +29,7 @@ metadata:
 {{ toYaml .Values.podAnnotations | indent 4 }}
   {{- end }}
 spec:
-  minReadySeconds: 0
+  minReadySeconds: {{ .Values.minReadySeconds }}
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
