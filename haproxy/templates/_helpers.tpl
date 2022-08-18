@@ -25,11 +25,11 @@ Expand the name of the chart.
 Allow the release namespace to be overridden for multi-namespace deployments in combined charts
 */}}
 {{- define "haproxy.namespace" -}}
-  {{- if .Values.namespaceOverride -}}
-    {{- .Values.namespaceOverride -}}
-  {{- else -}}
-    {{- .Release.Namespace -}}
-  {{- end -}}
+{{- if .Values.namespaceOverride -}}
+{{- .Values.namespaceOverride -}}
+{{- else -}}
+{{- .Release.Namespace -}}
+{{- end -}}
 {{- end -}}
 
 {{/*
