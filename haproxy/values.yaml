@@ -25,8 +25,7 @@ serviceAccount:
 ## If namespaceOverride is set, helm will use it's value instead of .Release.Namespace for all chart components.
 ## It is useful in case Haproxy is used as a dependency for another helm chart. Value can be overridden in parent chart values.yaml
 ## Example values.yaml of parent chart:
-## haproxy:
-##   namespaceOverride: haproxytech
+# namespaceOverride: haproxytech
 
 ## Default values for image
 image:
