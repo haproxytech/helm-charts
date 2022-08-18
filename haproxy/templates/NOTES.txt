@@ -42,7 +42,7 @@ initContainers:
       privileged: true
 
 Node IP can be found with:
-  $ kubectl --namespace {{ .Release.Namespace }} get nodes -o jsonpath="{.items[0].status.addresses[1].address}"
+  $ kubectl --namespace {{ template "haproxy.namespace" . }} get nodes -o jsonpath="{.items[0].status.addresses[1].address}"
 
 For more examples and up to date documentation, please visit:
   * Helm chart documentation: https://github.com/haproxytech/helm-charts/tree/main/haproxy

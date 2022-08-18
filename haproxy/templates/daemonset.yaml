@@ -22,6 +22,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ include "haproxy.fullname" . }}
+  namespace: {{ template "haproxy.namespace" . }}
   labels:
     {{- include "haproxy.labels" . | nindent 4 }}
   {{- if .Values.podAnnotations }}

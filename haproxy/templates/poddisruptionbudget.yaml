@@ -19,6 +19,7 @@ apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "haproxy.fullname" . }}
+  namespace: {{ template "haproxy.namespace" . }}
   labels:
     {{- include "haproxy.labels" . | nindent 4 }}
 spec:
