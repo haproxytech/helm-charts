@@ -16,8 +16,8 @@ apiVersion: v2
 name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
-version: 1.22.4
-appVersion: 1.8.3
+version: 1.23.0
+appVersion: 1.8.4
 kubeVersion: ">=1.17.0-0"
 keywords:
   - ingress
@@ -27,13 +27,11 @@ sources:
   - https://github.com/haproxytech/kubernetes-ingress
 icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
 maintainers:
-  - name: Moemen Mhedhbi
-    email: mmhedhbi@haproxy.com
-  - name: Baptiste Assmann
-    email: bassmann@haproxy.com
   - name: Dinko Korunic
     email: dkorunic@haproxy.com
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Use Ingress Controller 1.8.3 version for base image
+    - Use Ingress Controller 1.8.4 version for base image
+    - Further enhance securityContext (allowPrivilegeEscalation, runAsNonRoot, seccompProfile)
+    - Use 8080 for http and 8443 for https for containerPorts
