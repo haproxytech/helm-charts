@@ -3,6 +3,30 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Update base image to 2.6.5 release
+        - Fix for namespaceOverride not used for configMap
+    apiVersion: v2
+    appVersion: 2.6.5
+    created: "2022-09-07T15:25:40.556638647Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 03c4f15d507167978cc432e15b525c75489bf69ee1d4bc479daca9dd19c6a72e
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.17.0/haproxy-1.17.0.tgz
+    version: 1.17.0
+  - annotations:
+      artifacthub.io/changes: |
         - Update base image to 2.6.3 release
         - Add namespaceOverride option
         - minReadySeconds is configurable
@@ -2890,4 +2914,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2022-08-22T10:00:03.617551375Z"
+generated: "2022-09-07T15:25:40.557668414Z"
