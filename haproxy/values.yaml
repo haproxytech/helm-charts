@@ -361,29 +361,28 @@ podSecurityContext: {}
 
 ## Container Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-securityContext:
-  enabled: false
-  runAsUser: 1000
-  runAsGroup: 1000
-  allowPrivilegeEscalation: true
-  runAsNonRoot: true
-  capabilities:
-    drop:
-      - ALL
-    add:
-      - NET_BIND_SERVICE
-  seccompProfile:
-    type: RuntimeDefault
+securityContext: {}
+#  runAsUser: 1000
+#  runAsGroup: 1000
+#  allowPrivilegeEscalation: true
+#  runAsNonRoot: true
+#  capabilities:
+#    drop:
+#      - ALL
+#    add:
+#      - NET_BIND_SERVICE
+#  seccompProfile:
+#    type: RuntimeDefault
 
 ## Compute Resources
 ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 resources:
 #  limits:
-#    cpu: 100m
-#    memory: 64Mi
+#    cpu: 250m
+#    memory: 128Mi
   requests:
-    cpu: 100m
-    memory: 64Mi
+    cpu: 250m
+    memory: 128Mi
 
 ## Horizontal Pod Scaler
 ## Only to be used with Deployment kind

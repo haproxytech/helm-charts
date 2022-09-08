@@ -1,3 +1,4 @@
+kind: DaemonSet
 securityContext:
   runAsUser: 1000
   runAsGroup: 1000

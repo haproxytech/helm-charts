@@ -104,14 +104,7 @@ spec:
         {{- end }}
         - name: {{ .Chart.Name }}
           {{- if .Values.securityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.securityContext.runAsUser }}
-            runAsGroup: {{ .Values.securityContext.runAsGroup }}
-            capabilities:
-              drop:
-                - ALL
-              add:
-                - NET_BIND_SERVICE
+            {{- toYaml .Values.securityContext | nindent 12 }}
           {{- end }}
           image: "{{ .Values.image.repository }}:{{ tpl .Values.image.tag . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}

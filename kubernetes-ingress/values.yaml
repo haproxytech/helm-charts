@@ -178,11 +178,11 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   resources:
   #  limits:
-  #    cpu: 100m
-  #    memory: 64Mi
+  #    cpu: 250m
+  #    memory: 400Mi
     requests:
-      cpu: 100m
-      memory: 64Mi
+      cpu: 250m
+      memory: 400Mi
 
   ## Horizontal Pod Scaler
   ## Only to be used with Deployment kind
