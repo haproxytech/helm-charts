@@ -3,6 +3,30 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Update base image to 2.6.6 release
+        - Fully open securityContext for user configuration
+    apiVersion: v2
+    appVersion: 2.6.6
+    created: "2022-10-07T22:11:04.219295687Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: ecde8d2552100271acc1005da2dd1d5ea1620dee591dc3383efecaffdc40e936
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.17.1/haproxy-1.17.1.tgz
+    version: 1.17.1
+  - annotations:
+      artifacthub.io/changes: |
         - Update base image to 2.6.5 release
         - Fix for namespaceOverride not used for configMap
     apiVersion: v2
@@ -2938,4 +2962,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2022-09-13T22:13:51.39605812Z"
+generated: "2022-10-07T22:11:04.220024529Z"
