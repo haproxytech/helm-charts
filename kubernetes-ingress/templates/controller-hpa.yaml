@@ -20,10 +20,8 @@ limitations under the License.
 apiVersion: autoscaling/v2
 {{- else if .Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
 apiVersion: autoscaling/v2beta2
-{{- else if .Capabilities.APIVersions.Has "autoscaling/v2beta1" }}
-apiVersion: autoscaling/v2beta1
 {{- else }}
-  {{- fail "ERROR: You must have at least autoscaling/v2beta1 to use HorizontalPodAutoscaler" }}
+  {{- fail "ERROR: You must have autoscaling/v2 or autoscaling/v2beta2 to use HorizontalPodAutoscaler" }}
 {{- end }}
 kind: HorizontalPodAutoscaler
 metadata:
