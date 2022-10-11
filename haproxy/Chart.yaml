@@ -31,5 +31,4 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Update base image to 2.6.6 release
-    - Fully open securityContext for user configuration
+    - Fixes securityContext rendering
