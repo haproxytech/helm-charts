@@ -1,4 +1,5 @@
 securityContext:
+  enabled: true
   runAsUser: 1000
   runAsGroup: 1000
   allowPrivilegeEscalation: true
