@@ -103,7 +103,7 @@ spec:
         {{- end }}
         - name: {{ .Chart.Name }}
           {{- if .Values.securityContext.enabled }}
-            {{- toYaml .Values.securityContext | nindent 12 }}
+          securityContext: {{- omit .Values.securityContext "enabled" | toYaml  | nindent 12 }}
           {{- end }}
           image: "{{ .Values.image.repository }}:{{ tpl .Values.image.tag . }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
