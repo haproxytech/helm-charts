@@ -33,6 +33,10 @@ podSecurityPolicy:
 rbac:
   create: true
 
+## Create namespace
+## https://kubernetes.io/docs/tasks/administer-cluster/namespaces-walkthrough/
+namespace:
+  create: false
 
 ## Configure Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
