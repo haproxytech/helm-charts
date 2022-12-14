@@ -174,7 +174,7 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   podAnnotations: {}
   #  key: value
-  
+
   ## Allows to enable/disable environment variables for finding services
   ## ref: https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service
   ## Note: Possible performance issues in large clusters: https://github.com/kubernetes/kubernetes/issues/92615
