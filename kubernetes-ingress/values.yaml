@@ -177,6 +177,7 @@ controller:
   
   ## Allows to enable/disable environment variables for finding services
   ## ref: https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service
+  ## Note: Possible performance issues in large clusters: https://github.com/kubernetes/kubernetes/issues/92615
   enableServiceLinks: true
 
   ## Ingress TLS secret, if it is enabled and secret is null then controller will use auto-generated secret, otherwise
