@@ -443,6 +443,10 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   priorityClassName: ""
 
+  ## Pod runtime class name
+  ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
+  runtimeClassName: ""
+
   ## Controller container lifecycle handlers
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
   lifecycle: {}

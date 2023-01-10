@@ -76,6 +76,9 @@ spec:
 {{- if .Values.controller.priorityClassName }}
       priorityClassName: {{ .Values.controller.priorityClassName }}
 {{- end }}
+{{- if .Values.controller.runtimeClassName }}
+      runtimeClassName: {{ .Values.controller.runtimeClassName }}
+{{- end }}
       containers:
         - name: {{ template "kubernetes-ingress.name" . }}-{{ .Values.controller.name }}
           image: "{{ .Values.controller.image.repository }}:{{ tpl .Values.controller.image.tag . }}"
