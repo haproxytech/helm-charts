@@ -134,4 +134,11 @@ Create a default fully qualified ServiceMonitor name.
 {{- default (include "kubernetes-ingress.fullname" .) .Values.controller.serviceMonitor.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
+{{/*
+Create a FQDN for the Service metrics.
+*/}}
+{{- define "kubernetes-ingress.serviceMetricsName" -}}
+{{- printf "%s-%s" (include "kubernetes-ingress.fullname" . | trunc 56 | trimSuffix "-") "metrics" }}
+{{- end -}}
+
 {{/* vim: set filetype=mustache: */}}
