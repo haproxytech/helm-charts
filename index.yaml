@@ -3,6 +3,29 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Fix HPA spec
+    apiVersion: v2
+    appVersion: 2.6.6
+    created: "2023-01-13T09:12:13.676968365Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: bad0d7393ad9d73dd484346ffd8b32fcc34dd958bff2b20e32e48fc1f65bb532
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.17.5/haproxy-1.17.5.tgz
+    version: 1.17.5
+  - annotations:
+      artifacthub.io/changes: |
         - Fixes securityContext rendering
     apiVersion: v2
     appVersion: 2.6.6
@@ -3157,4 +3180,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-01-10T10:12:52.007107375Z"
+generated: "2023-01-13T09:12:13.677780782Z"
