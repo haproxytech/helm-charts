@@ -16,7 +16,7 @@ apiVersion: v2
 name: haproxy
 description: A Helm chart for HAProxy on Kubernetes
 type: application
-version: 1.17.5
+version: 1.17.6
 appVersion: 2.6.6
 kubeVersion: ">=1.17.0-0"
 keywords:
@@ -31,4 +31,4 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Fix HPA spec
+    - Add possibility to pass additional ports to Service
