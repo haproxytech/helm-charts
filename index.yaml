@@ -3,6 +3,29 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Add possibility to pass additional ports to Service
+    apiVersion: v2
+    appVersion: 2.6.6
+    created: "2023-02-06T11:21:45.171054985Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 285465ae08d4f5f5437a13cf57914a5aaf51a847396acfc8b8ce234b09fd0acf
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.17.6/haproxy-1.17.6.tgz
+    version: 1.17.6
+  - annotations:
+      artifacthub.io/changes: |
         - Fix HPA spec
     apiVersion: v2
     appVersion: 2.6.6
@@ -3228,4 +3251,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-01-19T17:56:31.279486975Z"
+generated: "2023-02-06T11:21:45.17304133Z"
