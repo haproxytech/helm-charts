@@ -468,6 +468,11 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-traffic-policy
   # externalTrafficPolicy: Cluster
 
+  ## Additional Service ports to use(e.g. port of side container haproxy exporter)
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+  additionalPorts: {}
+    # prometheus: 9101
+
 serviceMonitor:
   ## Toggle the ServiceMonitor true if you have Prometheus Operator installed and configured
   enabled: false
