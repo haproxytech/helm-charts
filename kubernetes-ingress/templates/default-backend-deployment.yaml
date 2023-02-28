@@ -66,9 +66,9 @@ spec:
           image: "{{ .Values.defaultBackend.image.repository }}:{{ .Values.defaultBackend.image.tag }}"
           imagePullPolicy: {{ .Values.defaultBackend.image.pullPolicy }}
           securityContext:
+            runAsNonRoot: true
             runAsUser: {{ .Values.defaultBackend.image.runAsUser }}
             allowPrivilegeEscalation: false
-            runAsNonRoot: true
             capabilities:
               drop:
                 - ALL
