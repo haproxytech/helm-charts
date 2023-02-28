@@ -363,10 +363,11 @@ podSecurityContext: {}
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 securityContext: {}
 #  enabled: true
+#  runAsNonRoot: true
 #  runAsUser: 1000
 #  runAsGroup: 1000
-#  allowPrivilegeEscalation: true
-#  runAsNonRoot: true
+#  fsGroup: 1000
+#  allowPrivilegeEscalation: false
 #  capabilities:
 #    drop:
 #      - ALL
