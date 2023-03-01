@@ -662,6 +662,30 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - replace k8s.gcr.io registry for the default backend with registry.k8s.io
+    apiVersion: v2
+    appVersion: 1.9.3
+    created: "2023-03-01T17:32:40.784282663Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 8201b2d4c50a6e336491697f7a7c2577a52adffc6b350fdf95fa254d1165b592
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.28.3/kubernetes-ingress-1.28.3.tgz
+    version: 1.28.3
+  - annotations:
+      artifacthub.io/changes: |
         - pod and container securityContext fixes for NET_BIND_SERVICE capability
         - PodSecurityPolicy fixes for K8s 1.25+
     apiVersion: v2
@@ -3351,4 +3375,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-03-01T09:07:26.660510071Z"
+generated: "2023-03-01T17:32:40.785249805Z"
