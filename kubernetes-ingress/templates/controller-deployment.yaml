@@ -80,6 +80,12 @@ spec:
 {{- if .Values.controller.runtimeClassName }}
       runtimeClassName: {{ .Values.controller.runtimeClassName }}
 {{- end }}
+{{- if .Values.controller.unprivileged }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser:  1000
+        runAsGroup: 1000
+{{- end }}
       containers:
         - name: {{ template "kubernetes-ingress.name" . }}-{{ .Values.controller.name }}
           image: "{{ .Values.controller.image.repository }}:{{ tpl .Values.controller.image.tag . }}"
@@ -115,7 +121,7 @@ spec:
             runAsNonRoot: true
             runAsUser:  1000
             runAsGroup: 1000
-            allowPrivilegeEscalation: false
+            allowPrivilegeEscalation: true
             capabilities:
               drop:
                 - ALL
