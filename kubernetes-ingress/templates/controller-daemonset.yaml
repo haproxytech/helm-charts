@@ -100,9 +100,6 @@ spec:
           - --configmap={{ .Release.Namespace }}/{{ template "kubernetes-ingress.fullname" . }}
           - --http-bind-port={{ .Values.controller.containerPort.http }}
           - --https-bind-port={{ .Values.controller.containerPort.https }}
-{{- if .Values.defaultBackend.enabled }}
-          - --default-backend-service={{ .Release.Namespace }}/{{ template "kubernetes-ingress.defaultBackend.fullname" . }}
-{{- end }}
 {{- if .Values.controller.ingressClass }}
           - --ingress.class={{ .Values.controller.ingressClass }}
 {{- end }}
