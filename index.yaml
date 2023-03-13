@@ -662,6 +662,30 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Allow disabling enableServiceLinks (#179)
+    apiVersion: v2
+    appVersion: 1.9.5
+    created: "2023-03-13T07:27:20.987860147Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: c5928d4a3932d22f8b5fc20af906344abc1bbdb65a3a14f2f8ca531439ef530d
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.19.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.29.2/kubernetes-ingress-1.29.2.tgz
+    version: 1.29.2
+  - annotations:
+      artifacthub.io/changes: |
         - Use Ingress Controller 1.9.5 version for base image
     apiVersion: v2
     appVersion: 1.9.5
@@ -3423,4 +3447,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-03-10T15:10:40.064504208Z"
+generated: "2023-03-13T07:27:20.988826158Z"
