@@ -157,10 +157,10 @@ spec:
           - name: AWS_WEB_IDENTITY_REFRESH_TOKEN_FILE
             value: "/var/run/secrets/product-license/license_token"
           - name: AWS_ROLE_ARN
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.aws.licenseConfigSecretName }}
-                  key: iam_role
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.aws.licenseConfigSecretName }}
+                key: iam_role
           {{- end }}
           - name: POD_NAME
             valueFrom:
@@ -196,7 +196,7 @@ spec:
             {{- end }}
             {{- if eq "string" (printf "%T" .Values.controller.extraVolumeMounts) }}
 {{ tpl .Values.controller.extraVolumeMounts . | indent 12 }}
-            {{- else }}
+            {{- else if gt (len .Values.controller.extraVolumeMounts) 0 }}
 {{ toYaml .Values.controller.extraVolumeMounts | indent 12 }}
             {{- end }}
           {{- end}}
@@ -217,7 +217,7 @@ spec:
         {{- end }}
         {{- if eq "string" (printf "%T" .Values.controller.extraVolumes) }}
 {{ tpl .Values.controller.extraVolumes . | indent 8 }}
-        {{- else }}
+        {{- else if gt (len .Values.controller.extraVolumes) 0 }}
 {{ toYaml .Values.controller.extraVolumes | indent 8 }}
         {{- end }}
       {{- end }}
