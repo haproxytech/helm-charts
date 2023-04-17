@@ -146,6 +146,18 @@ helm install my-ingress haproxytech/kubernetes-ingress \
 
 **_NOTE_**: make sure your Ingress routes have corresponding `ingress.class: haproxy` annotation.
 
+### Installing Gateway API support
+
+[Gateway API support](https://gateway-api.sigs.k8s.io/) can be installed and used wth controller. Supported features can seen in [Ingress Controller documentation](https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/gateway-api.md)
+
+
+```console
+helm install my-ingress haproxytech/kubernetes-ingress \
+  --set controller.gatewayControllerName=haproxy.org/gateway-controller
+```
+
+**_NOTE_**: Gateway API is not part of the default k8s API so it needs to be installed.
+
 ### Installing with service annotations
 
 On some environments like EKS and GKE there might be a need to pass service annotations. Syntax can become a little tedious however:
