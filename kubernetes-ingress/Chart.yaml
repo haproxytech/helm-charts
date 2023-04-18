@@ -32,6 +32,5 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - AWS MarketPlace fixes (#182)
-    - supporting AWS MarketPlace integration with DS strategy (#183)
-    - Use Ingress Controller 1.9.6 version for base image
+    - Add support for gateway-controller-name (#185)
+    - Use Ingress Controller 1.10.1 version for base image
