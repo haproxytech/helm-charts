@@ -162,7 +162,7 @@ controller:
 
   # Gateway API controller, not available in k8s as default, but can be installed
   # ref: https://gateway-api.sigs.k8s.io/
-  gatewayControllerName: # if used, for example haproxy.org/gateway-controller
+  # gatewayControllerName: haproxy.org/gateway-controller
 
   ## Additional labels to add to the deployment or daemonset metadata
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
