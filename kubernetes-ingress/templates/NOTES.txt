@@ -11,6 +11,10 @@ RBAC authorization is disabled.
 Controller ingress.class is set to "{{ .Values.controller.ingressClass }}" so make sure to use same annotation for
 Ingress resource.
 {{- end}}
+{{- if .Values.controller.gatewayControllerName}}
+Controller Gateway Controller Name is set to "{{ .Values.controller.gatewayControllerName }}" so make sure
+that Gateway API CRDs are installed in Kubernetes.
+{{- end}}
 
 Service ports mapped are:
 {{- if eq .Values.controller.kind "Deployment" }}
@@ -64,6 +68,3 @@ For more examples and up to date documentation, please visit:
   * Controller documentation: https://www.haproxy.com/documentation/kubernetes/latest/
   * Annotation reference: https://github.com/haproxytech/kubernetes-ingress/tree/master/documentation
   * Image parameters reference: https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/controller.md
-
-
-
