@@ -662,6 +662,30 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Further improvements to Gateway API setup
+    apiVersion: v2
+    appVersion: 1.10.1
+    created: "2023-04-19T08:40:25.700639787Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 3ef131d7876191daacba626086e0206541593cd5df566a0d1a52038476b022ad
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.30.2/kubernetes-ingress-1.30.2.tgz
+    version: 1.30.2
+  - annotations:
+      artifacthub.io/changes: |
         - Add support for gateway-controller-name (#185)
         - Use Ingress Controller 1.10.1 version for base image
     apiVersion: v2
@@ -3498,4 +3522,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-04-18T08:24:54.742991032Z"
+generated: "2023-04-19T08:40:25.701409104Z"
