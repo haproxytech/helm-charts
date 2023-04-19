@@ -104,8 +104,8 @@ spec:
 {{- if .Values.controller.ingressClass }}
           - --ingress.class={{ .Values.controller.ingressClass }}
 {{- end }}
-{{- if .Values.controller.gatewayControllerName }}
-          - --gateway-controller-name={{ .Values.controller.gatewayControllerName }}
+{{- if and .Values.controller.kubernetesGateway.enabled .Values.controller.kubernetesGateway.gatewayControllerName }}
+          - --gateway-controller-name={{ .Values.controller.kubernetesGateway.gatewayControllerName }}
 {{- end }}
 {{- if .Values.controller.publishService.enabled }}
           - --publish-service={{ template "kubernetes-ingress.publishServicePath" . }}

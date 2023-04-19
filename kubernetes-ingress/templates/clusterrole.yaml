@@ -87,4 +87,25 @@ rules:
   - list
   - watch
   - update
+{{- if .Values.controller.kubernetesGateway.enabled }}
+- apiGroups:
+  - "gateway.networking.k8s.io"
+  resources:
+  - referencegrants
+  - gateways
+  - gatewayclasses
+  - tcproutes
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - "gateway.networking.k8s.io"
+  resources:
+  - gatewayclasses/status
+  - gateways/status
+  - tcproutes/status
+  verbs:
+  - update
+{{- end }}
 {{- end -}}

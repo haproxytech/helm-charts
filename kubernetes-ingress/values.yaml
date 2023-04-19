@@ -160,9 +160,12 @@ controller:
   # ref: https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/#using-multiple-ingress-controllers
   ingressClass: haproxy   # typically "haproxy" or null to receive all events
 
-  # Gateway API controller, not available in k8s as default, but can be installed
+  # Gateway API controller, not available in K8s as default but can be installed
   # ref: https://gateway-api.sigs.k8s.io/
-  # gatewayControllerName: haproxy.org/gateway-controller
+  # ref: https://gateway-api.sigs.k8s.io/guides/#installing-a-gateway-controller
+  kubernetesGateway:
+    enabled: false
+    gatewayControllerName: haproxy.org/gateway-controller
 
   ## Additional labels to add to the deployment or daemonset metadata
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
