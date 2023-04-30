@@ -443,8 +443,8 @@ controller:
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxUnavailable: 0
-      maxSurge: 1
+      maxUnavailable: 0 # set a non-zero value when controller.kind is 'DaemonSet'
+      maxSurge: 1 # set to 0 when controller.kind is 'DaemonSet'
 
   ## Controller Pod PriorityClass
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
