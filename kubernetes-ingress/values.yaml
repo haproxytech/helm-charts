@@ -440,11 +440,9 @@ controller:
 
   ## Controller deployment strategy definition
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  ## ref: https://kubernetes.io/docs/tasks/manage-daemon/update-daemon-set/
   strategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 0
-      maxSurge: 1
 
   ## Controller Pod PriorityClass
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
