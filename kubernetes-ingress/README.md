@@ -14,7 +14,7 @@ This chart bootstraps an HAProxy kubernetes-ingress deployment/daemonset on a [K
 
 ### Prerequisites
 
-- Kubernetes 1.17+ (recommended 1.20+)
+- Kubernetes 1.22+ (recommended 1.24+)
 - Helm 3.6+ (recommended 3.7+)
 
 ## Before you begin
@@ -149,7 +149,6 @@ helm install my-ingress haproxytech/kubernetes-ingress \
 ### Installing Gateway API support
 
 [Gateway API support](https://gateway-api.sigs.k8s.io/) can be installed and used wth controller. Supported features can seen in [Ingress Controller documentation](https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/gateway-api.md)
-
 
 ```console
 helm install my-ingress haproxytech/kubernetes-ingress \
