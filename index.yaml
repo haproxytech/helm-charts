@@ -662,6 +662,30 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Use Ingress Controller 1.10.2 version for base image
+    apiVersion: v2
+    appVersion: 1.10.2
+    created: "2023-05-11T09:05:26.855478717Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 171d673d0d2b6dc4e61e41233f18fa33158d6addf957d8133cb1c49a76030e57
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.30.5/kubernetes-ingress-1.30.5.tgz
+    version: 1.30.5
+  - annotations:
+      artifacthub.io/changes: |
         - Allow strategy override for DaemonSet deployments (#186)
         - Keep rollingUpdate defaults for both DaemonSet and Deployment (#186, #189)
     apiVersion: v2
@@ -3571,4 +3595,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-05-01T20:16:32.470188042Z"
+generated: "2023-05-11T09:05:26.856153662Z"
