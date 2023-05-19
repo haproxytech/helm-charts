@@ -47,6 +47,7 @@ shareProcessNamespace:
 # ref: https://kubernetes.io/docs/concepts/workloads/pods/#workload-resources-for-managing-pods
 # ref: https://kubernetes.io/docs/concepts/workloads/pods/#how-pods-manage-multiple-containers
 sidecarContainers: []
+
 ## Reflex
 # ref: https://github.com/cespare/reflex
 # ref: https://hub.docker.com/r/acim/go-reflex
@@ -90,7 +91,7 @@ minReadySeconds: 0
 ## Command line arguments to pass to HAProxy
 args:
   enabled: true    # EE images require disabling this due to S6-overlay
-  # ref: http://cbonte.github.io/haproxy-dconv/2.2/management.html#3
+  # ref: http://cbonte.github.io/haproxy-dconv/2.6/management.html#3
   defaults: ["-f", "/usr/local/etc/haproxy/haproxy.cfg"]
   extraArgs: []    # EE images require disabling this due to S6-overlay
 
@@ -216,7 +217,7 @@ extraVolumes: []
 #   emptyDir: {}
 
 ## HAProxy daemon configuration
-# ref: https://www.haproxy.org/download/2.2/doc/configuration.txt
+# ref: https://www.haproxy.org/download/2.6/doc/configuration.txt
 config: |
   global
     log stdout format raw local0
@@ -235,9 +236,14 @@ config: |
   backend be_main
     server web1 10.0.0.1:8080 check
 
+# Mount path and sub path for config file
+configMount:
+  mountPath: /usr/local/etc/haproxy/haproxy.cfg    # EE images use /etc/hapee-VERSION/hapee-lb.cfg
+  subPath: haproxy.cfg                             # EE images use hapee-lb.cfg
+
 ## Basic features : Maps
-# ref: http://cbonte.github.io/haproxy-dconv/2.2/configuration.html#7.3.1-map
-# ref: http://cbonte.github.io/haproxy-dconv/2.2/intro.html#3.3.8
+# ref: http://cbonte.github.io/haproxy-dconv/2.6/configuration.html#7.3.1-map
+# ref: http://cbonte.github.io/haproxy-dconv/2.6/intro.html#3.3.8
 includes:
   # routes.map: |
   #   www.example.com/v1     www.example2.com/v2
@@ -252,8 +258,8 @@ includes:
   #   Check passed.
   #   </body></html>
 
-## Mount path includes file and maps
-includesMountPath: /etc/haproxy
+## Mount path for includes and maps
+includesMountPath: /usr/local/etc/haproxy         # EE images use /etc/hapee-VERSION
 
 ## Additional secrets to mount as volumes
 ## This is expected to be an array of dictionaries specifying the volume name, secret name and mount path

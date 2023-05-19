@@ -153,8 +153,8 @@ spec:
           {{- end }}
           volumeMounts:
             - name: haproxy-config
-              mountPath: /usr/local/etc/haproxy/haproxy.cfg
-              subPath: haproxy.cfg
+              mountPath: {{ .Values.configMount.mountPath }}
+              subPath: {{ .Values.configMount.subPath }}
             {{- if .Values.includes }}
             - name: includes
               mountPath: {{ .Values.includesMountPath }}
