@@ -3,6 +3,31 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Update base image to HAProxy 2.7.5
+        - Allow changing configMount file/location for EE images
+        - Fix includesMountPath default location
+    apiVersion: v2
+    appVersion: 2.7.5
+    created: "2023-05-19T09:10:05.615060097Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 9fae0b583e0d124cd0220f04cf52999b528352b188694b6b126e7de17db212bd
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.19.0/haproxy-1.19.0.tgz
+    version: 1.19.0
+  - annotations:
+      artifacthub.io/changes: |
         - Update base image to HAProxy 2.6.9
         - Update HPA API version (#172)
         - Fix HPA spec (#173)
@@ -3595,4 +3620,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-05-11T09:05:26.856153662Z"
+generated: "2023-05-19T09:10:05.615531151Z"
