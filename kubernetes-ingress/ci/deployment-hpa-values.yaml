@@ -1,5 +1,4 @@
 controller:
-  kind: Deployment
   autoscaling:
     enabled: true
     minReplicas: 1

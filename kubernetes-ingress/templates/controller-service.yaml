@@ -91,6 +91,13 @@ spec:
   {{- if .Values.controller.service.sessionAffinity }}
   sessionAffinity: {{ .Values.controller.service.sessionAffinity }}
   {{- end }}
+{{- if .Values.controller.service.ipFamilies }}
+  ipFamilies:
+{{- toYaml .Values.controller.service.ipFamilies | nindent 4 }}
+{{- end }}
+{{- if .Values.controller.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ .Values.controller.service.ipFamilyPolicy | quote }}
+{{- end }}
   externalIPs:
 {{- if .Values.controller.service.externalIPs }}
 {{ toYaml .Values.controller.service.externalIPs | indent 4 }}

@@ -424,6 +424,12 @@ controller:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     # clusterIP: ""
 
+    ## IPv4/IPv6 dual-stack
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/
+    ##
+    # ipFamilies: [IPv4, IPv6]
+    # ipFamilyPolicy: PreferDualStack
+
     ## Service session affinity
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     # sessionAffinity: ""
