@@ -19,7 +19,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "haproxy.fullname" . }}
-  namespace: {{ template "haproxy.namespace" . }}
+  namespace: {{ include "haproxy.namespace" . }}
   labels:
   {{- include "haproxy.labels" . | nindent 4 }}
 data:
@@ -33,7 +33,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: includes
-  namespace: {{ template "haproxy.namespace" . }}
+  namespace: {{ include "haproxy.namespace" . }}
 data:
 {{- range $key, $val := .Values.includes }}
   {{ $key }}: | {{ $val | nindent 4 }}

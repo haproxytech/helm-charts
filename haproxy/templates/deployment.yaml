@@ -19,7 +19,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "haproxy.fullname" . }}
-  namespace: {{ template "haproxy.namespace" . }}
+  namespace: {{ include "haproxy.namespace" . }}
   labels:
     {{- include "haproxy.labels" . | nindent 4 }}
   {{- if .Values.podAnnotations }}

@@ -19,7 +19,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "haproxy.fullname" . }}
-  namespace: {{ template "haproxy.namespace" . }}
+  namespace: {{ include "haproxy.namespace" . }}
   labels:
     {{- include "haproxy.labels" . | nindent 4 }}
     {{- if .Values.serviceMonitor.extraLabels }}

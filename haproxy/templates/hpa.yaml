@@ -26,7 +26,7 @@ apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "haproxy.fullname" . }}
-  namespace: {{ template "haproxy.namespace" . }}
+  namespace: {{ include "haproxy.namespace" . }}
   labels:
     {{- include "haproxy.labels" . | nindent 4 }}
 spec:

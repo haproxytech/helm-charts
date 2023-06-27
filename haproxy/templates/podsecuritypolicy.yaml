@@ -27,7 +27,7 @@ apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: {{ include "haproxy.fullname" . }}
-  namespace: {{ template "haproxy.namespace" . }}
+  namespace: {{ include "haproxy.namespace" . }}
   labels:
     {{- include "haproxy.labels" . | nindent 4 }}
 {{- if .Values.podSecurityPolicy.annotations }}
