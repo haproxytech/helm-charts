@@ -24,8 +24,8 @@ kind: IngressClass
 metadata:
   name: {{ .Values.controller.ingressClassResource.name }}
   labels:
-    app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
-    helm.sh/chart: {{ template "kubernetes-ingress.chart" . }}
+    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
+    helm.sh/chart: {{ include "kubernetes-ingress.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}

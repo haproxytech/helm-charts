@@ -21,11 +21,11 @@ limitations under the License.
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ template "kubernetes-ingress.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ include "kubernetes-ingress.fullname" . }}
+  namespace: {{ include "kubernetes-ingress.namespace" . }}
   labels:
-    app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
-    helm.sh/chart: {{ template "kubernetes-ingress.chart" . }}
+    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
+    helm.sh/chart: {{ include "kubernetes-ingress.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
@@ -40,12 +40,12 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
+      app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
+        app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         {{- if .Values.controller.podLabels }}
 {{ toYaml .Values.controller.podLabels | indent 8 }}
@@ -56,7 +56,7 @@ spec:
       {{- end }}
     spec:
       enableServiceLinks: {{ .Values.controller.enableServiceLinks }}
-      serviceAccountName: {{ template "kubernetes-ingress.serviceAccountName" . }}
+      serviceAccountName: {{ include "kubernetes-ingress.serviceAccountName" . }}
       terminationGracePeriodSeconds: {{ .Values.controller.terminationGracePeriodSeconds }}
       {{- if $useHostNetwork }}
       hostNetwork: true
@@ -68,7 +68,7 @@ spec:
       dnsPolicy: {{ .Values.controller.dnsPolicy }}
 {{- if .Values.controller.imageCredentials.registry }}
       imagePullSecrets:
-      - name: {{ template "kubernetes-ingress.fullname" . }}
+      - name: {{ include "kubernetes-ingress.fullname" . }}
 {{- else if .Values.controller.existingImagePullSecret }}
       imagePullSecrets:
       - name: {{ .Values.controller.existingImagePullSecret }}
@@ -86,7 +86,7 @@ spec:
         runAsGroup: 1000
 {{- end }}
       containers:
-        - name: {{ template "kubernetes-ingress.name" . }}-{{ .Values.controller.name }}
+        - name: {{ include "kubernetes-ingress.name" . }}-{{ .Values.controller.name }}
           image: "{{ .Values.controller.image.repository }}:{{ tpl .Values.controller.image.tag . }}"
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
           args:
@@ -94,10 +94,10 @@ spec:
 {{- if and .Values.controller.defaultTLSSecret.secret .Values.controller.defaultTLSSecret.secretNamespace }}
           - --default-ssl-certificate={{ tpl .Values.controller.defaultTLSSecret.secretNamespace . }}/{{ .Values.controller.defaultTLSSecret.secret }}
 {{- else }}
-          - --default-ssl-certificate={{ .Release.Namespace }}/{{ template "kubernetes-ingress.defaultTLSSecret.fullname" . }}
+          - --default-ssl-certificate={{ include "kubernetes-ingress.namespace" . }}/{{ include "kubernetes-ingress.defaultTLSSecret.fullname" . }}
 {{- end }}
 {{- end }}
-          - --configmap={{ .Release.Namespace }}/{{ template "kubernetes-ingress.fullname" . }}
+          - --configmap={{ include "kubernetes-ingress.namespace" . }}/{{ include "kubernetes-ingress.fullname" . }}
           - --http-bind-port={{ .Values.controller.containerPort.http }}
           - --https-bind-port={{ .Values.controller.containerPort.https }}
 {{- if .Values.controller.ingressClass }}
@@ -107,7 +107,7 @@ spec:
           - --gateway-controller-name={{ .Values.controller.kubernetesGateway.gatewayControllerName }}
 {{- end }}
 {{- if .Values.controller.publishService.enabled }}
-          - --publish-service={{ template "kubernetes-ingress.publishServicePath" . }}
+          - --publish-service={{ include "kubernetes-ingress.publishServicePath" . }}
 {{- end }}
 {{- if .Values.controller.logging.level }}
           - --log={{ .Values.controller.logging.level }}

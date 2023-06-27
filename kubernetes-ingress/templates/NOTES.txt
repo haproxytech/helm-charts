@@ -35,7 +35,7 @@ Service ports mapped are:
 {{- end }}
 
 Node IP can be found with:
-  $ kubectl --namespace {{ .Release.Namespace }} get nodes -o jsonpath="{.items[0].status.addresses[1].address}"
+  $ kubectl --namespace {{ include "kubernetes-ingress.namespace" . }} get nodes -o jsonpath="{.items[0].status.addresses[1].address}"
 
 The following ingress resource routes traffic to pods that match the following:
   * service name: web

@@ -29,11 +29,11 @@ metadata:
   annotations:
 {{ toYaml .Values.controller.autoscaling.annotations | indent 4 }}
 {{- end }}
-  name: {{ template "kubernetes-ingress.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ include "kubernetes-ingress.fullname" . }}
+  namespace: {{ include "kubernetes-ingress.namespace" . }}
   labels:
-    app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
-    helm.sh/chart: {{ template "kubernetes-ingress.chart" . }}
+    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
+    helm.sh/chart: {{ include "kubernetes-ingress.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
@@ -41,7 +41,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ template "kubernetes-ingress.fullname" . }}
+    name: {{ include "kubernetes-ingress.fullname" . }}
   minReplicas: {{ .Values.controller.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.controller.autoscaling.maxReplicas }}
   metrics:

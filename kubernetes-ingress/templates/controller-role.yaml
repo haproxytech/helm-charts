@@ -18,11 +18,11 @@ limitations under the License.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ template "kubernetes-ingress.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ include "kubernetes-ingress.fullname" . }}
+  namespace: {{ include "kubernetes-ingress.namespace" . }}
   labels:
-    app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
-    helm.sh/chart: {{ template "kubernetes-ingress.chart" . }}
+    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
+    helm.sh/chart: {{ include "kubernetes-ingress.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
@@ -34,5 +34,5 @@ rules:
   verbs:
   - use
   resourceNames:
-  - {{ template "kubernetes-ingress.fullname" . }}
+  - {{ include "kubernetes-ingress.fullname" . }}
 {{- end -}}

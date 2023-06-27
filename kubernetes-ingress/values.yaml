@@ -44,6 +44,10 @@ serviceAccount:
   create: true
   name:
 
+## Namespace override
+## Allow the release namespace to be overridden for multi-namespace deployments in combined charts
+# namespaceOverride: haproxytech
+
 ## AWS Market Place integration
 ## Allows installation of the HAPEE Ingress Controller on AWS EKS and EKS-Anywhere.
 ## ref: https://docs.aws.amazon.com/marketplace/latest/userguide/container-anywhere-license-manager-integration.html
@@ -193,7 +197,7 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/configuration/secret/
   defaultTLSSecret:
     enabled: true
-    secretNamespace: "{{ .Release.Namespace }}"
+    secretNamespace: '{{ include "kubernetes-ingress.namespace" . }}'
     secret: null
 
   ## Compute Resources for controller container

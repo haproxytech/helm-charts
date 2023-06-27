@@ -22,6 +22,17 @@ Expand the name of the chart.
 {{- end -}}
 
 {{/*
+Allow the release namespace to be overridden for multi-namespace deployments in combined charts
+*/}}
+{{- define "kubernetes-ingress.namespace" -}}
+{{- if .Values.namespaceOverride -}}
+{{- .Values.namespaceOverride -}}
+{{- else -}}
+{{- .Release.Namespace -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
@@ -65,7 +76,7 @@ Generate default certificate for HAProxy.
 */}}
 {{- define "kubernetes-ingress.gen-certs" -}}
 {{- $ca := genCA "kubernetes-ingress-ca" 365 -}}
-{{- $cn := printf "%s.%s" .Release.Name .Release.Namespace -}}
+{{- $cn := printf "%s.%s" .Release.Name (include "kubernetes-ingress.namespace" .) -}}
 {{- $cert := genSignedCert $cn nil nil 365 $ca -}}
 tls.crt: {{ $cert.Cert | b64enc }}
 tls.key: {{ $cert.Key | b64enc }}
@@ -113,7 +124,7 @@ By default this will use the <namespace>/<service-name> matching the controller'
 Users can provide an override for an explicit service they want to use via `.Values.controller.publishService.pathOverride`
 */}}
 {{- define "kubernetes-ingress.publishServicePath" -}}
-{{- $defServicePath := printf "%s/%s" .Release.Namespace (include "kubernetes-ingress.fullname" .) -}}
+{{- $defServicePath := printf "%s/%s" (include "kubernetes-ingress.namespace" .) (include "kubernetes-ingress.fullname" .) -}}
 {{- $servicePath := default $defServicePath .Values.controller.publishService.pathOverride }}
 {{- print $servicePath | trimSuffix "-" -}}
 {{- end -}}

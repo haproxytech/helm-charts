@@ -18,11 +18,11 @@ limitations under the License.
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ template "kubernetes-ingress.serviceMonitorName" . }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ include "kubernetes-ingress.serviceMonitorName" . }}
+  namespace: {{ include "kubernetes-ingress.namespace" . }}
   labels:
-    app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
-    helm.sh/chart: {{ template "kubernetes-ingress.chart" . }}
+    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
+    helm.sh/chart: {{ include "kubernetes-ingress.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
@@ -34,9 +34,9 @@ spec:
     {{ .Values.controller.serviceMonitor.endpoints | toYaml | nindent 4 }}
   namespaceSelector:
     matchNames:
-    - {{ .Release.Namespace }}
+    - {{ include "kubernetes-ingress.namespace" . }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
+      app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

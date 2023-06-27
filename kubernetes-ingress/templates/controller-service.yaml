@@ -18,11 +18,11 @@ limitations under the License.
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "kubernetes-ingress.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ include "kubernetes-ingress.fullname" . }}
+  namespace: {{ include "kubernetes-ingress.namespace" . }}
   labels:
-    app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
-    helm.sh/chart: {{ template "kubernetes-ingress.chart" . }}
+    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
+    helm.sh/chart: {{ include "kubernetes-ingress.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
@@ -86,7 +86,7 @@ spec:
     {{- end }}
   {{- end }}
   selector:
-    app.kubernetes.io/name: {{ template "kubernetes-ingress.name" . }}
+    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
   {{- if .Values.controller.service.sessionAffinity }}
   sessionAffinity: {{ .Values.controller.service.sessionAffinity }}
