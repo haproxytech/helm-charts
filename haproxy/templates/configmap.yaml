@@ -32,7 +32,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: includes
+  name: {{ include "haproxy.includes" . }}
   namespace: {{ include "haproxy.namespace" . }}
 data:
 {{- range $key, $val := .Values.includes }}

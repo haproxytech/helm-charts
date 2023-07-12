@@ -89,6 +89,13 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
+Create includes name
+*/}}
+{{- define "haproxy.includes" -}}
+{{- printf "%s-%s" (include "haproxy.fullname" .) "includes" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
 Encode an imagePullSecret string.
 */}}
 {{- define "haproxy.imagePullSecret" }}
