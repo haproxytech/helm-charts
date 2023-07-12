@@ -710,6 +710,30 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Update CRDs to v1alpha2 (#200)
+    apiVersion: v2
+    appVersion: 1.10.4
+    created: "2023-07-12T09:31:32.845107145Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 84db45546ca028ef9d09019b5600e8b123f36b171a5a61b12db77e04bc52daad
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.32.1/kubernetes-ingress-1.32.1.tgz
+    version: 1.32.1
+  - annotations:
+      artifacthub.io/changes: |
         - Allow the release namespace to be overridden (#195)
         - Add missing RBAC rules for customresourcedefinitions (#196)
     apiVersion: v2
@@ -3716,4 +3740,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-06-30T22:30:54.167584423Z"
+generated: "2023-07-12T09:31:32.845896447Z"
