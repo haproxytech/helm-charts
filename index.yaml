@@ -734,6 +734,30 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Use Ingress Controller 1.10.5 version for base image
+    apiVersion: v2
+    appVersion: 1.10.5
+    created: "2023-07-24T18:26:53.080074504Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: fce4bbbe55b7f448e2255e591a904994c9c6387fac7dcfb03d9bebc7e89ff4a6
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.32.2/kubernetes-ingress-1.32.2.tgz
+    version: 1.32.2
+  - annotations:
+      artifacthub.io/changes: |
         - Update CRDs to v1alpha2 (#200)
     apiVersion: v2
     appVersion: 1.10.4
@@ -3764,4 +3788,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-07-12T09:54:35.774630757Z"
+generated: "2023-07-24T18:26:53.080786124Z"
