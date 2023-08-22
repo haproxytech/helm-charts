@@ -259,7 +259,7 @@ includes:
   #   </body></html>
 
 ## Mount path for includes and maps
-includesMountPath: /usr/local/etc/haproxy         # EE images use /etc/hapee-VERSION
+includesMountPath: /usr/local/etc/haproxy/includes         # EE images use /etc/hapee-VERSION
 
 ## Additional secrets to mount as volumes
 ## This is expected to be an array of dictionaries specifying the volume name, secret name and mount path
