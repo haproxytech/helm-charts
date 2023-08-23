@@ -87,7 +87,7 @@ spec:
           projected:
             sources:
             - configMap:
-                name: includes
+                name: {{ include "haproxy.includes" . }}
         {{- end }}
         {{- range $mountedSecret := .Values.mountedSecrets }}
         - name: {{ $mountedSecret.volumeName }}
