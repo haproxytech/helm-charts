@@ -112,6 +112,9 @@ spec:
 {{- if .Values.controller.logging.level }}
           - --log={{ .Values.controller.logging.level }}
 {{- end }}
+{{- if .Values.controller.service.enablePorts.prometheus }}
+          - --prometheus
+{{- end }}
 {{- range .Values.controller.extraArgs }}
           - {{ . }}
 {{- end }}

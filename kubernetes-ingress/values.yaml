@@ -375,6 +375,7 @@ controller:
     #  http: 31080
     #  https: 31443
     #  stat: 31024
+    #  prometheus: 36060
 
     ## Service ports to use for http, https and stat
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
@@ -382,6 +383,7 @@ controller:
       http: 80
       https: 443
       stat: 1024
+      prometheus: 6060
 
     ## The controller service ports for http, https and stat can be disabled by
     ## setting below to false - this could be useful when only deploying haproxy
@@ -391,6 +393,7 @@ controller:
       http: true
       https: true
       stat: true
+      prometheus: true
 
     ## Target port mappings for http, https and stat
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
@@ -398,6 +401,7 @@ controller:
       http: http
       https: https
       stat: stat
+      prometheus: prometheus
 
     ## Additional tcp ports to expose
     ## This is especially useful for TCP services:
