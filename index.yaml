@@ -758,6 +758,30 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Use Ingress Controller 1.10.8 version for base image
+    apiVersion: v2
+    appVersion: 1.10.8
+    created: "2023-09-29T10:33:40.289241701Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: b7d7e2d77100e66950c50cdf4a8533dd8f57296dd2f9c9b6e2b3e57063e02fbc
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.33.1/kubernetes-ingress-1.33.1.tgz
+    version: 1.33.1
+  - annotations:
+      artifacthub.io/changes: |
         - Use Ingress Controller 1.10.7 version for base image
         - Enable new Prometheus endpoint on tcp/6060 by default
     apiVersion: v2
@@ -3861,4 +3885,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-09-07T15:26:33.7930057Z"
+generated: "2023-09-29T10:33:40.289938054Z"
