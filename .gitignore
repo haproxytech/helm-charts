@@ -28,3 +28,6 @@ Session.vim
 
 # TODO
 TODO
+
+# release packages
+.cr-release-packages/
