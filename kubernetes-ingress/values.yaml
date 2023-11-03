@@ -81,6 +81,10 @@ controller:
   ## ref: https://kubernetes.io/docs/tutorials/security/seccomp/
   enableRuntimeDefaultSeccompProfile: true
 
+  ## Privilege escalation
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  allowPrivilegeEscalation: false
+
   ## Init Containers
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   initContainers: []
@@ -107,6 +111,7 @@ controller:
 
   ## Controller Container listener port configuration
   ## ref: https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/
+  ## Note: If binding to privileged ports, allowPrivilegeEscalation will be required for NET_BIND_SERVICE to apply
   containerPort:
     http: 8080
     https: 8443

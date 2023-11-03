@@ -43,7 +43,7 @@ metadata:
     seccomp.security.alpha.kubernetes.io/defaultProfileName:  'runtime/default'
     apparmor.security.beta.kubernetes.io/defaultProfileName:  'runtime/default'
 spec:
-  allowPrivilegeEscalation: true
+  allowPrivilegeEscalation: {{ .Values.controller.allowPrivilegeEscalation }}
   allowedCapabilities:
     - NET_BIND_SERVICE
   defaultAllowPrivilegeEscalation: false
