@@ -758,6 +758,31 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Use Ingress Controller 1.10.9 version for base image
+        - Set allowPrivilegeEscalation to false by default
+    apiVersion: v2
+    appVersion: 1.10.9
+    created: "2023-11-03T15:19:50.969015396Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 95580885e81f0321986d2be65b4aa9c36df68faecfd5e8a9fe77b6d1ade24397
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.34.0/kubernetes-ingress-1.34.0.tgz
+    version: 1.34.0
+  - annotations:
+      artifacthub.io/changes: |
         - Use Ingress Controller 1.10.8 version for base image
     apiVersion: v2
     appVersion: 1.10.8
@@ -3885,4 +3910,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-09-29T10:33:40.289938054Z"
+generated: "2023-11-03T15:19:50.969365104Z"
