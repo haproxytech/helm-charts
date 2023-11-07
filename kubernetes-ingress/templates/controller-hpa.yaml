@@ -16,7 +16,7 @@ limitations under the License.
 
 {{- if and (eq .Values.controller.kind "Deployment") .Values.controller.autoscaling.enabled }}
 {{- if not .Values.controller.keda.enabled }}
-{{- if .Capabilities.APIVersions.Has "autoscaling/v2" }}
+{{- if or (.Capabilities.APIVersions.Has "autoscaling/v2") (semverCompare ">=1.23.0-0" .Capabilities.KubeVersion.Version) }}
 apiVersion: autoscaling/v2
 {{- else if .Capabilities.APIVersions.Has "autoscaling/v2beta2" }}
 apiVersion: autoscaling/v2beta2

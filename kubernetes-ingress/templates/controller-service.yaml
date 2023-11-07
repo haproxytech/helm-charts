@@ -47,7 +47,7 @@ spec:
     - name: http
       port: {{ .Values.controller.service.ports.http }}
       protocol: TCP
-      {{- if semverCompare ">=1.20" .Capabilities.KubeVersion.Version }}
+      {{- if semverCompare ">=1.20.0-0" .Capabilities.KubeVersion.Version }}
       appProtocol: http
       {{- end }}
       targetPort: {{ .Values.controller.service.targetPorts.http }}
@@ -59,7 +59,7 @@ spec:
     - name: https
       port: {{ .Values.controller.service.ports.https }}
       protocol: TCP
-      {{- if semverCompare ">=1.20" .Capabilities.KubeVersion.Version }}
+      {{- if semverCompare ">=1.20.0-0" .Capabilities.KubeVersion.Version }}
       appProtocol: https
       {{- end }}
       targetPort: {{ .Values.controller.service.targetPorts.https }}
