@@ -95,7 +95,10 @@ rules:
   - get
   - list
   - watch
+  - create
   - update
+  - patch
+  - delete
 {{- if .Values.controller.kubernetesGateway.enabled }}
 - apiGroups:
   - "gateway.networking.k8s.io"
