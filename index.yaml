@@ -758,6 +758,32 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Use Ingress Controller 1.10.10 version for base image
+        - Add CRD install/upgrade job for automated CRD management
+        - Remove default CRDs provided by Chart
+    apiVersion: v2
+    appVersion: 1.10.10
+    created: "2023-11-17T11:20:35.64420446Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: b8c50cec7370bc6273baaab144d92374bb54a73516ea6c1fafe9610c2ca2c45d
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.35.0/kubernetes-ingress-1.35.0.tgz
+    version: 1.35.0
+  - annotations:
+      artifacthub.io/changes: |
         - Fixes for .Capabilities.APIVersions issues (issues #202 and #211)
         - semverCompare fixes for appProtocol
     apiVersion: v2
@@ -3935,4 +3961,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-11-07T08:40:59.376599713Z"
+generated: "2023-11-17T11:20:35.644591095Z"
