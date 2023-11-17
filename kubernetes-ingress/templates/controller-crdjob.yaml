@@ -47,5 +47,5 @@ spec:
           command:
             - /haproxy-ingress-controller
             - --job-check-crd
-          restartPolicy: Never
+      restartPolicy: Never
   backoffLimit: 0
