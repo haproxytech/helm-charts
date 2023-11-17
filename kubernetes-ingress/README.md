@@ -262,6 +262,9 @@ kubectl apply -f https://raw.githubusercontent.com/haproxytech/helm-charts/main/
 kubectl apply -f https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/crds/core.haproxy.org_backends.yaml
 ```
 
+Note: from Helm Chart 1.35.0, Helm Chart contains CRD install/upgrade job that will take care of both installing and
+upgrading CRDs accordingly.
+
 ## Uninstalling the chart
 
 To uninstall/delete the _my-release_ deployment:

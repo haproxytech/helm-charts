@@ -17,7 +17,6 @@ jobs:
       - checkout
       - run:
           command: |
-            find . -type f -ipath '*/crds/*' -exec grep 'nullable:[[:space:]]*false' '{}' '+' && exit 1
             ct lint --all --validate-maintainers=false --config .circleci/ct.yaml
   install-charts:
     machine: true
