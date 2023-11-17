@@ -246,6 +246,16 @@ helm install keda kedacore/keda --namespace keda
 helm install mytest haproxytech/kubernetes-ingress -f mykeda.yaml
 ```
 
+## Installing on Azure Managed Kubernetes Service (AKS)
+
+By default Azure LB sends probe to `/` and expects HTTP status codes of 200-399 to consider Pod healthy, which means probes end up on default HTTP backend returning HTTP 404 status code. Since v1.20 AKS service annotation `service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path` can be used to override health probe behaviour and we recommend using the following annotation on AKS to target `/healthz` endpoint for health probes:
+
+```console
+helm install ...
+  --set controller.service.type=LoadBalancer \
+  --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz
+```
+
 ## Upgrading the chart
 
 To upgrade the _my-release_ deployment:
