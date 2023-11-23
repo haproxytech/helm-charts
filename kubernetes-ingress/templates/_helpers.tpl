@@ -153,10 +153,10 @@ Create a FQDN for the Service metrics.
 {{- end -}}
 
 {{/*
-Create a default fully qualified default CRD job name.
+Create a default fully qualified unique CRD job name.
 */}}
 {{- define "kubernetes-ingress.crdjob.fullname" -}}
-{{- printf "%s-%s" (include "kubernetes-ingress.fullname" .) "crdjob" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-%d" (include "kubernetes-ingress.fullname" .) "crdjob" .Release.Revision | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/* vim: set filetype=mustache: */}}
