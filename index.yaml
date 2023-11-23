@@ -761,6 +761,30 @@ entries:
         - CRD job updates and bug fixes
     apiVersion: v2
     appVersion: 1.10.10
+    created: "2023-11-23T07:47:04.854211327Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 2a768e8ea9a3d7924a66180eed04627168b3c5636cfc0588f99cfc1a88f82dea
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.35.2/kubernetes-ingress-1.35.2.tgz
+    version: 1.35.2
+  - annotations:
+      artifacthub.io/changes: |
+        - CRD job updates and bug fixes
+    apiVersion: v2
+    appVersion: 1.10.10
     created: "2023-11-22T08:03:21.773953413Z"
     description: A Helm chart for HAProxy Kubernetes Ingress Controller
     digest: aa14c4e8bd2553609d3109d3467a057a7165ba89d300437dfcda7f8072fe8232
@@ -3985,4 +4009,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-11-22T08:03:21.774313607Z"
+generated: "2023-11-23T07:47:04.854791803Z"
