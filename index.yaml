@@ -758,6 +758,30 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Increase CRD job cleanup TTL to 120s (#213)
+    apiVersion: v2
+    appVersion: 1.10.10
+    created: "2023-11-24T14:06:32.036564728Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 584877076a28c2cb06f5b948355a4643a42edde469dcc20ffcbff8b35b6917ff
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.35.3/kubernetes-ingress-1.35.3.tgz
+    version: 1.35.3
+  - annotations:
+      artifacthub.io/changes: |
         - CRD job updates and bug fixes
     apiVersion: v2
     appVersion: 1.10.10
@@ -4009,4 +4033,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-11-23T07:47:04.854791803Z"
+generated: "2023-11-24T14:06:32.036899986Z"
