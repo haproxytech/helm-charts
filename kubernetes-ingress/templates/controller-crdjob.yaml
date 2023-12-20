@@ -25,6 +25,9 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
 spec:
 {{- if or (.Capabilities.APIVersions.Has "batch/v1alpha1") (semverCompare ">=1.23.0-0" .Capabilities.KubeVersion.Version) }}
   ttlSecondsAfterFinished: 120
