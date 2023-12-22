@@ -16,7 +16,7 @@ apiVersion: v2
 name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
-version: 1.35.4
+version: 1.35.5
 appVersion: 1.10.10
 kubeVersion: ">=1.22.0-0"
 keywords:
@@ -32,4 +32,4 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Add ArgoCD hook fixes for CRD cleanup job (#214)
+    - Remove unneeded initContainers from CRD job (#215)
