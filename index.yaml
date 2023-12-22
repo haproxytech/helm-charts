@@ -758,6 +758,30 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Remove unneeded initContainers from CRD job (#215)
+    apiVersion: v2
+    appVersion: 1.10.10
+    created: "2023-12-22T07:53:27.327148283Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 7292b3fb0f14c119cfc80350297ce532e1096a0df6fa45c474c2730891e3ffbd
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.35.5/kubernetes-ingress-1.35.5.tgz
+    version: 1.35.5
+  - annotations:
+      artifacthub.io/changes: |
         - Add ArgoCD hook fixes for CRD cleanup job (#214)
     apiVersion: v2
     appVersion: 1.10.10
@@ -4057,4 +4081,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-12-20T15:39:54.877867449Z"
+generated: "2023-12-22T07:53:27.327505586Z"
