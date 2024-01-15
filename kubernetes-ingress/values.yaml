@@ -538,3 +538,7 @@ controller:
   ## Toggle to add the RBAC permissions needed for the techdump tool.
   techdump:
     enabled: false
+
+  ## automountServiceAccountToken
+  ## Automatically mount a ServiceAccount's API credentials
+  automountServiceAccountToken: true
