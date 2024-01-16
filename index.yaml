@@ -758,6 +758,31 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Enable automountServiceAccountToken use (#217)
+        - Automatically mount /tmp and /run as tmpfs for S6 overlay v3
+    apiVersion: v2
+    appVersion: 1.10.10
+    created: "2024-01-16T13:05:38.14486723Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 3fe6a61484d6abb88709afac7a17393ae3978ebc439fb14cd398e1dc8ea5f5c9
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.36.0/kubernetes-ingress-1.36.0.tgz
+    version: 1.36.0
+  - annotations:
+      artifacthub.io/changes: |
         - Remove unneeded initContainers from CRD job (#215)
     apiVersion: v2
     appVersion: 1.10.10
@@ -4081,4 +4106,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2023-12-22T07:53:27.327505586Z"
+generated: "2024-01-16T13:05:38.145227235Z"
