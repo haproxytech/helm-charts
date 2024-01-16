@@ -16,7 +16,7 @@ apiVersion: v2
 name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
-version: 1.35.5
+version: 1.36.0
 appVersion: 1.10.10
 kubeVersion: ">=1.22.0-0"
 keywords:
@@ -32,4 +32,5 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Remove unneeded initContainers from CRD job (#215)
+    - Enable automountServiceAccountToken use (#217)
+    - Automatically mount /tmp and /run as tmpfs for S6 overlay v3

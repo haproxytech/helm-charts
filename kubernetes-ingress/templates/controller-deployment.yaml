@@ -196,8 +196,13 @@ spec:
 {{ toYaml .Values.controller.lifecycle | indent 12 }}
             {{- end }}
           {{- end }}
-          {{- if or .Values.controller.extraVolumeMounts .Values.aws.licenseConfigSecretName }}
           volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+              subPath: tmp
+            - name: tmp
+              mountPath: /run
+              subPath: run
             {{- if .Values.aws.licenseConfigSecretName }}
             - name: aws-product-license
               readOnly: true
@@ -208,7 +213,6 @@ spec:
             {{- else if gt (len .Values.controller.extraVolumeMounts) 0 }}
 {{ toYaml .Values.controller.extraVolumeMounts | indent 12 }}
             {{- end }}
-          {{- end}}
         {{- if .Values.controller.extraContainers }}
           {{- if eq "string" (printf "%T" .Values.controller.extraContainers) }}
 {{ tpl .Values.controller.extraContainers . | indent 8 }}
@@ -216,8 +220,15 @@ spec:
 {{ toYaml .Values.controller.extraContainers | indent 8 }}
           {{- end }}
         {{- end }}
-      {{- if or .Values.controller.extraVolumes .Values.aws.licenseConfigSecretName }}
       volumes:
+        - name: tmp
+          {{- if semverCompare ">=1.21.0-0" .Capabilities.KubeVersion.Version }}
+          emptyDir:
+            medium: Memory
+            sizeLimit: 64Mi
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
         {{- if .Values.aws.licenseConfigSecretName }}
         - name: aws-product-license
           secret:
@@ -229,7 +240,6 @@ spec:
         {{- else if gt (len .Values.controller.extraVolumes) 0 }}
 {{ toYaml .Values.controller.extraVolumes | indent 8 }}
         {{- end }}
-      {{- end }}
       {{- with.Values.controller.initContainers }}
       initContainers:
           {{- toYaml . | nindent 8 }}
