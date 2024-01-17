@@ -43,6 +43,7 @@ namespace:
 serviceAccount:
   create: true
   name:
+  automountServiceAccountToken: true
 
 ## Namespace override
 ## Allow the release namespace to be overridden for multi-namespace deployments in combined charts
@@ -538,7 +539,3 @@ controller:
   ## Toggle to add the RBAC permissions needed for the techdump tool.
   techdump:
     enabled: false
-
-  ## automountServiceAccountToken
-  ## Automatically mount a ServiceAccount's API credentials
-  automountServiceAccountToken: true

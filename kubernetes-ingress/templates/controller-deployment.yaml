@@ -57,9 +57,6 @@ spec:
     spec:
       enableServiceLinks: {{ .Values.controller.enableServiceLinks }}
       serviceAccountName: {{ include "kubernetes-ingress.serviceAccountName" . }}
-      {{- if hasKey .Values.controller "automountServiceAccountToken" }}
-      automountServiceAccountToken: {{ .Values.controller.automountServiceAccountToken }}
-      {{- end }}
       terminationGracePeriodSeconds: {{ .Values.controller.terminationGracePeriodSeconds }}
 {{- with .Values.controller.topologySpreadConstraints }}
       topologySpreadConstraints:

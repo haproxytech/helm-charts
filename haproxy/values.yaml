@@ -20,6 +20,7 @@ serviceAccount:
   annotations: {}
   create: true
   name:
+  automountServiceAccountToken: true
 
 ## Override namespace for for the whole chart
 ## If namespaceOverride is set, helm will use it's value instead of .Release.Namespace for all chart components.

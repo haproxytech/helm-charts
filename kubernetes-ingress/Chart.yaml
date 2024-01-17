@@ -16,7 +16,7 @@ apiVersion: v2
 name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
-version: 1.36.0
+version: 1.36.1
 appVersion: 1.10.10
 kubeVersion: ">=1.22.0-0"
 keywords:
@@ -32,5 +32,4 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Enable automountServiceAccountToken use (#217)
-    - Automatically mount /tmp and /run as tmpfs for S6 overlay v3
+    - Move automountServiceAccountToken flag from pods to ServiceAccount configuration (fixes for #217)
