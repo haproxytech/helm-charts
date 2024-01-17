@@ -475,6 +475,10 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-traffic-policy
   # externalTrafficPolicy: Cluster
 
+  ## Service internalTrafficPolicy
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/
+  # internalTrafficPolicy: Cluster
+
   ## Additional Service ports to use(e.g. port of side container haproxy exporter)
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   additionalPorts: {}
