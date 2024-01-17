@@ -3,6 +3,30 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Update base image to HAProxy 2.9.2
+        - Add automountServiceAccountToken feature for ServiceAccount (#192)
+    apiVersion: v2
+    appVersion: 2.9.2
+    created: "2024-01-17T13:30:07.232508947Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: abba494cf9af94248071d2d565ca45efb68c6cbf27506894db222efed07b9c7d
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.20.0/haproxy-1.20.0.tgz
+    version: 1.20.0
+  - annotations:
+      artifacthub.io/changes: |
         - Update base image to HAProxy 2.8.2
         - Fix includes name in haproxy charts (#203)
     apiVersion: v2
@@ -756,6 +780,30 @@ entries:
     - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.0.1/haproxy-1.0.1.tgz
     version: 1.0.1
   kubernetes-ingress:
+  - annotations:
+      artifacthub.io/changes: |
+        - Move automountServiceAccountToken flag from pods to ServiceAccount configuration (fixes for #217)
+    apiVersion: v2
+    appVersion: 1.10.10
+    created: "2024-01-17T13:30:07.355696062Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: e937c7b4b6c7204486914a38496a2dcd44643472521c6c607874a94d4671bfa5
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.36.1/kubernetes-ingress-1.36.1.tgz
+    version: 1.36.1
   - annotations:
       artifacthub.io/changes: |
         - Enable automountServiceAccountToken use (#217)
@@ -4106,4 +4154,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-01-16T13:05:38.145227235Z"
+generated: "2024-01-17T13:30:07.356426312Z"
