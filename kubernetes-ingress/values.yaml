@@ -453,6 +453,7 @@ controller:
   daemonset:
     useHostNetwork: false  # also modify dnsPolicy accordingly
     useHostPort: false
+    hostIP: null
     hostPorts:
       http: 80
       https: 443
