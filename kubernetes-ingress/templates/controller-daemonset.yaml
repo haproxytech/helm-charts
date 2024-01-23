@@ -18,6 +18,7 @@ limitations under the License.
 {{- $useHostNetwork := .Values.controller.daemonset.useHostNetwork -}}
 {{- $useHostPort := .Values.controller.daemonset.useHostPort -}}
 {{- $hostPorts := .Values.controller.daemonset.hostPorts -}}
+{{- $hostIP := .Values.controller.daemonset.hostIP -}}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -142,6 +143,9 @@ spec:
               {{- if $useHostPort }}
               hostPort: {{ index $hostPorts $key | default $value }}
               {{- end }}
+              {{- if $hostIP }}
+              hostIP: {{ $hostIP }}
+              {{- end }}
           {{- end }}
           {{- range .Values.controller.service.tcpPorts }}
             - name: {{ .name }}-tcp
@@ -149,6 +153,9 @@ spec:
               protocol: TCP
               {{- if $useHostPort }}
               hostPort: {{ .port }}
+              {{- end }}
+              {{- if $hostIP }}
+              hostIP: {{ $hostIP }}
               {{- end }}
           {{- end }}
           {{- with .Values.controller.livenessProbe }}
