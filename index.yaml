@@ -3,6 +3,31 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Update base image to HAProxy 2.9.5
+        - Add internalTrafficPolicy property for service (#218)
+        - Update podAnnotations rendering for better flexibility (#224)
+    apiVersion: v2
+    appVersion: 2.9.5
+    created: "2024-02-16T07:16:03.057336145Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 51c5e395e8d99b7a27c326bc6708e47e9e3e8af1407df63ae25a71d767523585
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.21.0/haproxy-1.21.0.tgz
+    version: 1.21.0
+  - annotations:
+      artifacthub.io/changes: |
         - Update base image to HAProxy 2.9.2
         - Add automountServiceAccountToken feature for ServiceAccount (#192)
     apiVersion: v2
@@ -4180,4 +4205,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-02-14T13:56:16.7660323Z"
+generated: "2024-02-16T07:16:03.058466479Z"
