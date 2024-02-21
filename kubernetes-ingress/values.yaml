@@ -447,6 +447,10 @@ controller:
     ## Service session affinity
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     # sessionAffinity: ""
+    
+    ## class of load balancer implementation 
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    loadBalancerClass: nil
 
   ## Controller DaemonSet configuration
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
