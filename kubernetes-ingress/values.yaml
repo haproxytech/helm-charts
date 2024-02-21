@@ -18,9 +18,9 @@
 podSecurityPolicy:
   annotations: {}
     ## Specify pod annotations
-    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor
-    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp
-    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#sysctl
+    ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor
+    ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp
+    ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#sysctl
     ##
     # apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default
     # apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default
@@ -154,7 +154,7 @@ controller:
       scheme: HTTP
 
   ## IngressClass:
-  ## Ref: https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/ingressclass.md
+  ## ref: https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/ingressclass.md
 
   # k8s >= 1.18: IngressClass resource used, in multi-ingress environments, to select ingress resources to implement.
   # ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class
@@ -420,7 +420,7 @@ controller:
 
     ## Set external traffic policy
     ## Default is "Cluster", setting it to "Local" preserves source IP
-    ## Ref: https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typeloadbalancer
+    ## ref: https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typeloadbalancer
     # externalTrafficPolicy: "Local"
 
     ## Expose service via external IPs that route to one or more cluster nodes
@@ -431,10 +431,10 @@ controller:
     loadBalancerIP: ""
 
     ## Source IP ranges permitted to access Network Load Balancer
-    # ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/
     loadBalancerSourceRanges: []
 
-    ## Class of load balancer implementation 
+    ## Class of load balancer implementation
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
     loadBalancerClass: nil
 
