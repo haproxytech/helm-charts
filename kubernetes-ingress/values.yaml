@@ -434,6 +434,10 @@ controller:
     # ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/
     loadBalancerSourceRanges: []
 
+    ## Class of load balancer implementation 
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    loadBalancerClass: nil
+
     ## Service ClusterIP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     # clusterIP: ""
