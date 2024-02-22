@@ -444,7 +444,7 @@ controller:
 
     ## Class of load balancer implementation
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
-    loadBalancerClass: nil
+    loadBalancerClass: null
 
     ## Service ClusterIP
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/

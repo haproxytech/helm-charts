@@ -16,7 +16,7 @@ apiVersion: v2
 name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
-version: 1.38.0
+version: 1.38.1
 appVersion: 1.10.11
 kubeVersion: ">=1.22.0-0"
 keywords:
@@ -32,5 +32,4 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Add QUIC support for upcoming IC v1.11
-    - Allow setting loadBalancerClass for the service (#226)
+    - Fix for loadBalancerClass bug (#227)
