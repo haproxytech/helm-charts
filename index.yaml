@@ -807,6 +807,31 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Add QUIC support for upcoming IC v1.11
+        - Allow setting loadBalancerClass for the service (#226)
+    apiVersion: v2
+    appVersion: 1.10.11
+    created: "2024-02-22T17:07:29.164328779Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 18aac9432a76eacaa729891d4f27cd0c6fedf377a9107f9e2a14713abcc76587
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.38.0/kubernetes-ingress-1.38.0.tgz
+    version: 1.38.0
+  - annotations:
+      artifacthub.io/changes: |
         - Allow setting hostIP for daemonset (#220)
         - Add missing permissions for v1 CRDs (#222)
         - Use Ingress Controller 1.10.11 version for base image
@@ -4205,4 +4230,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-02-16T07:16:03.058466479Z"
+generated: "2024-02-22T17:07:29.165070271Z"
