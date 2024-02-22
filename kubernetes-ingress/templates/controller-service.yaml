@@ -67,6 +67,18 @@ spec:
       nodePort: {{ .Values.controller.service.nodePorts.https }}
     {{- end }}
   {{- end }}
+  {{- if .Values.controller.service.enablePorts.quic }}
+    - name: quic
+      port: {{ .Values.controller.service.ports.https }}
+      protocol: UDP
+      {{- if semverCompare ">=1.20.0-0" .Capabilities.KubeVersion.Version }}
+      appProtocol: https
+      {{- end }}
+      targetPort: {{ .Values.controller.service.targetPorts.quic }}
+    {{- if .Values.controller.service.nodePorts.https }}
+      nodePort: {{ .Values.controller.service.nodePorts.https }}
+    {{- end }}
+  {{- end }}
   {{- if .Values.controller.service.enablePorts.stat }}
     - name: stat
       port: {{ .Values.controller.service.ports.stat }}

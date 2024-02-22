@@ -101,6 +101,8 @@ spec:
           - --configmap={{ include "kubernetes-ingress.namespace" . }}/{{ include "kubernetes-ingress.fullname" . }}
           - --http-bind-port={{ .Values.controller.containerPort.http }}
           - --https-bind-port={{ .Values.controller.containerPort.https }}
+          - --quic-bind-port={{ .Values.controller.containerPort.https }}
+          - --quic-announce-port={{ .Values.controller.service.ports.https }}
 {{- if .Values.controller.ingressClass }}
           - --ingress.class={{ .Values.controller.ingressClass }}
 {{- end }}
@@ -141,6 +143,9 @@ spec:
               containerPort: {{ $value }}
               protocol: TCP
           {{- end }}
+            - name: quic
+              containerPort: {{ .Values.controller.containerPort.https }}
+              protocol: UDP
           {{- range .Values.controller.service.tcpPorts }}
             - name: {{ .name }}-tcp
               containerPort: {{ .targetPort }}

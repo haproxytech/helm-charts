@@ -23,14 +23,49 @@ Service ports mapped are:
     containerPort: {{ $value }}
     protocol: TCP
 {{- end }}
+  - name: quic
+    containerPort: {{ .Values.controller.containerPort.https }}
+    protocol: UDP
+{{- range .Values.controller.service.tcpPorts }}
+  - name: {{ .name }}-tcp
+    containerPort: {{ .targetPort }}
+    protocol: TCP
+{{- end }}
 {{- end }}
 {{- if eq .Values.controller.kind "DaemonSet" }}
+{{- $useHostPort := .Values.controller.daemonset.useHostPort -}}
 {{- $hostPorts := .Values.controller.daemonset.hostPorts -}}
+{{- $hostIP := .Values.controller.daemonset.hostIP -}}
 {{- range $key, $value := .Values.controller.containerPort }}
   - name: {{ $key }}
     containerPort: {{ $value }}
     protocol: TCP
+{{- if $useHostPort }}
     hostPort: {{ index $hostPorts $key | default $value }}
+{{- end }}
+{{- if $hostIP }}
+    hostIP: {{ $hostIP }}
+{{- end }}
+{{- end }}
+  - name: quic
+    containerPort: {{ .Values.controller.containerPort.https }}
+    protocol: UDP
+{{- if $useHostPort }}
+    hostPort: {{ .Values.controller.daemonset.hostPorts.https }}
+{{- end }}
+{{- if $hostIP }}
+    hostIP: {{ $hostIP }}
+{{- end }}
+{{- range .Values.controller.service.tcpPorts }}
+  - name: {{ .name }}-tcp
+    containerPort: {{ .port }}
+    protocol: TCP
+{{- if $useHostPort }}
+    hostPort: {{ .port }}
+{{- end }}
+{{- if $hostIP }}
+    hostIP: {{ $hostIP }}
+{{- end }}
 {{- end }}
 {{- end }}
 

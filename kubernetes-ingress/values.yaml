@@ -317,6 +317,12 @@ controller:
   #  - --namespace-whitelist=default
   #  - --namespace-whitelist=namespace1
   #  - --namespace-blacklist=namespace2
+  #  - --disable-ipv4
+  #  - --disable-ipv6
+  #  - --disable-http
+  #  - --disable-https
+  #  - --disable-quic
+  #  - --sync-period=10s
 
   ## Custom configuration for Controller
   ## ref: https://github.com/haproxytech/kubernetes-ingress/tree/master/documentation
@@ -398,6 +404,7 @@ controller:
     enablePorts:
       http: true
       https: true
+      quic: true
       stat: true
       prometheus: true
 
@@ -406,6 +413,7 @@ controller:
     targetPorts:
       http: http
       https: https
+      quic: quic
       stat: stat
       prometheus: prometheus
 
