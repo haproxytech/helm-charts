@@ -807,6 +807,30 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Fix for loadBalancerClass bug (#227)
+    apiVersion: v2
+    appVersion: 1.10.11
+    created: "2024-02-22T22:37:23.173247271Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: cd1c64f0cfd74f86b6774bfd8ba1641e809dd0252fc773ed869e1997b01a07b5
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.38.1/kubernetes-ingress-1.38.1.tgz
+    version: 1.38.1
+  - annotations:
+      artifacthub.io/changes: |
         - Add QUIC support for upcoming IC v1.11
         - Allow setting loadBalancerClass for the service (#226)
     apiVersion: v2
@@ -4230,4 +4254,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-02-22T17:07:29.165070271Z"
+generated: "2024-02-22T22:37:23.174356654Z"
