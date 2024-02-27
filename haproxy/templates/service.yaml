@@ -51,14 +51,7 @@ spec:
   {{- end }}
   {{- if or .Values.containerPorts .Values.service.additionalPorts }}
   ports:
-  {{- with .Values.containerPorts }}
-  {{- range $key, $port := . }}
-  - name: {{ $key }}
-    protocol: TCP
-    port: {{ $port }}
-    targetPort: {{ $key }}
-  {{- end }}
-  {{- end }}
+  {{- include "haproxy.exposedPorts" . | nindent 3 -}}
   {{- with .Values.service.additionalPorts }}
   {{- range $key, $port := . }}
   - name: {{ $key }}
