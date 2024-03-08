@@ -807,6 +807,30 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Use Ingress Controller 1.11.0 version for base image
+    apiVersion: v2
+    appVersion: 1.11.0
+    created: "2024-03-08T15:33:20.056112112Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: f7f22b5e6e49a5303028e791ef6eb08e87739d9a51e54a317caa1a425f99a304
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.38.2/kubernetes-ingress-1.38.2.tgz
+    version: 1.38.2
+  - annotations:
+      artifacthub.io/changes: |
         - Fix for loadBalancerClass bug (#227)
     apiVersion: v2
     appVersion: 1.10.11
@@ -4254,4 +4278,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-02-22T22:37:23.174356654Z"
+generated: "2024-03-08T15:33:20.056734802Z"
