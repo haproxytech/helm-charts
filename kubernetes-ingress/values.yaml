@@ -460,6 +460,17 @@ controller:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     # sessionAffinity: ""
 
+    ## Controller Metrics Service configuration
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+    metrics:
+      ## Service annotations
+      ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+      annotations: {}
+
+      ## Service labels
+      ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+      labels: {}
+
   ## Controller DaemonSet configuration
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
   daemonset:
