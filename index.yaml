@@ -807,6 +807,30 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Use Ingress Controller 1.11.2 version for base image
+    apiVersion: v2
+    appVersion: 1.11.2
+    created: "2024-03-22T18:14:04.220861954Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: ea3ef7152b8fca78b47d13a0f0df2a8e20309b6bc53e4ca5459ddb2aa404e8ab
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.38.5/kubernetes-ingress-1.38.5.tgz
+    version: 1.38.5
+  - annotations:
+      artifacthub.io/changes: |
         - Add metrics service-specific metadata (#229)
         - Enable QUIC only for K8s 1.24 (#230) due to MixedProtocolLBService feature gate
     apiVersion: v2
@@ -4327,4 +4351,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-03-20T09:58:13.951203535Z"
+generated: "2024-03-22T18:14:04.221905966Z"
