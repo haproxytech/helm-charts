@@ -16,8 +16,8 @@ apiVersion: v2
 name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
-version: 1.38.4
-appVersion: 1.11.1
+version: 1.38.5
+appVersion: 1.11.2
 kubeVersion: ">=1.22.0-0"
 keywords:
   - ingress
@@ -32,5 +32,4 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Add metrics service-specific metadata (#229)
-    - Enable QUIC only for K8s 1.24 (#230) due to MixedProtocolLBService feature gate
+    - Use Ingress Controller 1.11.2 version for base image
