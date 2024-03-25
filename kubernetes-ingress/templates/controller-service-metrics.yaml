@@ -48,7 +48,7 @@ metadata:
     {{ $key }}: {{ $value | quote }}
 {{- end }}
 spec:
-  type: ClusterIP
+  type: {{ .Values.controller.service.metrics.type }}
   ports:
     - name: stat
       port: {{ .Values.controller.service.ports.stat }}
