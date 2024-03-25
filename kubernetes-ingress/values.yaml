@@ -463,6 +463,8 @@ controller:
     ## Controller Metrics Service configuration
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     metrics:
+      type: ClusterIP    # can be 'ClusterIP', 'NodePort' or 'LoadBalancer'
+
       ## Service annotations
       ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
       annotations: {}
