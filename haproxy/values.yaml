@@ -484,6 +484,12 @@ service:
   additionalPorts: {}
     # prometheus: 9101
 
+  ## Deterministic exposure of ports to the service
+  ## .Values.containerPorts will be exposed if exposedPorts is empty
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
+  exposedPorts: {}
+    # http: 80
+
 serviceMonitor:
   ## Toggle the ServiceMonitor true if you have Prometheus Operator installed and configured
   enabled: false

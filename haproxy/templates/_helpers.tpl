@@ -103,3 +103,26 @@ Encode an imagePullSecret string.
 {{- end }}
 
 {{/* vim: set filetype=mustache: */}}
+
+{{/*
+Exposed ports to service
+*/}}
+{{- define "haproxy.exposedPorts" }}
+{{- $exposedPorts := .Values.service.exposedPorts }}
+{{- if empty $exposedPorts }}
+{{- $containerPorts := .Values.containerPorts }}
+{{- range $key, $port := $containerPorts }}
+- name: {{ $key }}
+  protocol: TCP
+  port: {{ $port }}
+  targetPort: {{ $key }}
+{{- end }}
+{{- else }}
+{{- range $key, $port := $exposedPorts }}
+- name: {{ $key }}
+  protocol: TCP
+  port: {{ $port }}
+  targetPort: {{ $key }}
+{{- end }}
+{{- end }}
+{{- end }}
