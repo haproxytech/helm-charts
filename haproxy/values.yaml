@@ -132,11 +132,11 @@ startupProbe:
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
 daemonset:
   useHostNetwork: false   # also modify dnsPolicy accordingly
-  useHostPort: false
-  hostPorts:
-    http: 80
-    https: 443
-    stat: 1024
+  useHostPort: false # also modify the hostPorts and containerPorts accordingly
+  hostPorts: {} # modify to list the hostPorts accordingly when useHostPort is set to true.
+  #  http: 80
+  #  https: 443
+  #  stat: 1024
 
 ## Init Containers
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
@@ -164,10 +164,10 @@ existingImagePullSecret: null
 
 ## Container listener port configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/
-containerPorts:   # has to match hostPorts when useHostNetwork is true
-  http: 80
-  https: 443
-  stat: 1024
+containerPorts: {}  # has to match hostPorts when useHostNetwork is true
+#  http: 80
+#  https: 443
+#  stat: 1024
 
 ## Deployment strategy definition
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -218,6 +218,7 @@ extraVolumes: []
 #   emptyDir: {}
 
 ## HAProxy daemon configuration
+# Update accordingly to override the configuration added to the /usr/local/etc/haproxy/haproxy.cfg file
 # ref: https://www.haproxy.org/download/2.6/doc/configuration.txt
 config: |
   global
@@ -230,12 +231,13 @@ config: |
     timeout connect 60s
     timeout server 60s
 
-  frontend fe_main
-    bind :80
-    default_backend be_main
+## Example 
+#  frontend fe_main
+#    bind :80
+#    default_backend be_main
 
-  backend be_main
-    server web1 10.0.0.1:8080 check
+#  backend be_main
+#    server web1 10.0.0.1:8080 check
 
 # Mount path and sub path for config file
 configMount:
