@@ -3,6 +3,29 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Remove hardcode from configmap template for haproxy chart (#233)
+    apiVersion: v2
+    appVersion: 2.9.5
+    created: "2024-04-03T12:22:41.303677651Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 8801426bcdf1fcc9b0bea62727637f0fe1af8379a4416f7316fd2ead22d63a75
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.21.1/haproxy-1.21.1.tgz
+    version: 1.21.1
+  - annotations:
+      artifacthub.io/changes: |
         - Update base image to HAProxy 2.9.5
         - Add internalTrafficPolicy property for service (#218)
         - Update podAnnotations rendering for better flexibility (#224)
@@ -4351,4 +4374,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-03-22T18:14:04.221905966Z"
+generated: "2024-04-03T12:22:41.304082791Z"
