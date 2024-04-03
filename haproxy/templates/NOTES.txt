@@ -5,11 +5,16 @@ Controller image deployed is: "{{ .Values.image.repository }}:{{ tpl .Values.ima
 Your HAProxy app is of a "{{ .Values.kind }}" kind.
 
 Service ports mapped are:
+{{- $nodePorts := .Values.service.nodePorts }}
+{{- $servicePortType := .Values.service.type }}
 {{- if eq .Values.kind "Deployment" }}
 {{- range $key, $value := .Values.containerPorts }}
   - name: {{ $key }}
     containerPort: {{ $value }}
     protocol: TCP
+    {{- if and (hasKey $nodePorts $key) (eq $servicePortType "NodePort") }}
+    nodePort: {{ get $nodePorts $key }}
+    {{- end }}
 {{- end }}
 {{- end }}
 {{- if eq .Values.kind "DaemonSet" }}
@@ -21,6 +26,9 @@ Service ports mapped are:
     protocol: TCP
     {{- if $useHostPort }}
     hostPort: {{ index $hostPorts $key | default $value }}
+    {{- end }}
+    {{- if and (hasKey $nodePorts $key) (eq $servicePortType "NodePort") }}
+    nodePort: {{ get $nodePorts $key }}
     {{- end }}
 {{- end }}
 {{- end }}
