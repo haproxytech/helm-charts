@@ -449,7 +449,7 @@ PodDisruptionBudget:
 ## Service configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
-  type: ClusterIP   # can be 'LoadBalancer'
+  type: ClusterIP   # can be 'ClusterIP', 'NodePort', 'LoadBalancer'
 
   ## Service ClusterIP
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
@@ -483,6 +483,12 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   additionalPorts: {}
     # prometheus: 9101
+
+  ## NodePort custom port
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#nodeport-custom-port
+  nodePorts: {}
+    # http: 32080
+    # https: 32443
 
 serviceMonitor:
   ## Toggle the ServiceMonitor true if you have Prometheus Operator installed and configured
