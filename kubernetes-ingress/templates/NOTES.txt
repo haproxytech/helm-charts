@@ -23,7 +23,7 @@ Service ports mapped are:
     containerPort: {{ $value }}
     protocol: TCP
 {{- end }}
-{{- if semverCompare ">=1.24.0-0" .Capabilities.KubeVersion.Version }}
+{{- if and (semverCompare ">=1.24.0-0" .Capabilities.KubeVersion.Version) .Values.controller.service.enablePorts.quic }}
   - name: quic
     containerPort: {{ .Values.controller.containerPort.https }}
     protocol: UDP
@@ -49,7 +49,7 @@ Service ports mapped are:
     hostIP: {{ $hostIP }}
 {{- end }}
 {{- end }}
-{{- if semverCompare ">=1.24.0-0" .Capabilities.KubeVersion.Version }}
+{{- if and (semverCompare ">=1.24.0-0" .Capabilities.KubeVersion.Version) .Values.controller.service.enablePorts.quic }}
   - name: quic
     containerPort: {{ .Values.controller.containerPort.https }}
     protocol: UDP

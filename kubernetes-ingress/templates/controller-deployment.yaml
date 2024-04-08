@@ -101,7 +101,7 @@ spec:
           - --configmap={{ include "kubernetes-ingress.namespace" . }}/{{ include "kubernetes-ingress.fullname" . }}
           - --http-bind-port={{ .Values.controller.containerPort.http }}
           - --https-bind-port={{ .Values.controller.containerPort.https }}
-{{- if semverCompare ">=1.24.0-0" .Capabilities.KubeVersion.Version }}
+{{- if and (semverCompare ">=1.24.0-0" .Capabilities.KubeVersion.Version) .Values.controller.service.enablePorts.quic }}
           - --quic-bind-port={{ .Values.controller.containerPort.https }}
           - --quic-announce-port={{ .Values.controller.service.ports.https }}
 {{- end }}
@@ -145,7 +145,7 @@ spec:
               containerPort: {{ $value }}
               protocol: TCP
           {{- end }}
-          {{- if semverCompare ">=1.24.0-0" .Capabilities.KubeVersion.Version }}
+          {{- if and (semverCompare ">=1.24.0-0" .Capabilities.KubeVersion.Version) .Values.controller.service.enablePorts.quic }}
             - name: quic
               containerPort: {{ .Values.controller.containerPort.https }}
               protocol: UDP
