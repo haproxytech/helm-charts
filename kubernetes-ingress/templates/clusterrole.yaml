@@ -130,7 +130,6 @@ rules:
   verbs:
   - update
 {{- end }}
-{{- if .Values.controller.techdump.enabled }}
 - apiGroups:
   - "apps"
   resources:
@@ -141,5 +140,4 @@ rules:
   - get
   - list
   - watch
-{{- end }}
 {{- end -}}

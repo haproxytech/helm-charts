@@ -560,8 +560,3 @@ controller:
         path: /metrics
         scheme: http
         interval: 30s
-
-  ## Techdump
-  ## Toggle to add the RBAC permissions needed for the techdump tool.
-  techdump:
-    enabled: false
