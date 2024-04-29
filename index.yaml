@@ -854,6 +854,30 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Allow setting resources requests or limits on crdjob (#236)
+    apiVersion: v2
+    appVersion: 1.11.3
+    created: "2024-04-29T15:16:59.035015058Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 3f67937dab7793581688f7211a08c615d369a2dbd0d8e86da4e14a13a10510d2
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.39.2/kubernetes-ingress-1.39.2.tgz
+    version: 1.39.2
+  - annotations:
+      artifacthub.io/changes: |
         - Remove techdump toggle entirely
     apiVersion: v2
     appVersion: 1.11.3
@@ -4449,4 +4473,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-04-19T15:16:43.737364534Z"
+generated: "2024-04-29T15:16:59.035417193Z"
