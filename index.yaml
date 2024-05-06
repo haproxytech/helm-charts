@@ -854,6 +854,30 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Use Ingress Controller 1.11.4 version for base image
+    apiVersion: v2
+    appVersion: 1.11.4
+    created: "2024-05-06T07:23:41.385106171Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 16babbf7d4b9d71c88f8b41b6ffb16e587f349e6b229f89ca9ecffff26431168
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.39.3/kubernetes-ingress-1.39.3.tgz
+    version: 1.39.3
+  - annotations:
+      artifacthub.io/changes: |
         - Allow setting resources requests or limits on crdjob (#236)
     apiVersion: v2
     appVersion: 1.11.3
@@ -4473,4 +4497,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-04-29T15:16:59.035417193Z"
+generated: "2024-05-06T07:23:41.385535954Z"
