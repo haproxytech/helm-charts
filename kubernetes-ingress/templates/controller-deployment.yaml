@@ -125,9 +125,9 @@ spec:
           - --proxy-k8s-fetch-period={{ .Values.controller.sync.fetchParams.period }}
   {{- end }}
   {{- if eq .Values.controller.sync.fetchParams.source "k8s" }}
-          - --k8s-api-sync-type=fetch_from_k8s_api
+          - --k8s-api-sync-type=k8s
   {{- else if eq .Values.controller.sync.fetchParams.source "proxy" }}
-          - --k8s-api-sync-type=fetch_from_proxy
+          - --k8s-api-sync-type=proxy
           - --proxy-svc-label-selector={{ .Values.controller.sync.proxyParams.proxySvcLabelSelector }}
   {{- end }}
 {{- end }}

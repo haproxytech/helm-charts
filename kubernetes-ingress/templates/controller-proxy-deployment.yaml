@@ -121,7 +121,7 @@ spec:
           - --prometheus
 {{- end }}
           - --proxy-server-mode
-          - --k8s-api-sync-type=fetch_from_k8s_api
+          - --k8s-api-sync-type=k8s
           - --proxy-svc-label-selector={{ .Values.controller.sync.proxyParams.proxySvcLabelSelector }}
 {{- if .Values.controller.sync.fetchParams.period }}
           - --proxy-k8s-fetch-period={{ .Values.controller.sync.fetchParams.period }}
