@@ -1,5 +1,5 @@
 {{/*
-Copyright 2019 HAProxy Technologies LLC
+Copyright 2024 HAProxy Technologies LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */}}
 
-{{- if and (eq .Values.controller.sync.mode  "fetch") (eq .Values.controller.sync.fetchParams.source "proxy") }}
+{{- if and (eq .Values.controller.sync.mode "fetch") (eq .Values.controller.sync.fetchParams.source "proxy") }}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "kubernetes-ingress.fullname" . }}-proxy
+  name: {{ include "kubernetes-ingress.serviceProxyName" . }}
   namespace: {{ include "kubernetes-ingress.namespace" . }}
   labels:
-    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}-proxy
+    app.kubernetes.io/name: {{ include "kubernetes-ingress.serviceProxyName" . }}
     helm.sh/chart: {{ include "kubernetes-ingress.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -53,7 +53,7 @@ spec:
     {{- end }}
   {{- end }}
   selector:
-    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}-proxy
+    app.kubernetes.io/name: {{ include "kubernetes-ingress.serviceProxyName" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
   {{- if .Values.controller.service.sessionAffinity }}
   sessionAffinity: {{ .Values.controller.service.sessionAffinity }}
