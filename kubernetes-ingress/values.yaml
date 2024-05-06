@@ -560,3 +560,16 @@ controller:
         path: /metrics
         scheme: http
         interval: 30s
+
+  ## Specified how the controller will sync data from Kubernetes
+  ## Possbile values: 'default' or 'fetch'
+  ## - 'default': the sync is done based on K8s informers (event based)
+  ## - 'fetch':  the controller pulls data periodically (from k8s or from proxy)
+  sync:
+    mode: default # can be 'default' or 'fetch'
+    fetchParams: # Mandatory if mode is 'fetch'
+      # period: 3s # optional, default is 5s
+      source: k8s # possible values are: 'proxy', 'k8s'
+    proxyParams: # Mandatory if source is 'proxy'
+      replicaCount: 3 # number of replicas of the proxy, mandatory if source is 'proxy'
+      proxySvcLabelSelector: run:haproxy-ingress-proxy # label selector of the proxy service, mandatory if source is 'proxy'

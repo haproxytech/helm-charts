@@ -14,14 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */}}
 
-{{- if eq .Values.controller.kind "Deployment" }}
+{{- if and (eq .Values.controller.sync.mode  "fetch") (eq .Values.controller.sync.fetchParams.source "proxy") }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "kubernetes-ingress.fullname" . }}
+  name: {{ include "kubernetes-ingress.fullname" . }}-proxy
   namespace: {{ include "kubernetes-ingress.namespace" . }}
   labels:
-    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
+    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}-proxy
     helm.sh/chart: {{ include "kubernetes-ingress.chart" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -31,12 +31,12 @@ metadata:
     {{- end }}
 spec:
   {{- if and (not .Values.controller.autoscaling.enabled) (not .Values.controller.keda.enabled) }}
-  replicas: {{ .Values.controller.replicaCount }}
+  replicas: {{ .Values.controller.sync.proxyParams.replicaCount }}
   {{- end }}
   minReadySeconds: {{ .Values.controller.minReadySeconds }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
+      app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}-proxy
       app.kubernetes.io/instance: {{ .Release.Name }}
   {{- with .Values.controller.strategy }}
   strategy:
@@ -45,7 +45,7 @@ spec:
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
+        app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}-proxy
         app.kubernetes.io/instance: {{ .Release.Name }}
         {{- if .Values.controller.podLabels }}
 {{ toYaml .Values.controller.podLabels | indent 8 }}
@@ -120,16 +120,11 @@ spec:
 {{- if .Values.controller.service.enablePorts.prometheus }}
           - --prometheus
 {{- end }}
-{{- if eq .Values.controller.sync.mode "fetch" }}
-  {{- if .Values.controller.sync.fetchParams.period }}
-          - --proxy-k8s-fetch-period={{ .Values.controller.sync.fetchParams.period }}
-  {{- end }}
-  {{- if eq .Values.controller.sync.fetchParams.source "k8s" }}
+          - --proxy-server-mode
           - --k8s-api-sync-type=k8s
-  {{- else if eq .Values.controller.sync.fetchParams.source "proxy" }}
-          - --k8s-api-sync-type=proxy
           - --proxy-svc-label-selector={{ .Values.controller.sync.proxyParams.proxySvcLabelSelector }}
-  {{- end }}
+{{- if .Values.controller.sync.fetchParams.period }}
+          - --proxy-k8s-fetch-period={{ .Values.controller.sync.fetchParams.period }}
 {{- end }}
 {{- range .Values.controller.extraArgs }}
           - {{ . }}

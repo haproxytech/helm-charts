@@ -140,4 +140,12 @@ rules:
   - get
   - list
   - watch
+{{- if and (eq .Values.controller.sync.mode  "fetch") (eq .Values.controller.sync.fetchParams.source "proxy") }}
+- apiGroups:
+  - "coordination.k8s.io"
+  resources:
+  - leases
+  verbs:
+  - "*"
+{{- end }}
 {{- end -}}
