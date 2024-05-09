@@ -340,6 +340,8 @@ controller:
   #   annotationKey: value
 
   ## Controller Logging configuration
+  ## Careful: this block will be ignored if you use config.cr-global.
+  ## In this case, move your logging config in entry spec.log_targets in your CR.
   logging:
     ## Controller logging level
     ## This only relevant to Controller logs
