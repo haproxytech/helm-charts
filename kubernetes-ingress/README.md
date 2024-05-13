@@ -54,8 +54,6 @@ helm install haproxytech/kubernetes-ingress \
   --name my-release
 ```
 
-By default Helm chart will install several [custom resource definitions](https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress/crds) in the cluster if they are missing.
-
 ### Installing with unique name
 
 To auto-generate controller and its resources names when installing, use the following:
