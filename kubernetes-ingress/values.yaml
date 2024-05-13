@@ -78,6 +78,11 @@ controller:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   unprivileged: true
 
+  ## Allow privileged port binding without root privileges
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/
+  ## Note: this feature enables net.ipv4.ip_unprivileged_port_start=0 sysctl when running in unprivileged mode
+  allowPrivilegedPorts: false
+
   ## Restricts container syscalls
   ## ref: https://kubernetes.io/docs/tutorials/security/seccomp/
   enableRuntimeDefaultSeccompProfile: true
