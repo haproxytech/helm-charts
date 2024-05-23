@@ -1,6 +1,6 @@
 HAProxy Kubernetes Ingress Controller has been successfully installed.
 
-Controller image deployed is: "{{ .Values.controller.image.repository }}:{{ tpl .Values.controller.image.tag . }}".
+Controller image deployed is: "{{ .Values.controller.image.repository }}:{{ .Values.controller.image.tag }}".
 Your controller is of a "{{ .Values.controller.kind }}" kind. Your controller service is running as a "{{ .Values.controller.service.type }}" type.
 {{- if .Values.rbac.create}}
 RBAC authorization is enabled.

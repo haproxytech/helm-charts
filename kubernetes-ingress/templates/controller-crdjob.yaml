@@ -69,7 +69,7 @@ spec:
 {{- end }}
       containers:
         - name: crd
-          image: "{{ .Values.controller.image.repository }}:{{ tpl .Values.controller.image.tag . }}"
+          image: "{{ .Values.controller.image.repository }}:{{ .Values.controller.image.tag }}"
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
           command:
             - /haproxy-ingress-controller

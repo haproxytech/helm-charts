@@ -1,7 +1,7 @@
 HAProxy has been has been successfully installed. This Chart is used to run HAProxy as a regular application,
 as opposed to HAProxy Ingress Controller Chart.
 
-Controller image deployed is: "{{ .Values.image.repository }}:{{ tpl .Values.image.tag . }}".
+Controller image deployed is: "{{ .Values.image.repository }}:{{ .Values.image.tag }}".
 Your HAProxy app is of a "{{ .Values.kind }}" kind.
 
 Service ports mapped are:
