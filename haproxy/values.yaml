@@ -31,8 +31,7 @@ serviceAccount:
 ## Default values for image
 image:
   repository: haproxytech/haproxy-alpine    # can be changed to use CE or EE images
-  # Overrides the image tag whose default is the chart appVersion
-  tag: ""
+  tag: ""                                   # overrides the image tag whose default is the chart appVersion
   pullPolicy: IfNotPresent
 
 ## Automatically Roll Deployments
