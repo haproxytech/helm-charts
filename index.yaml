@@ -854,6 +854,30 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Replace tpl with default for Ingress Controller image tag (#244)
+    apiVersion: v2
+    appVersion: 1.11.4
+    created: "2024-05-23T17:33:13.197018771Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 8e3f86e6c9303e2a39bbf9590863966af584ddcfb0ade57ef119205a472c19b2
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.39.4/kubernetes-ingress-1.39.4.tgz
+    version: 1.39.4
+  - annotations:
+      artifacthub.io/changes: |
         - Use Ingress Controller 1.11.4 version for base image
     apiVersion: v2
     appVersion: 1.11.4
@@ -4497,4 +4521,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-05-06T07:23:41.385535954Z"
+generated: "2024-05-23T17:33:13.197997626Z"
