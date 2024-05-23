@@ -61,7 +61,8 @@ controller:
   name: controller
   image:
     repository: haproxytech/kubernetes-ingress    # can be changed to use CE or EE Controller images
-    tag: "{{ .Chart.AppVersion }}"
+    # Overrides the image tag whose default is the chart appVersion
+    tag: ""
     pullPolicy: IfNotPresent
 
   ## Deployment or DaemonSet pod mode

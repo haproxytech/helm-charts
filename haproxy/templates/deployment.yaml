@@ -106,7 +106,7 @@ spec:
           {{- if .Values.securityContext.enabled }}
           securityContext: {{- omit .Values.securityContext "enabled" | toYaml  | nindent 12 }}
           {{- end }}
-          image: "{{ .Values.image.repository }}:{{ tpl .Values.image.tag . }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.args.enabled }}
           args:
