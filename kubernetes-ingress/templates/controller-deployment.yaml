@@ -167,7 +167,7 @@ spec:
               protocol: UDP
           {{- end }}
           {{- range .Values.controller.service.tcpPorts }}
-            - name: {{ .name }}-tcp
+            - name: {{ .name | trunc 15 | trimSuffix "-" }}
               containerPort: {{ .targetPort }}
               protocol: TCP
           {{- end }}
