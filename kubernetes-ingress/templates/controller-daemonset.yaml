@@ -168,7 +168,7 @@ spec:
               {{- end }}
           {{- end }}
           {{- range .Values.controller.service.tcpPorts }}
-            - name: {{ .name }}-tcp
+            - name: {{ .name | trunc 15 | trimSuffix "-" }}
               containerPort: {{ .port }}
               protocol: TCP
               {{- if $useHostPort }}
