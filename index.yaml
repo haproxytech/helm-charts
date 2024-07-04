@@ -854,6 +854,31 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Use Ingress Controller 3.0.1 version for base image
+        - Limit template spec name to 15 characters (#247)
+    apiVersion: v2
+    appVersion: 3.0.1
+    created: "2024-07-04T08:08:57.604799091Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 02302f8df09d9b3a190fa1433ed0687b784a8d4bf7cee7c82d6dc7fed96142da
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.40.1/kubernetes-ingress-1.40.1.tgz
+    version: 1.40.1
+  - annotations:
+      artifacthub.io/changes: |
         - Use Ingress Controller 3.0.0 version for base image
     apiVersion: v2
     appVersion: 3.0.0
@@ -4545,4 +4570,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-06-27T13:41:44.277000249Z"
+generated: "2024-07-04T08:08:57.605219159Z"
