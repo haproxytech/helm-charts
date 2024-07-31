@@ -197,6 +197,13 @@ extraEnvs: []
 #     fieldRef:
 #       fieldPath: status.podIP
 
+## Use envFrom to define all of the ConfigMap's data as container environment variables
+## ref: https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
+extraEnvFrom: []
+## Example passing the pod IP into a container
+#  - configMapRef:
+#      name: ha-env-config
+
 ## Additional volumeMounts to the controller main container
 extraVolumeMounts: []
 ## Example empty volume mounts when using securityContext->readOnlyRootFilesystem
