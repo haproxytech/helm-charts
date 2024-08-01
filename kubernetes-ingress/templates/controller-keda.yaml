@@ -42,11 +42,16 @@ spec:
 {{ end }}
   advanced:
     restoreToOriginalReplicaCount: {{ .Values.controller.keda.restoreToOriginalReplicaCount }}
-{{- if .Values.controller.keda.behavior }}
+{{- if .Values.controller.keda.horizontalPodAutoscalerConfig }}
     horizontalPodAutoscalerConfig:
+{{- if .Values.controller.keda.horizontalPodAutoscalerConfig.name }}
+      name: {{ .Values.controller.keda.horizontalPodAutoscalerConfig.name }}
+{{- end }}
+{{- if .Values.controller.keda.horizontalPodAutoscalerConfig.behavior }}
       behavior:
-{{ with .Values.controller.keda.behavior -}}
+{{ with .Values.controller.keda.horizontalPodAutoscalerConfig.behavior -}}
 {{ toYaml . | indent 8 }}
 {{ end }}
+{{- end }}
 {{- end }}
 {{- end }}
