@@ -257,13 +257,15 @@ controller:
     restoreToOriginalReplicaCount: false
     scaledObject:
       annotations: {}
-    behavior: {}
-    #  scaleDown:
-    #    stabilizationWindowSeconds: 300
-    #    policies:
-    #    - type: Percent
-    #      value: 100
-    #      periodSeconds: 15
+    horizontalPodAutoscalerConfig: {}
+      # name: ""
+      # behavior:
+      #  scaleDown:
+      #    stabilizationWindowSeconds: 300
+      #    policies:
+      #    - type: Percent
+      #      value: 100
+      #      periodSeconds: 15
     triggers: []
     #  - type: prometheus
     #    metadata:
