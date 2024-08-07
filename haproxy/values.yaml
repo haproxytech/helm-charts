@@ -197,7 +197,7 @@ extraEnvs: []
 #     fieldRef:
 #       fieldPath: status.podIP
 
-## Use envFrom to add env vars from a secret or configmap to the HA Proxy container
+## Use envFrom to add env vars from a secret or ConfigMap to the HAProxy container
 ## ref: https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
 extraEnvFrom: []
 ## Example passing the pod IP into a container
