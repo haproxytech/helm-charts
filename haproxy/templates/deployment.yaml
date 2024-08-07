@@ -139,6 +139,10 @@ spec:
           env:
             {{- toYaml . | trim | nindent 12 }}
           {{- end }}
+          { { - with .Values.extraEnvFrom } }
+          envFrom:
+            { { - toYaml . | trim | nindent 12 } }
+          { { - end } }
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.lifecycle }}
