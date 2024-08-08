@@ -854,6 +854,32 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Fix bug w/ permissions (#255)
+        - Add ability to specify HPA name in KEDA object (#253)
+        - Add pre-install hook annotation for namespace creation (#254)
+    apiVersion: v2
+    appVersion: 3.0.1
+    created: "2024-08-08T19:49:15.29507865Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 9beb462019c45d02a745523f51e424e54e55c0669bfa19d5f93e3cf3ca8b2489
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.41.0/kubernetes-ingress-1.41.0.tgz
+    version: 1.41.0
+  - annotations:
+      artifacthub.io/changes: |
         - Use Ingress Controller 3.0.1 version for base image
         - Limit template spec name to 15 characters (#247)
     apiVersion: v2
@@ -4570,4 +4596,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-07-04T08:08:57.605219159Z"
+generated: "2024-08-08T19:49:15.29550855Z"
