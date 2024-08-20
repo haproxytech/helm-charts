@@ -208,6 +208,10 @@ spec:
           {{- if .Values.controller.extraEnvs -}}
           {{- toYaml .Values.controller.extraEnvs | nindent 10 }}
           {{- end }}
+          {{- with .Values.controller.extraEnvFrom }}
+          envFrom:
+            {{- toYaml . | trim | nindent 12 }}
+          {{- end }}
           resources:
             {{- toYaml .Values.controller.resources | nindent 12 }}
           {{- if .Values.controller.lifecycle }}
