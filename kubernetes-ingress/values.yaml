@@ -521,6 +521,13 @@ controller:
     # - name: TZ
     #   value: "Etc/UTC"
 
+  ## Use envFrom to add env vars from a secret or ConfigMap to the HAProxy container
+  ## ref: https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
+  extraEnvFrom: []
+  ## Example passing the pod IP into a container
+  #  - configMapRef:
+  #      name: ha-env-config
+
   ## Add additional containers
   extraContainers: []
     ## Example sidecar
