@@ -25,10 +25,6 @@ metadata:
   namespace: {{ include "haproxy.namespace" . }}
   labels:
     {{- include "haproxy.labels" . | nindent 4 }}
-  {{- if .Values.podAnnotations }}
-  annotations:
-{{ toYaml .Values.podAnnotations | indent 4 }}
-  {{- end }}
 spec:
   minReadySeconds: {{ .Values.minReadySeconds }}
   updateStrategy:
