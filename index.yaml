@@ -3,6 +3,29 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Update base image to HAProxy 3.0.4
+    apiVersion: v2
+    appVersion: 3.0.4
+    created: "2024-09-19T06:59:00.597073549Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: d13ed4c3fc96528e58d4fb6b5beb80c035da9ac98310525aff6d0716c8a4c25e
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.23.0/haproxy-1.23.0.tgz
+    version: 1.23.0
+  - annotations:
+      artifacthub.io/changes: |
         - Add support for NodePort custom ports (#234)
         - Update base image to HAProxy 2.9.6
     apiVersion: v2
@@ -4596,4 +4619,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-08-08T19:49:15.29550855Z"
+generated: "2024-09-19T06:59:00.597510291Z"
