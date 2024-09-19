@@ -41,9 +41,16 @@ spec:
         {{- if .Values.controller.podLabels }}
 {{ toYaml .Values.controller.podLabels | indent 8 }}
         {{- end }}
+      {{- $podAnnotations := dict }}
+      {{- if .Values.crdjob.podAnnotations }}
+        {{- $podAnnotations = merge $podAnnotations .Values.crdjob.podAnnotations }}
+      {{- end }}
       {{- if .Values.controller.podAnnotations }}
+        {{- $podAnnotations = merge $podAnnotations .Values.controller.podAnnotations }}
+      {{- end }}
+      {{- if not (empty $podAnnotations) }}
       annotations:
-{{ toYaml .Values.controller.podAnnotations | indent 8 }}
+{{ toYaml $podAnnotations | indent 8 }}
       {{- end }}
     spec:
       restartPolicy: Never
