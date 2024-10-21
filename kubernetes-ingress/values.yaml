@@ -331,6 +331,11 @@ controller:
   #  - --disable-quic
   #  - --sync-period=10s
 
+  ## Automatically Roll Deployments
+  # ref: https://helm.sh/docs/howto/charts_tips_and_tricks/#automatically-roll-deployments
+  checksumConfigMap:
+    enabled: false
+
   ## Custom configuration for Controller
   ## ref: https://github.com/haproxytech/kubernetes-ingress/tree/master/documentation
   config: {}

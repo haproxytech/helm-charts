@@ -50,8 +50,11 @@ spec:
         {{- if .Values.controller.podLabels }}
 {{ toYaml .Values.controller.podLabels | indent 8 }}
         {{- end }}
-      {{- if .Values.controller.podAnnotations }}
       annotations:
+      {{- if .Values.controller.checksumConfigMap.enabled }}
+        checksum/config: {{ include (print $.Template.BasePath "/controller-configmap.yaml") . | sha256sum }}
+      {{- end }}
+      {{- if .Values.controller.podAnnotations }}
 {{ toYaml .Values.controller.podAnnotations | indent 8 }}
       {{- end }}
     spec:
