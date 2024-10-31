@@ -877,6 +877,32 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Add envFrom to Deployment and Deamonset (#256)
+        - Remove pod annotations from deployment (#259)
+        - Add possibility to set crdjob annotations (#264)
+    apiVersion: v2
+    appVersion: 3.0.4
+    created: "2024-10-31T10:51:46.158551501Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 63335dadcedd838710a79894aa660d4a30ef6eb01640d662f527f3bf2fcf1ef5
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.42.0/kubernetes-ingress-1.42.0.tgz
+    version: 1.42.0
+  - annotations:
+      artifacthub.io/changes: |
         - Fix bug w/ permissions (#255)
         - Add ability to specify HPA name in KEDA object (#253)
         - Add pre-install hook annotation for namespace creation (#254)
@@ -4619,4 +4645,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-09-19T06:59:00.597510291Z"
+generated: "2024-10-31T10:51:46.158917474Z"
