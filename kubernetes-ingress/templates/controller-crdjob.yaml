@@ -30,7 +30,9 @@ metadata:
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
 spec:
 {{- if or (.Capabilities.APIVersions.Has "batch/v1alpha1") (semverCompare ">=1.23.0-0" .Capabilities.KubeVersion.Version) }}
-  ttlSecondsAfterFinished: 120
+{{- if .Values.crdjob.ttlSecondsAfterFinished }}
+  ttlSecondsAfterFinished: {{ .Values.crdjob.ttlSecondsAfterFinished }}
+{{- end }}
 {{- end }}
   backoffLimit: 0
   template:

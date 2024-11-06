@@ -16,12 +16,11 @@
 ## ref: https://github.com/haproxytech/kubernetes-ingress/tree/master/documentation
 
 podSecurityPolicy:
+  ## Specify pod annotations
+  ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor
+  ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp
+  ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#sysctl
   annotations: {}
-    ## Specify pod annotations
-    ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor
-    ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp
-    ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#sysctl
-    ##
     # apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default
     # apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default
     # seccomp.security.alpha.kubernetes.io/allowedProfileNames: runtime/default
@@ -598,4 +597,8 @@ crdjob:
   ## All annotations from the controller (if set) are added to the pod metadata
   ## If the annotation key is set for both controller and crdjob, the crdjob annotation will be used
   podAnnotations: {}
-  #  key: value
+  # key: value
+
+  ## Automatic job cleanup
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/ttlafterfinished/
+  ttlSecondsAfterFinished: 600
