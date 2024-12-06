@@ -877,6 +877,31 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Increase default and expose CRD job TTL (#266)
+        - Use Ingress Controller 3.1.0-rc1 version for base image
+    apiVersion: v2
+    appVersion: 3.1.0-rc1
+    created: "2024-12-06T18:34:07.71739783Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 02f01e374a5f9792a950ce5d09bb6a00b3dbf457f7c61971532cb654f295aa36
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.43.0/kubernetes-ingress-1.43.0.tgz
+    version: 1.43.0
+  - annotations:
+      artifacthub.io/changes: |
         - Add envFrom to Deployment and Deamonset (#256)
         - Remove pod annotations from deployment (#259)
         - Add possibility to set crdjob annotations (#264)
@@ -4645,4 +4670,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-10-31T10:51:46.158917474Z"
+generated: "2024-12-06T18:34:07.717817544Z"
