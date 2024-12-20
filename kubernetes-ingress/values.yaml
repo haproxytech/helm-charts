@@ -235,6 +235,12 @@ controller:
     annotations: {}
     #  annotationKey: value
 
+    ## Behavior
+    ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#configurable-scaling-behavior
+    # behavior:
+    #   scaleDown:
+    #      stabilizationWindowSeconds: 3600
+
     ## Custom metrics (example)
     ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/#autoscaling-on-multiple-metrics-and-custom-metrics
     # custom:

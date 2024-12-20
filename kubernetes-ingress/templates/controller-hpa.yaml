@@ -44,6 +44,9 @@ spec:
     name: {{ include "kubernetes-ingress.fullname" . }}
   minReplicas: {{ .Values.controller.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.controller.autoscaling.maxReplicas }}
+  {{- if .Values.controller.autoscaling.behavior }}
+  behavior: {{- toYaml .Values.controller.autoscaling.behavior | nindent 4 }}
+  {{- end }}
   metrics:
   {{- if .Values.controller.autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
