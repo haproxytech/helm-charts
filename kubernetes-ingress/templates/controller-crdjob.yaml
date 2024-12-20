@@ -48,7 +48,11 @@ spec:
         {{- $podAnnotations = merge $podAnnotations .Values.crdjob.podAnnotations }}
       {{- end }}
       {{- if .Values.controller.podAnnotations }}
-        {{- $podAnnotations = merge $podAnnotations .Values.controller.podAnnotations }}
+        {{- if eq "string" (printf "%T" .Values.controller.podAnnotations) }}
+          {{- $podAnnotations = merge $podAnnotations (tpl .Values.controller.podAnnotations . | fromYaml) }}
+        {{- else }}
+          {{- $podAnnotations = merge $podAnnotations .Values.controller.podAnnotations }}
+        {{- end }}
       {{- end }}
       {{- if not (empty $podAnnotations) }}
       annotations:
