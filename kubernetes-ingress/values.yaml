@@ -563,6 +563,7 @@ controller:
   ##   --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false
   serviceMonitor:
     ## Toggle the ServiceMonitor true if you have Prometheus Operator installed and configured
+    ## Should not be enabled when controller.podMonitor.enabled is true
     enabled: false
 
     ## Specify the labels to add to the ServiceMonitors to be selected for target discovery
@@ -570,6 +571,28 @@ controller:
 
     ## Specify the endpoints
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/design.md#servicemonitor
+    endpoints:
+      - port: stat
+        path: /metrics
+        scheme: http
+        interval: 30s
+
+  ## PodMonitor
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/user-guides/getting-started.md
+  ## Note: requires Prometheus Operator to be able to work, for example:
+  ## helm install prometheus prometheus-community/kube-prometheus-stack \
+  ##   --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false \
+  ##   --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false
+  podMonitor:
+    ## Toggle the PodMonitor true if you have Prometheus Operator installed and configured
+    ## Should not be enabled when controller.serviceMonitor.enabled is true
+    enabled: false
+
+    ## Specify the labels to add to the PodMonitors to be selected for target discovery
+    extraLabels: {}
+
+    ## Specify the endpoints
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/design.md#podMonitor
     endpoints:
       - port: stat
         path: /metrics

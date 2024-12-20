@@ -146,6 +146,13 @@ Create a default fully qualified ServiceMonitor name.
 {{- end -}}
 
 {{/*
+Create a default fully qualified PodMonitor name.
+*/}}
+{{- define "kubernetes-ingress.podMonitorName" -}}
+{{- default (include "kubernetes-ingress.fullname" .) .Values.controller.podMonitor.nameOverride | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Create a FQDN for the Service metrics.
 */}}
 {{- define "kubernetes-ingress.serviceMetricsName" -}}

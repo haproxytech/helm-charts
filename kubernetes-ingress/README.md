@@ -194,6 +194,22 @@ helm install my-ingress haproxytech/kubernetes-ingress \
   --set controller.serviceMonitor.enabled=true
 ```
 
+### Installing the PodMonitor
+
+As an alternative to a `ServiceMonitor` you can use a `PodMonitor`, which targets the pods directly instead of using a service.
+If you're using the [Prometheus Operator](https://github.com/prometheus-operator/prometheus-operator), you can automatically install the `PodMonitor` definition in order to automate the scraping options according to your needs.
+
+```console
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+helm install prometheus prometheus-community/kube-prometheus-stack \
+  --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false \
+  --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false
+
+helm install my-ingress haproxytech/kubernetes-ingress \
+  --set controller.podMonitor.enabled=true
+```
+
 ### Installing with Kubernetes Event-driven Autoscaling (KEDA)
 
 [KEDA](https://keda.sh/docs/2.3/concepts/scaling-deployments/) is an improved scaling solution built on top of HPA which allows autoscaling criteria based on information from any event source including Prometheus metrics collected from HAProxy native Prometheus Exporter.
