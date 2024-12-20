@@ -1,6 +1,3 @@
 controller:
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 0
-      maxSurge: 1
+  podMonitor:
+    enabled: true
