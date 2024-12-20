@@ -52,7 +52,11 @@ spec:
         {{- end }}
       {{- if .Values.controller.podAnnotations }}
       annotations:
+{{- if eq "string" (printf "%T" .Values.controller.podAnnotations) }}
+{{ tpl .Values.controller.podAnnotations . | indent 8 }}
+{{- else }}
 {{ toYaml .Values.controller.podAnnotations | indent 8 }}
+{{- end }}
       {{- end }}
     spec:
       enableServiceLinks: {{ .Values.controller.enableServiceLinks }}
