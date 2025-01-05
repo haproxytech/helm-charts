@@ -34,5 +34,9 @@ data:
   syslog-server: {{ include "kubernetes-ingress.syslogServer" . }}
 {{- end }}
 {{- if .Values.controller.config }}
+{{- if eq "string" (printf "%T" .Values.controller.config) }}
+{{ tpl .Values.controller.config . | indent 2 }}
+{{- else }}
 {{ toYaml .Values.controller.config | indent 2 }}
+{{- end }}
 {{- end }}
