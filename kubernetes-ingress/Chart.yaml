@@ -16,7 +16,7 @@ apiVersion: v2
 name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
-version: 1.43.0
+version: 1.44.0
 appVersion: 3.1.0-rc1
 kubeVersion: ">=1.23.0-0"
 keywords:
@@ -32,5 +32,9 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Increase default and expose CRD job TTL (#266)
-    - Use Ingress Controller 3.1.0-rc1 version for base image
+    - Support PodMonitor as alternative to ServiceMonitor (#271)
+    - Use correct values for PodMonitor test (#272)
+    - Support to specify HPA behavior (#274)
+    - Make controller.podAnnotations templatable (#276)
+    - Fix controller.podAnnotations not being templatable in every location (#277)
+    - Make controller.config templatable (#279)
