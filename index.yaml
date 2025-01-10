@@ -877,6 +877,35 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Support PodMonitor as alternative to ServiceMonitor (#271)
+        - Use correct values for PodMonitor test (#272)
+        - Support to specify HPA behavior (#274)
+        - Make controller.podAnnotations templatable (#276)
+        - Fix controller.podAnnotations not being templatable in every location (#277)
+        - Make controller.config templatable (#279)
+    apiVersion: v2
+    appVersion: 3.1.0-rc1
+    created: "2025-01-10T10:21:27.079166791Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 1086129a39f38520c017a81a149c0c2dd6bb40e26e37f87f5b94f09d373a6aa6
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.44.0/kubernetes-ingress-1.44.0.tgz
+    version: 1.44.0
+  - annotations:
+      artifacthub.io/changes: |
         - Increase default and expose CRD job TTL (#266)
         - Use Ingress Controller 3.1.0-rc1 version for base image
     apiVersion: v2
@@ -4670,4 +4699,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2024-12-06T18:34:07.717817544Z"
+generated: "2025-01-10T10:21:27.079648504Z"
