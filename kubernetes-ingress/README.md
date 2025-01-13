@@ -260,7 +260,23 @@ helm install keda kedacore/keda --namespace keda
 helm install mytest haproxytech/kubernetes-ingress -f mykeda.yaml
 ```
 
-## Installing on Azure Managed Kubernetes Service (AKS)
+### Installing on Amazon Elastic Kubernetes Service (EKS)
+
+By default AWS LB does not support mixed protocols (TCP and UDP) on the same port yet, resulting in the following error on deploy:
+
+```
+Error syncing load balancer: failed to ensure load balancer: mixed protocol is not supported for LoadBalancer
+```
+
+This issue can be easily fixed by disabling QUIC support (requires `udp/443` listener) with the following:
+
+```console
+helm install my-ingress haproxytech/kubernetes-ingress \
+  --set controller.service.type=LoadBalancer \
+  --set controller.service.enablePorts.quic=false
+```
+
+### Installing on Azure Managed Kubernetes Service (AKS)
 
 By default Azure LB sends probe to `/` and expects HTTP status codes of 200-399 to consider Pod healthy, which means probes end up on default HTTP backend returning HTTP 404 status code. Since v1.20 AKS service annotation `service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path` can be used to override health probe behaviour and we recommend using the following annotation on AKS to target `/healthz` endpoint for health probes:
 
