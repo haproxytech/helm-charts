@@ -96,6 +96,11 @@ args:
   defaults: ["-f", "/usr/local/etc/haproxy/haproxy.cfg"]
   extraArgs: []    # EE images require disabling this due to S6-overlay
 
+## Annotations to add to the deployment metadata
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+deploymentAnnotations: {}
+#  key: value
+
 ## Controller Container liveness/readiness probe configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
