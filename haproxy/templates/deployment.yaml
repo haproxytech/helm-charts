@@ -156,7 +156,9 @@ spec:
           volumeMounts:
             - name: haproxy-config
               mountPath: {{ .Values.configMount.mountPath }}
+              {{- if .Values.configMount.subPath }}
               subPath: {{ .Values.configMount.subPath }}
+              {{- end }}
             {{- if .Values.includes }}
             - name: includes
               mountPath: {{ .Values.includesMountPath }}
