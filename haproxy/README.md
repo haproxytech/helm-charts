@@ -232,6 +232,67 @@ extraEnvs:
         fieldPath: status.podIP
 ```
 
+### Automatic configuration reloading
+
+In some cases, configuration changes are frequent and constantly restarting HAProxy is not optimal. For those cases the HAProxy hot-reload feature
+can be used.
+
+In master-worker mode, sending a USR2 signal to the HAProxy process will trigger a configuration reload.
+
+```yaml
+config: |
+  global
+    log stdout format raw local0
+    master-worker
+    daemon
+    maxconn 1024
+  defaults
+    log global
+    timeout client 60s
+    timeout connect 60s
+    timeout server 60s
+  frontend fe_main
+    mode http
+    bind :80
+    http-request redirect scheme https code 301 unless { ssl_fc }
+    default_backend be_main
+  backend be_main
+    mode http
+    server web1 10.0.0.1:8080 check
+```
+
+Make sure you are not specifying subPath for any of your volumeMounts so that Kubernetes will automatically update the volumes created from
+ConfigMaps.
+
+And finally, use some sidecar container which will be delivering the signal to the process. The shareProcessNamespace Pod property is required
+for the sidecars to be able to access other containers' processes.
+
+```yaml
+shareProcessNamespace:
+  enabled: true
+sidecarContainers:
+  - name: reflex
+    image: acim/go-reflex:1.17.3
+    command: ["reflex", "-d", "fancy"]
+    workingDir: /usr/local/etc/haproxy
+    args:
+      - -svr
+      - "..data"
+      - --
+      - bash
+      - -c
+      - 'pkill -SIGUSR2 "haproxy|hapee-lb"'
+    volumeMounts:
+      - name: haproxy-config
+        mountPath: /usr/local/etc/haproxy
+    resources:
+      limits:
+        memory: 128Mi
+      requests:
+        cpu: 50m
+        memory: 64Mi
+```
+
 ## Installing as non-root with binding to privileged ports
 
 To be able to bind to privileged ports such as tcp/80 and tcp/443 without root privileges (UID and GID are set to 1000 in the example, as HAProxy Docker image has UID/GID of 1000 reserved for HAProxy), there is a special workaround required as `NET_BIND_SERVICE` capability is [not propagated](https://github.com/kubernetes/kubernetes/issues/56374), so we need to use `initContainers` feature as well:
