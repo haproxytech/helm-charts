@@ -153,8 +153,8 @@ spec:
             - name: {{ $key }}
               containerPort: {{ $value }}
               protocol: TCP
-              {{- if $useHostPort }}
-              hostPort: {{ index $hostPorts $key | default $value }}
+              {{- if and $useHostPort (index $hostPorts $key) }}
+              hostPort: {{ index $hostPorts $key }}
               {{- end }}
               {{- if $hostIP }}
               hostIP: {{ $hostIP }}
