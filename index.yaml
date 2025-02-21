@@ -877,6 +877,31 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Use Ingress Controller 3.1.1 version for base image
+        - Bind only defined ports as HostPort (#286)
+    apiVersion: v2
+    appVersion: 3.1.1
+    created: "2025-02-21T15:03:53.376441009Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 72bfb64899bb9537203039027fbae5be02166fbc18fb7ad4721adeb9230a220f
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.44.1/kubernetes-ingress-1.44.1.tgz
+    version: 1.44.1
+  - annotations:
+      artifacthub.io/changes: |
         - Support PodMonitor as alternative to ServiceMonitor (#271)
         - Use correct values for PodMonitor test (#272)
         - Support to specify HPA behavior (#274)
@@ -4699,4 +4724,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2025-01-10T10:21:27.079648504Z"
+generated: "2025-02-21T15:03:53.376906116Z"
