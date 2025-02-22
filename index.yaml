@@ -3,6 +3,32 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Update base image to HAProxy 3.1.5
+        - Conditionalize config volumeMount subpath (#285)
+        - Conditionalize subPath for haproxy-config configmap
+        - Add deployment annotations as a configurable property. (#281)
+    apiVersion: v2
+    appVersion: 3.1.5
+    created: "2025-02-22T09:35:42.79621544Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 914274b4df29b1690144d984dd7cf4f6719f5faa71f82429f7a9c51483d3763b
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.24.0/haproxy-1.24.0.tgz
+    version: 1.24.0
+  - annotations:
+      artifacthub.io/changes: |
         - Update base image to HAProxy 3.0.4
     apiVersion: v2
     appVersion: 3.0.4
@@ -4724,4 +4750,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2025-02-21T15:03:53.376906116Z"
+generated: "2025-02-22T09:35:42.796648682Z"
