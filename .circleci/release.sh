@@ -26,8 +26,15 @@ package_chart() {
 }
 
 release_charts() {
-    echo "Upload Helm chart packages"
+    echo "Upload Helm chart packages to GitHub"
     cr upload -o "${OWNER}" -r "${GIT_REPO}" -p "${PACKAGE_PATH}"
+
+    echo "Upload Helm chart packages to GHCR OCI"
+    echo "${HELM_GH_TOKEN}" | helm registry login ghcr.io --username "${OWNER}" --password-stdin
+
+    for chart in "${PACKAGE_PATH}"/*.tgz; do
+        helm push "${chart}" "oci://ghcr.io/${OWNER}/${GIT_REPO}"
+    done
 }
 
 update_index() {
