@@ -25,12 +25,14 @@ Get the latest [Helm release](https://github.com/helm/helm#install).
 
 ### Add Helm chart repo
 
-Once you have Helm installed, add the repo as follows:
+Once you have Helm installed, add the haproxytech Chat Repository as follows:
 
 ```console
 helm repo add haproxytech https://haproxytech.github.io/helm-charts
 helm repo update
 ```
+
+Alternatively if you want to proceed with just OCI-based repository, skip this step and follow the installation with OCI.
 
 ## Install the chart
 
@@ -45,6 +47,12 @@ helm install my-release haproxytech/haproxy
 ```console
 helm install haproxytech/haproxy \
   --name my-release
+```
+
+Alternatively also have OCI-based repository available for simplified access:
+
+```console
+helm install oci://ghcr.io/haproxytech/helm-charts/haproxy --version 1.24.0
 ```
 
 ### Installing with unique name

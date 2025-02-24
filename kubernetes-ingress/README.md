@@ -31,7 +31,7 @@ Get the latest [Helm release](https://github.com/helm/helm#install).
 
 ### Adding Helm chart repo
 
-Once you have Helm installed, add the repo as follows:
+Once you have Helm installed, add the haproxytech Chart Repository as follows:
 
 ```console
 helm repo add haproxytech https://haproxytech.github.io/helm-charts
@@ -39,9 +39,11 @@ helm repo add haproxytech https://haproxytech.github.io/helm-charts
 helm repo update
 ```
 
+Alternatively if you want to proceed with just OCI-based repository, skip this step and follow the installation with OCI.
+
 ## Installing the chart
 
-To install the chart with Helm v3 as _my-release_ deployment:
+To install the chart with Helm v3 as _my-release_ deployment from Chat Repository:
 
 ```console
 helm install my-release haproxytech/kubernetes-ingress
@@ -52,6 +54,12 @@ helm install my-release haproxytech/kubernetes-ingress
 ```console
 helm install haproxytech/kubernetes-ingress \
   --name my-release
+```
+
+Alternatively also have OCI-based repository available for simplified access:
+
+```console
+helm install oci://ghcr.io/haproxytech/helm-charts/kubernetes-ingress --version 1.44.1
 ```
 
 ### Installing with unique name
