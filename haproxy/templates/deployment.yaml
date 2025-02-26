@@ -121,6 +121,7 @@ spec:
           {{- range $key, $value := .Values.containerPorts }}
             - name: {{ $key }}
               containerPort: {{ $value }}
+              hostPort: {{ $value }}
               protocol: TCP
           {{- end }}
           {{- with .Values.livenessProbe }}
