@@ -21,11 +21,7 @@ metadata:
   name: {{ include "kubernetes-ingress.serviceProxyName" . }}
   namespace: {{ include "kubernetes-ingress.namespace" . }}
   labels:
-    app.kubernetes.io/name: {{ include "kubernetes-ingress.serviceProxyName" . }}
-    helm.sh/chart: {{ include "kubernetes-ingress.chart" . }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    {{- include "kubernetes-ingress.serviceProxyLabels" . | nindent 4 }}
     {{- if .Values.controller.extraLabels }}
 {{ toYaml .Values.controller.extraLabels | indent 4 }}
     {{- end }}
@@ -36,8 +32,7 @@ spec:
   minReadySeconds: {{ .Values.controller.minReadySeconds }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "kubernetes-ingress.serviceProxyName" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- include "kubernetes-ingress.serviceProxySelectorLabels" . | nindent 6 }}
   {{- with .Values.controller.strategy }}
   strategy:
     {{- toYaml . | nindent 4 }}
@@ -45,8 +40,7 @@ spec:
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "kubernetes-ingress.serviceProxyName" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        {{- include "kubernetes-ingress.serviceProxySelectorLabels" . | nindent 8 }}
         {{- if .Values.controller.podLabels }}
 {{ toYaml .Values.controller.podLabels | indent 8 }}
         {{- end }}

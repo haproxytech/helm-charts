@@ -58,6 +58,65 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Create HAProxy Ingress Chart labels
+*/}}
+{{- define "kubernetes-ingress.helmChartLabels" -}}
+helm.sh/chart: {{ include "kubernetes-ingress.chart" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Create HAProxy Ingress Selector labels
+*/}}
+{{- define "kubernetes-ingress.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Create HAProxy Ingress labels
+*/}}
+{{- define "kubernetes-ingress.labels" -}}
+{{ include "kubernetes-ingress.selectorLabels" . }}
+{{ include "kubernetes-ingress.helmChartLabels" . }}
+{{- end }}
+
+{{/*
+Create CRD Job selector labels
+*/}}
+{{- define "kubernetes-ingress.crdJobSelectorLabels" -}}
+app.kubernetes.io/name: {{ include "kubernetes-ingress.serviceProxyName" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Create CRD Job labels
+*/}}
+{{- define "kubernetes-ingress.crdJobLabels" -}}
+{{ include "kubernetes-ingress.crdJobSelectorLabels" . }}
+{{ include "kubernetes-ingress.helmChartLabels" . }}
+{{- end }}
+
+{{/*
+Create Service Proxy selector labels
+*/}}
+{{- define "kubernetes-ingress.serviceProxySelectorLabels" -}}
+app.kubernetes.io/name: {{ include "kubernetes-ingress.serviceProxyName" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Create Service Proxy labels
+*/}}
+{{- define "kubernetes-ingress.serviceProxyLabels" -}}
+{{ include "kubernetes-ingress.serviceProxySelectorLabels" . }}
+{{ include "kubernetes-ingress.helmChartLabels" . }}
+{{- end }}
+
+{{/*
 Encode an imagePullSecret string.
 */}}
 {{- define "kubernetes-ingress.imagePullSecret" }}

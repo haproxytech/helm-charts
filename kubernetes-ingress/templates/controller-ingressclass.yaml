@@ -24,11 +24,7 @@ kind: IngressClass
 metadata:
   name: {{ .Values.controller.ingressClassResource.name }}
   labels:
-    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
-    helm.sh/chart: {{ include "kubernetes-ingress.chart" . }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    {{- include "kubernetes-ingress.labels" . | nindent 4 }}
 {{- if .Values.controller.ingressClassResource.default }}
   annotations:
     ingressclass.kubernetes.io/is-default-class: "true"

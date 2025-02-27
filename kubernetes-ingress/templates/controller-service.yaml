@@ -21,11 +21,7 @@ metadata:
   name: {{ include "kubernetes-ingress.fullname" . }}
   namespace: {{ include "kubernetes-ingress.namespace" . }}
   labels:
-    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
-    helm.sh/chart: {{ include "kubernetes-ingress.chart" . }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    {{- include "kubernetes-ingress.labels" . | nindent 4 }}
 {{- if .Values.controller.service.labels }}
 {{ toYaml .Values.controller.service.labels | indent 4 }}
 {{- end }}
@@ -107,8 +103,7 @@ spec:
     {{- end }}
   {{- end }}
   selector:
-    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "kubernetes-ingress.selectorLabels" . | nindent 4 }}
   {{- if .Values.controller.service.sessionAffinity }}
   sessionAffinity: {{ .Values.controller.service.sessionAffinity }}
   {{- end }}

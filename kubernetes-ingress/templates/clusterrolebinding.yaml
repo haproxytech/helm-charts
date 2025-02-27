@@ -20,11 +20,7 @@ kind: ClusterRoleBinding
 metadata:
   name: {{ include "kubernetes-ingress.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
-    helm.sh/chart: {{ include "kubernetes-ingress.chart" . }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    {{- include "kubernetes-ingress.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

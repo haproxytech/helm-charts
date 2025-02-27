@@ -31,11 +31,7 @@ metadata:
 {{ toYaml .Values.podSecurityPolicy.annotations | indent 4 }}
 {{- end }}
   labels:
-    app.kubernetes.io/name: {{ include "kubernetes-ingress.name" . }}
-    helm.sh/chart: {{ include "kubernetes-ingress.chart" . }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    {{- include "kubernetes-ingress.labels" . | nindent 4 }}
   name: {{ include "kubernetes-ingress.fullname" . }}
   annotations:
     seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'docker/default,runtime/default'
