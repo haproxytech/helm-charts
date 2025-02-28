@@ -903,6 +903,31 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Use templates for labels to remove duplication (#288)
+        - Use Ingress Controller 3.1.2 version for base image
+    apiVersion: v2
+    appVersion: 3.1.2
+    created: "2025-02-28T07:04:35.764097225Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 80b2ed6276c1d3a493c0c19cad5af0287b0688c41c3c662bf024dff704636667
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.44.2/kubernetes-ingress-1.44.2.tgz
+    version: 1.44.2
+  - annotations:
+      artifacthub.io/changes: |
         - Use Ingress Controller 3.1.1 version for base image
         - Bind only defined ports as HostPort (#286)
     apiVersion: v2
@@ -4750,4 +4775,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2025-02-22T09:35:42.796648682Z"
+generated: "2025-02-28T07:04:35.764691541Z"
