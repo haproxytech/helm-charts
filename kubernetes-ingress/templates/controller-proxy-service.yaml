@@ -21,11 +21,7 @@ metadata:
   name: {{ include "kubernetes-ingress.serviceProxyName" . }}
   namespace: {{ include "kubernetes-ingress.namespace" . }}
   labels:
-    app.kubernetes.io/name: {{ include "kubernetes-ingress.serviceProxyName" . }}
-    helm.sh/chart: {{ include "kubernetes-ingress.chart" . }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    {{- include "kubernetes-ingress.serviceProxyLabels" . | nindent 4 }}
     {{ (split ":" .Values.controller.sync.proxyParams.proxySvcLabelSelector)._0 }}: {{ (split ":" .Values.controller.sync.proxyParams.proxySvcLabelSelector)._1 }}
 {{- if .Values.controller.service.labels }}
 {{ toYaml .Values.controller.service.labels | indent 4 }}
@@ -65,8 +61,7 @@ spec:
     {{- end }}
   {{- end }}
   selector:
-    app.kubernetes.io/name: {{ include "kubernetes-ingress.serviceProxyName" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- include "kubernetes-ingress.serviceProxySelectorLabels" . | nindent 4 }}
   {{- if .Values.controller.service.sessionAffinity }}
   sessionAffinity: {{ .Values.controller.service.sessionAffinity }}
   {{- end }}
