@@ -16,8 +16,8 @@ apiVersion: v2
 name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
-version: 1.44.2
-appVersion: 3.1.2
+version: 1.44.3
+appVersion: 3.1.6
 kubeVersion: ">=1.23.0-0"
 keywords:
   - ingress
@@ -32,5 +32,5 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Use templates for labels to remove duplication (#288)
-    - Use Ingress Controller 3.1.2 version for base image
+    - Remove port name prometheus from service (#292)
+    - Use Ingress Controller 3.1.6 version for base image
