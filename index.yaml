@@ -903,6 +903,31 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Remove port name prometheus from service (#292)
+        - Use Ingress Controller 3.1.6 version for base image
+    apiVersion: v2
+    appVersion: 3.1.6
+    created: "2025-04-15T08:16:25.387261606Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 9dbd1ba25b64ac901399b1105f185fa88516bfdcb0917263d7a7c41c2c8c69d8
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.44.3/kubernetes-ingress-1.44.3.tgz
+    version: 1.44.3
+  - annotations:
+      artifacthub.io/changes: |
         - Use templates for labels to remove duplication (#288)
         - Use Ingress Controller 3.1.2 version for base image
     apiVersion: v2
@@ -4775,4 +4800,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2025-02-28T07:04:35.764691541Z"
+generated: "2025-04-15T08:16:25.387706968Z"
