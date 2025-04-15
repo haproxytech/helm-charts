@@ -401,7 +401,6 @@ controller:
     #  http: 31080
     #  https: 31443
     #  stat: 31024
-    #  prometheus: 36060
 
     ## Service ports to use for http, https and stat
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
