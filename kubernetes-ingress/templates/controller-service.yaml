@@ -84,15 +84,6 @@ spec:
       nodePort: {{ .Values.controller.service.nodePorts.stat }}
     {{- end }}
   {{- end }}
-  {{- if .Values.controller.service.enablePorts.prometheus }}
-    - name: prometheus
-      port: {{ .Values.controller.service.ports.prometheus }}
-      protocol: TCP
-      targetPort: {{ .Values.controller.service.targetPorts.prometheus }}
-    {{- if .Values.controller.service.nodePorts.prometheus }}
-      nodePort: {{ .Values.controller.service.nodePorts.prometheus }}
-    {{- end }}
-  {{- end }}
   {{- range .Values.controller.service.tcpPorts }}
     - name: {{ .name | trunc 15 | trimSuffix "-" }}
       port: {{ .port }}

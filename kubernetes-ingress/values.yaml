@@ -409,7 +409,6 @@ controller:
       http: 80
       https: 443
       stat: 1024
-      prometheus: 6060
 
     ## The controller service ports for http, https and stat can be disabled by
     ## setting below to false - this could be useful when only deploying haproxy
@@ -429,7 +428,6 @@ controller:
       https: https
       quic: quic
       stat: stat
-      prometheus: prometheus
 
     ## Additional tcp ports to expose
     ## This is especially useful for TCP services:
