@@ -620,8 +620,6 @@ controller:
 crdjob:
   ## Additional annotations to add to the pod container metadata
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ## All annotations from the controller (if set) are added to the pod metadata
-  ## If the annotation key is set for both controller and crdjob, the crdjob annotation will be used
   podAnnotations: {}
   # key: value
 

@@ -38,20 +38,13 @@ spec:
         {{- if .Values.controller.podLabels }}
 {{ toYaml .Values.controller.podLabels | indent 8 }}
         {{- end }}
-      {{- $podAnnotations := dict }}
       {{- if .Values.crdjob.podAnnotations }}
-        {{- $podAnnotations = merge $podAnnotations .Values.crdjob.podAnnotations }}
-      {{- end }}
-      {{- if .Values.controller.podAnnotations }}
-        {{- if eq "string" (printf "%T" .Values.controller.podAnnotations) }}
-          {{- $podAnnotations = merge $podAnnotations (tpl .Values.controller.podAnnotations . | fromYaml) }}
-        {{- else }}
-          {{- $podAnnotations = merge $podAnnotations .Values.controller.podAnnotations }}
-        {{- end }}
-      {{- end }}
-      {{- if not (empty $podAnnotations) }}
       annotations:
-{{ toYaml $podAnnotations | indent 8 }}
+{{- if eq "string" (printf "%T" .Values.crdjob.podAnnotations) }}
+{{ tpl .Values.crdjob.podAnnotations . | indent 8 }}
+{{- else }}
+{{ toYaml .Values.crdjob.podAnnotations | indent 8 }}
+{{- end }}
       {{- end }}
     spec:
       restartPolicy: Never
