@@ -121,6 +121,7 @@ controller:
     http: 8080
     https: 8443
     stat: 1024
+    admin: 6060
 
   ## Controller Container liveness/readiness probe configuration
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
@@ -401,6 +402,7 @@ controller:
     #  http: 31080
     #  https: 31443
     #  stat: 31024
+    #  admin: 31060
 
     ## Service ports to use for http, https and stat
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
@@ -408,6 +410,7 @@ controller:
       http: 80
       https: 443
       stat: 1024
+      admin: 6060
 
     ## The controller service ports for http, https and stat can be disabled by
     ## setting below to false - this could be useful when only deploying haproxy
@@ -418,7 +421,7 @@ controller:
       https: true
       quic: true
       stat: true
-      prometheus: true
+      admin: true
 
     ## Target port mappings for http, https and stat
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
@@ -427,6 +430,7 @@ controller:
       https: https
       quic: quic
       stat: stat
+      admin: admin
 
     ## Additional tcp ports to expose
     ## This is especially useful for TCP services:

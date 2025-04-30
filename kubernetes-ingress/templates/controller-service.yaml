@@ -84,6 +84,15 @@ spec:
       nodePort: {{ .Values.controller.service.nodePorts.stat }}
     {{- end }}
   {{- end }}
+  {{- if .Values.controller.service.enablePorts.admin }}
+    - name: admin
+      port: {{ .Values.controller.service.ports.admin }}
+      protocol: TCP
+      targetPort: {{ .Values.controller.service.targetPorts.admin }}
+    {{- if .Values.controller.service.nodePorts.admin }}
+      nodePort: {{ .Values.controller.service.nodePorts.admin }}
+    {{- end }}
+  {{- end }}
   {{- range .Values.controller.service.tcpPorts }}
     - name: {{ .name | trunc 15 | trimSuffix "-" }}
       port: {{ .port }}
