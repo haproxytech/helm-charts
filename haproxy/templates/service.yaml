@@ -21,6 +21,9 @@ metadata:
   namespace: {{ include "haproxy.namespace" . }}
   labels:
     {{- include "haproxy.labels" . | nindent 4 }}
+{{- range $key, $value := .Values.service.labels }}
+    {{ $key }}: {{ $value | quote }}
+{{- end }}
   annotations:
 {{- range $key, $value := .Values.service.annotations }}
     {{ $key }}: {{ $value | quote }}
