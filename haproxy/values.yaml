@@ -483,6 +483,10 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   annotations: {}
 
+  ## Service labels
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  labels: {}
+
   ## Service externalTrafficPolicy
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-traffic-policy
   # externalTrafficPolicy: Cluster
