@@ -16,8 +16,8 @@ apiVersion: v2
 name: haproxy
 description: A Helm chart for HAProxy on Kubernetes
 type: application
-version: 1.24.0
-appVersion: 3.1.5
+version: 1.25.0
+appVersion: 3.2.0
 kubeVersion: ">=1.17.0-0"
 keywords:
   - haproxy
@@ -31,7 +31,5 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Update base image to HAProxy 3.1.5
-    - Conditionalize config volumeMount subpath (#285)
-    - Conditionalize subPath for haproxy-config configmap
-    - Add deployment annotations as a configurable property. (#281)
+    - Update base image to HAProxy 3.2.0
+    - Add ability to set labels on Service resource (#295)
