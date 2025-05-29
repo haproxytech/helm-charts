@@ -903,6 +903,32 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/changes: |
+        - Use Ingress Controller 3.1.7 version for base image
+        - Add service port named admin (#294)
+        - Don't merge controller podAnnotations with crdjob podAnnotations (#293)
+    apiVersion: v2
+    appVersion: 3.1.7
+    created: "2025-05-29T06:46:28.476695817Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: bcec3f50b945850aefabf4871f8bb55ad636eb28ce5b141a2fec8a8d0d8b07fa
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.44.4/kubernetes-ingress-1.44.4.tgz
+    version: 1.44.4
+  - annotations:
+      artifacthub.io/changes: |
         - Remove port name prometheus from service (#292)
         - Use Ingress Controller 3.1.6 version for base image
     apiVersion: v2
@@ -4800,4 +4826,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2025-04-15T08:16:25.387706968Z"
+generated: "2025-05-29T06:46:28.477142166Z"
