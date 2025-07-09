@@ -902,6 +902,29 @@ entries:
     version: 1.0.1
   kubernetes-ingress:
   - annotations:
+      artifacthub.io/changes: '- Use Ingress Controller 3.1.9 version for base image'
+    apiVersion: v2
+    appVersion: 3.1.9
+    created: "2025-07-09T11:01:35.948077092Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 967cd41478eab9b3c02cd71edda830388b8c27176663e76b91347431f9f98d7b
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.44.5/kubernetes-ingress-1.44.5.tgz
+    version: 1.44.5
+  - annotations:
       artifacthub.io/changes: |
         - Use Ingress Controller 3.1.7 version for base image
         - Add service port named admin (#294)
@@ -4826,4 +4849,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2025-05-29T06:46:28.477142166Z"
+generated: "2025-07-09T11:01:35.948502589Z"
