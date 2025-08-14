@@ -17,7 +17,7 @@ name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
 version: 1.44.5
-appVersion: 3.1.10
+appVersion: 3.1.11
 kubeVersion: ">=1.23.0-0"
 keywords:
   - ingress
@@ -32,4 +32,4 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |-
-    - Use Ingress Controller 3.1.10 version for base image
+    - Use Ingress Controller 3.1.11 version for base image
