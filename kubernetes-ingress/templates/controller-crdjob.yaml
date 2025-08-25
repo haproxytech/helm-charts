@@ -24,6 +24,9 @@ metadata:
   annotations:
     argocd.argoproj.io/hook: Sync
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
+  {{- with .Values.controller.annotations }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
 {{- if or (.Capabilities.APIVersions.Has "batch/v1alpha1") (semverCompare ">=1.23.0-0" .Capabilities.KubeVersion.Version) }}
 {{- if .Values.crdjob.ttlSecondsAfterFinished }}

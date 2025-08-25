@@ -187,6 +187,11 @@ controller:
   extraLabels: {}
   #  key: value
 
+  ## Additional annotations to add to the deployment or daemonset metadata
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  annotations: {}
+  #  key: value
+
   ## Additional labels to add to the pod container metadata
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   podLabels: {}

@@ -20,6 +20,10 @@ kind: Deployment
 metadata:
   name: {{ include "kubernetes-ingress.serviceProxyName" . }}
   namespace: {{ include "kubernetes-ingress.namespace" . }}
+  {{- with .Values.controller.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   labels:
     {{- include "kubernetes-ingress.serviceProxyLabels" . | nindent 4 }}
     {{- if .Values.controller.extraLabels }}
