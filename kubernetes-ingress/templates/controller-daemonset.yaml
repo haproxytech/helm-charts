@@ -24,6 +24,10 @@ kind: DaemonSet
 metadata:
   name: {{ include "kubernetes-ingress.fullname" . }}
   namespace: {{ include "kubernetes-ingress.namespace" . }}
+  {{- with .Values.controller.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   labels:
     {{- include "kubernetes-ingress.labels" . | nindent 4 }}
     {{- if .Values.controller.extraLabels }}
