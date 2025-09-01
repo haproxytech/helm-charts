@@ -52,7 +52,7 @@ spec:
   externalIPs:
   {{- toYaml . | nindent 2 }}
   {{- end }}
-  {{- if or .Values.containerPorts .Values.service.additionalPorts }}
+  {{- if or .Values.containerPorts .Values.service.additionalPorts .Values.service.rawAdditionalPorts }}
   {{- $nodePorts := .Values.service.nodePorts }}
   {{- $servicePortType := .Values.service.type }}
   ports:
@@ -77,5 +77,8 @@ spec:
     nodePort: {{ get $nodePorts $key }}
   {{- end }}
   {{- end }}
+  {{- end }}
+  {{- with .Values.service.rawAdditionalPorts }}
+  {{- toYaml . | nindent 2 }}
   {{- end }}
   {{- end }}

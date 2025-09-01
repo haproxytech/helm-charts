@@ -101,6 +101,9 @@ args:
 deploymentAnnotations: {}
 #  key: value
 
+deploymentLabels: {}
+#  key: value
+
 ## Controller Container liveness/readiness probe configuration
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 livenessProbe:
@@ -173,6 +176,18 @@ containerPorts:   # has to match hostPorts when useHostNetwork is true
   http: 80
   https: 443
   stat: 1024
+
+## Raw container ports configuration (alternative to containerPorts for more control)
+## Allows specifying container ports in full Kubernetes format with custom protocols, names, etc.
+## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#containerport-v1-core
+rawContainerPorts: []
+# Example:
+# - containerPort: 9090
+#   name: metrics-port
+#   protocol: TCP
+# - containerPort: 8080
+#   name: custom-http
+#   protocol: TCP
 
 ## Deployment strategy definition
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -499,6 +514,20 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   additionalPorts: {}
     # prometheus: 9101
+
+  ## Raw additional service ports configuration (alternative to additionalPorts for more control)
+  ## Allows specifying service ports in full Kubernetes format with custom protocols, names, etc.
+  ## ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.33/#serviceport-v1-core
+  rawAdditionalPorts: []
+  # Example:
+  # - name: metrics-port
+  #   port: 9090
+  #   targetPort: 9090
+  #   protocol: TCP
+  # - name: custom-service
+  #   port: 8080
+  #   targetPort: custom-http
+  #   protocol: TCP
 
   ## NodePort custom port
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#nodeport-custom-port

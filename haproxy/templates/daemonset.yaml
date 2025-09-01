@@ -121,6 +121,9 @@ spec:
               hostPort: {{ index $hostPorts $key }}
               {{- end }}
           {{- end }}
+          {{- with .Values.rawContainerPorts }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | trim | nindent 12 }}
