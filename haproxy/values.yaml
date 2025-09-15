@@ -448,6 +448,10 @@ keda:
   pollingInterval: 30
   cooldownPeriod: 300
   restoreToOriginalReplicaCount: false
+  # fallback:
+  #   failureThreshold: 3
+  #   replicas: 6
+  #   behavior: static
   scaledObject:
     annotations: {}
   behavior: {}
