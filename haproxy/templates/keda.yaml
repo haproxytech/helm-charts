@@ -38,6 +38,10 @@ spec:
 {{- with .Values.keda.triggers }}
 {{ toYaml . | indent 2 }}
 {{ end }}
+{{- with .Values.keda.fallback }}
+  fallback:
+{{ toYaml . | indent 4 }}
+{{- end }}
   advanced:
     restoreToOriginalReplicaCount: {{ .Values.keda.restoreToOriginalReplicaCount }}
 {{- if .Values.keda.behavior }}

@@ -36,6 +36,10 @@ spec:
 {{- with .Values.controller.keda.triggers }}
 {{ toYaml . | indent 2 }}
 {{ end }}
+{{- with .Values.controller.keda.fallback }}
+  fallback:
+{{ toYaml . | indent 4 }}
+{{- end }}
   advanced:
     restoreToOriginalReplicaCount: {{ .Values.controller.keda.restoreToOriginalReplicaCount }}
 {{- if .Values.controller.keda.horizontalPodAutoscalerConfig }}
