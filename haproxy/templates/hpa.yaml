@@ -36,6 +36,9 @@ spec:
     name: {{ include "haproxy.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  {{- if .Values.autoscaling.behavior }}
+  behavior: {{- toYaml .Values.autoscaling.behavior | nindent 4 }}
+  {{- end }}
   metrics:
   {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
