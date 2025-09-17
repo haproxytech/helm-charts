@@ -440,6 +440,11 @@ autoscaling:
   #       target:
   #         type: Value
   #         value: 10k
+  ## Behavior
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#configurable-scaling-behavior
+  # behavior:
+  #   scaleDown:
+  #      stabilizationWindowSeconds: 3600
 
 keda:
   enabled: false
