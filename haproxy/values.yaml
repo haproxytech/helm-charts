@@ -511,6 +511,12 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   labels: {}
 
+  ## IPv4/IPv6 dual-stack
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/
+  ##
+  # ipFamilies: [IPv4, IPv6]
+  # ipFamilyPolicy: PreferDualStack
+
   ## Service externalTrafficPolicy
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-traffic-policy
   # externalTrafficPolicy: Cluster
