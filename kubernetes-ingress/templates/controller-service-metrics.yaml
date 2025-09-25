@@ -18,8 +18,6 @@ limitations under the License.
 The following Service resource will be created upon certain conditions:
 - The ServiceMonitor integration is enabled
 - A Service resource must be created
-- The stats port is not exposed
-- The Service is type LoadBalancer
 
 The reason for that is that the Ingress Controller would make it available to the outside
 sensitive data such as its metrics, and the operator wants to keep these data private
@@ -28,7 +26,7 @@ sensitive data such as its metrics, and the operator wants to keep these data pr
 To let the Prometheus Operator being able to scrape the metrics, an additional service
 is going to be created, allowing it to expose of these in the internal Kubernetes networking.
 */}}
-{{- if and (.Values.controller.serviceMonitor.enabled) (.Values.controller.service.enabled) (not .Values.controller.service.enablePorts.stat) (eq .Values.controller.service.type "LoadBalancer") }}
+{{- if and (.Values.controller.serviceMonitor.enabled) (.Values.controller.service.enabled) }}
 apiVersion: v1
 kind: Service
 metadata:
