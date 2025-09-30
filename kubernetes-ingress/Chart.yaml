@@ -16,7 +16,7 @@ apiVersion: v2
 name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
-version: 1.44.6
+version: 1.45.0
 appVersion: 3.1.12
 kubeVersion: ">=1.23.0-0"
 keywords:
@@ -33,3 +33,6 @@ engine: gotpl
 annotations:
   artifacthub.io/changes: |-
     - Use Ingress Controller 3.1.12 version for base image
+    - Allow creating metrics service if controller service is not LoadBalancer (#306)
+    - Add fallback configuration for KEDA (#304)
+    - Add option to configure 'metadata.annotations' for deployment and daemonset (#302)
