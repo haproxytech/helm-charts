@@ -902,6 +902,33 @@ entries:
     version: 1.0.1
   kubernetes-ingress:
   - annotations:
+      artifacthub.io/changes: |-
+        - Use Ingress Controller 3.1.12 version for base image
+        - Allow creating metrics service if controller service is not LoadBalancer (#306)
+        - Add fallback configuration for KEDA (#304)
+        - Add option to configure 'metadata.annotations' for deployment and daemonset (#302)
+    apiVersion: v2
+    appVersion: 3.1.12
+    created: "2025-09-30T08:27:20.400118242Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 0937baef7fdaf833de121930f3af52d364d078523212b5c76606f2532fefab22
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.45.0/kubernetes-ingress-1.45.0.tgz
+    version: 1.45.0
+  - annotations:
       artifacthub.io/changes: '- Use Ingress Controller 3.1.11 version for base image'
     apiVersion: v2
     appVersion: 3.1.11
@@ -4872,4 +4899,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2025-08-14T12:43:52.213031913Z"
+generated: "2025-09-30T08:27:20.400553141Z"
