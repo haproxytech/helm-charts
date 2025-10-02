@@ -3,6 +3,32 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Update base image to HAProxy 3.2.5
+        - Allow setting ipFamilies and ipFamilyPolicy of Service for dual stack (#308)
+        - Support hpa behavior for haproxy chart (#305)
+        - Ad support for deployment labels, raw container and service additional ports config (#303)
+    apiVersion: v2
+    appVersion: 3.2.5
+    created: "2025-10-02T10:01:42.6140974Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 0b9cc17e8ed82e762750bdc645c62aaddfc68d8c3809de80857b28ec3438dd9c
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.26.0/haproxy-1.26.0.tgz
+    version: 1.26.0
+  - annotations:
+      artifacthub.io/changes: |
         - Update base image to HAProxy 3.1.5
         - Conditionalize config volumeMount subpath (#285)
         - Conditionalize subPath for haproxy-config configmap
@@ -4899,4 +4925,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2025-09-30T08:27:20.400553141Z"
+generated: "2025-10-02T10:01:42.6145665Z"
