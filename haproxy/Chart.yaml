@@ -16,8 +16,8 @@ apiVersion: v2
 name: haproxy
 description: A Helm chart for HAProxy on Kubernetes
 type: application
-version: 1.25.0
-appVersion: 3.2.0
+version: 1.26.0
+appVersion: 3.2.5
 kubeVersion: ">=1.17.0-0"
 keywords:
   - haproxy
@@ -31,5 +31,7 @@ maintainers:
 engine: gotpl
 annotations:
   artifacthub.io/changes: |
-    - Update base image to HAProxy 3.2.0
-    - Add ability to set labels on Service resource (#295)
+    - Update base image to HAProxy 3.2.5
+    - Allow setting ipFamilies and ipFamilyPolicy of Service for dual stack (#308)
+    - Support hpa behavior for haproxy chart (#305)
+    - Ad support for deployment labels, raw container and service additional ports config (#303)
