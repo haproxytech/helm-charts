@@ -951,6 +951,29 @@ entries:
     version: 1.0.1
   kubernetes-ingress:
   - annotations:
+      artifacthub.io/changes: '- Use Ingress Controller 3.1.13 version for base image'
+    apiVersion: v2
+    appVersion: 3.1.13
+    created: "2025-10-08T12:36:21.110320956Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: cf4e17764739be25792c92eb0ba5fc4886812225d2c76e83f1323c555fe17bca
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.45.1/kubernetes-ingress-1.45.1.tgz
+    version: 1.45.1
+  - annotations:
       artifacthub.io/changes: |-
         - Use Ingress Controller 3.1.12 version for base image
         - Allow creating metrics service if controller service is not LoadBalancer (#306)
@@ -4948,4 +4971,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2025-10-07T07:40:55.304254193Z"
+generated: "2025-10-08T12:36:21.110755542Z"
