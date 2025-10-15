@@ -24,8 +24,8 @@ metadata:
   annotations:
     argocd.argoproj.io/hook: Sync
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
-    helm.sh/hook: "post-install,pre-upgrade"
-    helm.sh/hook-delete-policy: "hook-succeeded"
+    helm.sh/hook: post-install,pre-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
   {{- with .Values.controller.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
