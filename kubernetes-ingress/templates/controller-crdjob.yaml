@@ -98,15 +98,15 @@ spec:
           resources:
             {{- toYaml .Values.controller.resources | nindent 12 }}
           {{- end }}
-      {{- with .Values.controller.nodeSelector }}
+      {{- with .Values.crdjob.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.controller.affinity }}
+      {{- with .Values.crdjob.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.controller.tolerations }}
+      {{- with .Values.crdjob.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
