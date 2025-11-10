@@ -951,6 +951,30 @@ entries:
     version: 1.0.1
   kubernetes-ingress:
   - annotations:
+      artifacthub.io/changes: '- Add crdjob-specific Affinity, Tolerations and NodeSelector
+        (fixes #318)'
+    apiVersion: v2
+    appVersion: 3.1.14
+    created: "2025-11-10T09:31:40.702041333Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 860d0e72382b15fa60c784454c4bf99856cec9dd2d8bad690e6024716e433b00
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.46.1/kubernetes-ingress-1.46.1.tgz
+    version: 1.46.1
+  - annotations:
       artifacthub.io/changes: |-
         - Use Ingress Controller 3.1.14 version for base image
         - Fix crdjob helm hook annotation (#313)
@@ -4998,4 +5022,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2025-11-01T23:35:40.676648796Z"
+generated: "2025-11-10T09:31:40.702494089Z"
