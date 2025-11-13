@@ -60,6 +60,9 @@ spec:
       shareProcessNamespace: true
       {{- end }}
       serviceAccountName: {{ include "haproxy.serviceAccountName" . }}
+{{- if hasKey .Values.serviceAccount "automountServiceAccountToken" }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
+{{- end }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
