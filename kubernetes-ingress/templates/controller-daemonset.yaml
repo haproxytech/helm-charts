@@ -60,6 +60,9 @@ spec:
     spec:
       enableServiceLinks: {{ .Values.controller.enableServiceLinks }}
       serviceAccountName: {{ include "kubernetes-ingress.serviceAccountName" . }}
+{{- if hasKey .Values.serviceAccount "automountServiceAccountToken" }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
+{{- end }}
       terminationGracePeriodSeconds: {{ .Values.controller.terminationGracePeriodSeconds }}
       {{- if $useHostNetwork }}
       hostNetwork: true
