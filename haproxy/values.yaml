@@ -264,10 +264,15 @@ config: |
   backend be_main
     server web1 10.0.0.1:8080 check
 
-# Mount path and sub path for config file
+# Mount path without using sub path for config file, To be able to do hot reload
 configMount:
-  mountPath: /usr/local/etc/haproxy/haproxy.cfg    # EE images use /etc/hapee-VERSION/hapee-lb.cfg
-  subPath: haproxy.cfg                             # EE images use hapee-lb.cfg
+  mountPath: /usr/local/etc/haproxy
+  subPath: ""
+
+# Mount path and sub path for config file
+#configMount:
+#  mountPath: /usr/local/etc/haproxy/haproxy.cfg    # EE images use /etc/hapee-VERSION/hapee-lb.cfg
+#  subPath: haproxy.cfg                             # EE images use hapee-lb.cfg
 
 ## Basic features : Maps
 # ref: http://cbonte.github.io/haproxy-dconv/2.6/configuration.html#7.3.1-map
