@@ -3,6 +3,32 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Update base image to HAProxy 3.2.9
+        - Don't mount haproxy.cfg using subPath by default, to be able to do hot config reload (#322)
+        - Add gateway api support with httproute resource (#321)
+        - Define automountServiceAccountToken on Deployment and DaemonSet (#319)
+    apiVersion: v2
+    appVersion: 3.2.9
+    created: "2025-12-02T08:24:11.127185185Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: d13104d4bc295d808e732eab7220dc746290e755f424bd1bfa2b3f467074c414
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.27.0/haproxy-1.27.0.tgz
+    version: 1.27.0
+  - annotations:
+      artifacthub.io/changes: |
         - Update base image to HAProxy 3.2.6
     apiVersion: v2
     appVersion: 3.2.6
@@ -5022,4 +5048,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2025-11-10T09:31:40.702494089Z"
+generated: "2025-12-02T08:24:11.127649156Z"
