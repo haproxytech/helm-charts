@@ -46,7 +46,7 @@ spec:
         checksum/environment: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
       {{- end }}
       {{- if .Values.podAnnotations }}
-{{ toYaml .Values.podAnnotations | indent 8 }}
+{{ tpl (toYaml .Values.podAnnotations) . | indent 8 }}
       {{- end }}
     spec:
       {{- if .Values.shareProcessNamespace.enabled }}
