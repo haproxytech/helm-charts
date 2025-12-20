@@ -2,8 +2,8 @@
 
 set -o errexit
 
-readonly HELM_VERSION=3.11.3
-readonly CHART_RELEASER_VERSION=1.5.0
+readonly HELM_VERSION=3.19.4
+readonly CHART_RELEASER_VERSION=1.8.1
 
 install_helm() {
     echo "Installing Helm"
