@@ -3,7 +3,6 @@ jobs:
   lint-scripts:
     docker:
       - image: koalaman/shellcheck-alpine
-    resource_class: large
     steps:
       - checkout
       - run:
@@ -14,7 +13,6 @@ jobs:
   lint-charts:
     docker:
       - image: quay.io/helmpack/chart-testing:latest
-    resource_class: large
     steps:
       - checkout
       - run:
@@ -22,7 +20,6 @@ jobs:
             ct lint --all --validate-maintainers=false --config .circleci/ct.yaml
   install-charts:
     machine: true
-    resource_class: large
     steps:
       - checkout
       - run:
@@ -30,7 +27,6 @@ jobs:
           command: .circleci/install_charts.sh
   release-charts:
     machine: true
-    resource_class: large
     steps:
       - checkout
       - add_ssh_keys:

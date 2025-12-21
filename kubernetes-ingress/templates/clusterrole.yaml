@@ -95,6 +95,8 @@ rules:
 - apiGroups:
   - ingress.v1.haproxy.org
   - ingress.v1.haproxy.com
+  - ingress.v3.haproxy.org
+  - ingress.v3.haproxy.com
   resources:
     - "*"
   verbs:
