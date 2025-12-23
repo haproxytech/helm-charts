@@ -977,6 +977,29 @@ entries:
     version: 1.0.1
   kubernetes-ingress:
   - annotations:
+      artifacthub.io/changes: '- Use Ingress Controller 3.2.2 version for base image'
+    apiVersion: v2
+    appVersion: 3.2.2
+    created: "2025-12-23T16:42:29.706955723Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 279099d6cbae0bdbc1f498ee425b799916b417e92ed75dcbaab240d2aac69b65
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.47.1/kubernetes-ingress-1.47.1.tgz
+    version: 1.47.1
+  - annotations:
       artifacthub.io/changes: |-
         - Use Ingress Controller 3.2.1 version for base image
         - Better defaults for liveness, readiness and startup probes
@@ -5073,4 +5096,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2025-12-21T18:33:32.518088835Z"
+generated: "2025-12-23T16:42:29.707399677Z"
