@@ -665,4 +665,3 @@ crdjob:
     requests:
       cpu: 250m
       memory: 400Mi
-
