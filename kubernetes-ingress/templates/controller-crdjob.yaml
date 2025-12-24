@@ -96,7 +96,7 @@ spec:
               type: RuntimeDefault
             {{- end }}
           resources:
-            {{- toYaml .Values.controller.resources | nindent 12 }}
+            {{- toYaml .Values.crdjob.resources | nindent 12 }}
           {{- end }}
       {{- with .Values.crdjob.nodeSelector }}
       nodeSelector:
