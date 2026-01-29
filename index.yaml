@@ -3,6 +3,31 @@ entries:
   haproxy:
   - annotations:
       artifacthub.io/changes: |
+        - Update base image to HAProxy 3.3.1
+        - Fix image references to fully qualified path
+        - Fixes podLabels does not work in the deployment file (#324)
+    apiVersion: v2
+    appVersion: 3.3.1
+    created: "2026-01-29T16:19:35.564416931Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: c22b84f479666c43f6cbb93a254d9d8ef542ac6179d30733b213d8270f84352a
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.28.0/haproxy-1.28.0.tgz
+    version: 1.28.0
+  - annotations:
+      artifacthub.io/changes: |
         - Update base image to HAProxy 3.2.9
         - Don't mount haproxy.cfg using subPath by default, to be able to do hot config reload (#322)
         - Add gateway api support with httproute resource (#321)
@@ -5188,4 +5213,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-01-28T16:35:29.69240316Z"
+generated: "2026-01-29T16:19:35.564899282Z"
