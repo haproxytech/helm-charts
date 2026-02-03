@@ -198,6 +198,30 @@ Construct the syslog-server annotation
 {{- end -}}
 
 {{/*
+Render controller pod sysctls.
+
+Input: .Values.controller.sysctls (map[string]string)
+Also keeps the existing allowPrivilegedPorts behaviour by adding
+net.ipv4.ip_unprivileged_port_start=0 unless explicitly overridden via controller.sysctls.
+*/}}
+{{- define "kubernetes-ingress.controller.sysctls" -}}
+{{- $sysctls := .Values.controller.sysctls | default dict -}}
+{{- $keys := keys $sysctls | sortAlpha -}}
+{{- $needPrivPorts := and .Values.controller.unprivileged .Values.controller.allowPrivilegedPorts (not (hasKey $sysctls "net.ipv4.ip_unprivileged_port_start")) -}}
+{{- if or (gt (len $keys) 0) $needPrivPorts -}}
+sysctls:
+{{- range $name := $keys }}
+  - name: {{ $name }}
+    value: {{ index $sysctls $name | quote }}
+{{- end }}
+{{- if $needPrivPorts }}
+  - name: net.ipv4.ip_unprivileged_port_start
+    value: "0"
+{{- end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified ServiceMonitor name.
 */}}
 {{- define "kubernetes-ingress.serviceMonitorName" -}}

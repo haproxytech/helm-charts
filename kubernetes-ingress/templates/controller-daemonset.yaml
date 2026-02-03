@@ -85,16 +85,14 @@ spec:
 {{- if .Values.controller.runtimeClassName }}
       runtimeClassName: {{ .Values.controller.runtimeClassName }}
 {{- end }}
-{{- if .Values.controller.unprivileged }}
+{{- if or .Values.controller.unprivileged (gt (len (.Values.controller.sysctls | default dict)) 0) }}
       securityContext:
+{{- if .Values.controller.unprivileged }}
         runAsNonRoot: true
         runAsUser:  1000
         runAsGroup: 1000
-{{- if .Values.controller.allowPrivilegedPorts }}
-        sysctls:
-         - name: net.ipv4.ip_unprivileged_port_start
-           value: "0"
 {{- end }}
+{{ include "kubernetes-ingress.controller.sysctls" . | nindent 8 }}
 {{- end }}
       containers:
         - name: {{ include "kubernetes-ingress.name" . }}-{{ .Values.controller.name }}
