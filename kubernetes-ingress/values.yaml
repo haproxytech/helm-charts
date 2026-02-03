@@ -106,8 +106,8 @@ controller:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/
   ## Note: when unprivileged=true and allowPrivilegedPorts=true, the chart will also
   ## set net.ipv4.ip_unprivileged_port_start=0 unless you override it here.
-  sysctls: { }
-  #   "net.core.somaxconn": "8192"
+  sysctls: {}
+  #  "net.core.somaxconn": "8192"
 
   ## Pod termination grace period
   ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
