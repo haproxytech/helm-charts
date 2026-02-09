@@ -1002,6 +1002,29 @@ entries:
     version: 1.0.1
   kubernetes-ingress:
   - annotations:
+      artifacthub.io/changes: '- Add securityContext.sysctls options (#337)'
+    apiVersion: v2
+    appVersion: 3.2.5
+    created: "2026-02-09T18:22:37.228487742Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 80cdb989dee636004b388c181eb56c66aa9c6cbe020423ea6f2ea1dbf8f20d5a
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.48.0/kubernetes-ingress-1.48.0.tgz
+    version: 1.48.0
+  - annotations:
       artifacthub.io/changes: '- Use Ingress Controller 3.2.5 version for base image'
     apiVersion: v2
     appVersion: 3.2.5
@@ -5213,4 +5236,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-01-29T16:19:35.564899282Z"
+generated: "2026-02-09T18:22:37.228935646Z"
