@@ -15,6 +15,10 @@ limitations under the License.
 */}}
 
 {{- if eq .Values.controller.kind "Deployment" }}
+{{- $useHostNetwork := .Values.controller.deployment.useHostNetwork -}}
+{{- $useHostPort := .Values.controller.deployment.useHostPort -}}
+{{- $hostPorts := .Values.controller.deployment.hostPorts -}}
+{{- $hostIP := .Values.controller.deployment.hostIP -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -63,6 +67,9 @@ spec:
       automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
 {{- end }}
       terminationGracePeriodSeconds: {{ .Values.controller.terminationGracePeriodSeconds }}
+      {{- if $useHostNetwork }}
+      hostNetwork: true
+      {{- end }}
 {{- with .Values.controller.topologySpreadConstraints }}
       topologySpreadConstraints:
         {{- toYaml . | nindent 8 }}
@@ -164,16 +171,34 @@ spec:
             - name: {{ $key }}
               containerPort: {{ $value }}
               protocol: TCP
+              {{- if and $useHostPort (index $hostPorts $key) }}
+              hostPort: {{ index $hostPorts $key }}
+              {{- end }}
+              {{- if $hostIP }}
+              hostIP: {{ $hostIP }}
+              {{- end }}
           {{- end }}
           {{- if and (semverCompare ">=1.24.0-0" .Capabilities.KubeVersion.Version) .Values.controller.service.enablePorts.quic }}
             - name: quic
               containerPort: {{ .Values.controller.containerPort.https }}
               protocol: UDP
+              {{- if $useHostPort }}
+              hostPort: {{ .Values.controller.deployment.hostPorts.https }}
+              {{- end }}
+              {{- if $hostIP }}
+              hostIP: {{ $hostIP }}
+              {{- end }}
           {{- end }}
           {{- range .Values.controller.service.tcpPorts }}
             - name: {{ .name | trunc 15 | trimSuffix "-" }}
               containerPort: {{ .targetPort }}
               protocol: TCP
+              {{- if $useHostPort }}
+              hostPort: {{ .port }}
+              {{- end }}
+              {{- if $hostIP }}
+              hostIP: {{ $hostIP }}
+              {{- end }}
           {{- end }}
           {{- with .Values.controller.livenessProbe }}
           livenessProbe:
