@@ -504,6 +504,17 @@ controller:
       ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
       labels: {}
 
+  ## Controller Deployment configuration
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+  deployment:
+    useHostNetwork: false  # also modify dnsPolicy accordingly
+    useHostPort: false
+    hostIP: null
+    hostPorts:
+      http: 80
+      https: 443
+      stat: 1024
+
   ## Controller DaemonSet configuration
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
   daemonset:
