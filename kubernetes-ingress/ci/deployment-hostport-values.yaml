@@ -1,8 +1,0 @@
-controller:
-  kind: Deployment
-  deployment:
-    useHostPort: true
-    hostPorts:
-      http: 80
-      https: 443
-      stat: 1024
