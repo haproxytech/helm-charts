@@ -632,6 +632,11 @@ controller:
         path: /metrics
         scheme: http
         interval: 30s
+        params:
+          scope:
+            - global
+            - frontend
+            - backend
 
   ## Controller sync mode with Kubernetes
   ## Note: requires Enterprise Kubernetes Ingress Controller
