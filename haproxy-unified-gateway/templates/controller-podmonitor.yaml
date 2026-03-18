@@ -1,0 +1,21 @@
+{{- if and (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1") .Values.controller.podMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ include "haproxy-unified-gateway.podMonitorName" . }}
+  namespace: {{ include "haproxy-unified-gateway.namespace" . }}
+  labels:
+    {{- include "haproxy-unified-gateway.labels" . | nindent 4 }}
+    {{- with .Values.controller.podMonitor.extraLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  podMetricsEndpoints:
+    {{- toYaml .Values.controller.podMonitor.endpoints | nindent 4 }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "haproxy-unified-gateway.namespace" . }}
+  selector:
+    matchLabels:
+      {{- include "haproxy-unified-gateway.selectorLabels" . | nindent 6 }}
+{{- end }}

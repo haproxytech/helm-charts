@@ -1,0 +1,5 @@
+chart-dirs:
+  - .
+check-version-increment: false
+chart-yaml-schema: test/chart_schema.yaml
+lint-conf: test/lintconf.yaml

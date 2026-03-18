@@ -1,0 +1,35 @@
+HAProxy Unified Gateway has been installed.
+
+{{- if .Values.controller.service.enabled }}
+
+The controller is exposed via a {{ .Values.controller.service.type }} Service:
+  - HTTP:  {{ .Values.controller.service.http.port }}
+  - HTTPS: {{ .Values.controller.service.https.port }}
+  - Stats: {{ .Values.controller.service.stat.port }}
+
+{{- if eq .Values.controller.service.type "NodePort" }}
+Access the gateway using your node IP and the configured NodePort:
+  export NODE_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
+  echo "HTTP:  http://$NODE_IP:{{ .Values.controller.service.http.nodePort }}"
+  echo "HTTPS: https://$NODE_IP:{{ .Values.controller.service.https.nodePort }}"
+{{- else if eq .Values.controller.service.type "LoadBalancer" }}
+It may take a few minutes for the LoadBalancer IP to be available.
+Watch the status with:
+  kubectl get svc {{ include "haproxy-unified-gateway.fullname" . }} -n {{ include "haproxy-unified-gateway.namespace" . }} -w
+{{- end }}
+{{- end }}
+
+{{- if .Values.crdjob.enabled }}
+
+A post-install/pre-upgrade Job will install/update the HUG CRDs automatically.
+{{- end }}
+
+{{- if .Values.gwapijob.enabled }}
+
+A post-install/pre-upgrade Job will install Gateway API CRDs (v{{ .Values.gwapijob.version }}).
+{{- end }}
+
+To check the controller status:
+  kubectl get pods -n {{ include "haproxy-unified-gateway.namespace" . }} -l "{{ include "haproxy-unified-gateway.selectorLabels" . | replace "\n" "," }}"
+
+For more information, visit: https://github.com/haproxytech/haproxy-unified-gateway

@@ -1,0 +1,48 @@
+{{- if .Values.controller.service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "haproxy-unified-gateway.fullname" . }}
+  namespace: {{ include "haproxy-unified-gateway.namespace" . }}
+  labels:
+    {{- include "haproxy-unified-gateway.labels" . | nindent 4 }}
+    {{- with .Values.controller.service.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.controller.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.controller.service.type }}
+  {{- with .Values.controller.service.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ . }}
+  {{- end }}
+  selector:
+    {{- include "haproxy-unified-gateway.selectorLabels" . | nindent 4 }}
+  ports:
+    - name: http
+      port: {{ .Values.controller.service.http.port }}
+      targetPort: {{ .Values.controller.service.http.targetPort }}
+      protocol: TCP
+      {{- if and (eq .Values.controller.service.type "NodePort") .Values.controller.service.http.nodePort }}
+      nodePort: {{ .Values.controller.service.http.nodePort }}
+      {{- end }}
+    - name: https
+      port: {{ .Values.controller.service.https.port }}
+      targetPort: {{ .Values.controller.service.https.targetPort }}
+      protocol: TCP
+      {{- if and (eq .Values.controller.service.type "NodePort") .Values.controller.service.https.nodePort }}
+      nodePort: {{ .Values.controller.service.https.nodePort }}
+      {{- end }}
+    - name: stat
+      port: {{ .Values.controller.service.stat.port }}
+      targetPort: {{ .Values.controller.service.stat.targetPort }}
+      protocol: TCP
+      {{- if and (eq .Values.controller.service.type "NodePort") .Values.controller.service.stat.nodePort }}
+      nodePort: {{ .Values.controller.service.stat.nodePort }}
+      {{- end }}
+    {{- with .Values.controller.service.extraPorts }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+{{- end }}

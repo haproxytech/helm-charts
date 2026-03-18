@@ -1,0 +1,41 @@
+{{- if and (eq .Values.controller.kind "Deployment") .Values.controller.keda.enabled }}
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ include "haproxy-unified-gateway.fullname" . }}
+  namespace: {{ include "haproxy-unified-gateway.namespace" . }}
+  labels:
+    {{- include "haproxy-unified-gateway.labels" . | nindent 4 }}
+  {{- if .Values.controller.keda.scaledObject.annotations }}
+  annotations: {{ toYaml .Values.controller.keda.scaledObject.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    name: {{ include "haproxy-unified-gateway.fullname" . }}
+  pollingInterval: {{ .Values.controller.keda.pollingInterval }}
+  cooldownPeriod: {{ .Values.controller.keda.cooldownPeriod }}
+  minReplicaCount: {{ .Values.controller.keda.minReplicas }}
+  maxReplicaCount: {{ .Values.controller.keda.maxReplicas }}
+  triggers:
+{{- with .Values.controller.keda.triggers }}
+{{ toYaml . | indent 2 }}
+{{ end }}
+{{- with .Values.controller.keda.fallback }}
+  fallback:
+{{ toYaml . | indent 4 }}
+{{- end }}
+  advanced:
+    restoreToOriginalReplicaCount: {{ .Values.controller.keda.restoreToOriginalReplicaCount }}
+{{- if .Values.controller.keda.horizontalPodAutoscalerConfig }}
+    horizontalPodAutoscalerConfig:
+{{- if .Values.controller.keda.horizontalPodAutoscalerConfig.name }}
+      name: {{ .Values.controller.keda.horizontalPodAutoscalerConfig.name }}
+{{- end }}
+{{- if .Values.controller.keda.horizontalPodAutoscalerConfig.behavior }}
+      behavior:
+{{ with .Values.controller.keda.horizontalPodAutoscalerConfig.behavior -}}
+{{ toYaml . | indent 8 }}
+{{ end }}
+{{- end }}
+{{- end }}
+{{- end }}

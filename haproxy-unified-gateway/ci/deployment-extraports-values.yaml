@@ -1,0 +1,14 @@
+## Test: Deployment with extra container and service ports
+controller:
+  kind: Deployment
+  containerPort:
+    http: 31080
+    https: 31443
+    stat: 31024
+    custom: 8080
+  service:
+    extraPorts:
+      - name: custom
+        port: 8080
+        targetPort: 8080
+        protocol: TCP

@@ -1,0 +1,8 @@
+hugconf:
+  logging:
+    defaultLevel: Debug
+    categoryLevelList:
+      - category: "gate"
+        level: "Debug"
+      - category: "k8s"
+        level: "Info"

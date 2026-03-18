@@ -1,0 +1,4 @@
+controller:
+  extraArgs:
+    - --controller-name=gate.haproxy.org/hug
+    - --namespaces=default

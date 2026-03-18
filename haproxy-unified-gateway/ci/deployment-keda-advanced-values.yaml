@@ -1,0 +1,34 @@
+controller:
+  keda:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 10
+    pollingInterval: 15
+    cooldownPeriod: 600
+    restoreToOriginalReplicaCount: true
+    scaledObject:
+      annotations: {}
+    fallback:
+      failureThreshold: 3
+      replicas: 5
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 300
+          policies:
+            - type: Pods
+              value: 1
+              periodSeconds: 300
+    triggers:
+      - type: prometheus
+        metadata:
+          serverAddress: http://prometheus:9090
+          metricName: haproxy_process_idle_time_percent
+          threshold: '50'
+          query: avg(100-avg_over_time(haproxy_process_idle_time_percent{job="haproxy-unified-gateway"}[2m]))
+  # HPA should be ignored when KEDA is enabled
+  autoscaling:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
