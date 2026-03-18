@@ -1,0 +1,10 @@
+controller:
+  podMonitor:
+    enabled: true
+    extraLabels:
+      release: prometheus
+    endpoints:
+      - port: stat
+        path: /metrics
+        scheme: http
+        interval: 30s

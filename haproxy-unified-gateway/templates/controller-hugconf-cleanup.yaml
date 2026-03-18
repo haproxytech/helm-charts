@@ -1,0 +1,93 @@
+{{- if .Values.hugconf.create }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "haproxy-unified-gateway.fullname" . }}-hugconf-cleanup
+  namespace: {{ include "haproxy-unified-gateway.namespace" . }}
+  labels:
+    {{- include "haproxy-unified-gateway.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "haproxy-unified-gateway.fullname" . }}-hugconf-cleanup
+  labels:
+    {{- include "haproxy-unified-gateway.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+rules:
+  - apiGroups:
+      - "gate.v3.haproxy.org"
+    resources:
+      - hugconfs
+    verbs:
+      - get
+      - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "haproxy-unified-gateway.fullname" . }}-hugconf-cleanup
+  labels:
+    {{- include "haproxy-unified-gateway.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "haproxy-unified-gateway.fullname" . }}-hugconf-cleanup
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "haproxy-unified-gateway.fullname" . }}-hugconf-cleanup
+    namespace: {{ include "haproxy-unified-gateway.namespace" . }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "haproxy-unified-gateway.fullname" . }}-hugconf-cleanup
+  namespace: {{ include "haproxy-unified-gateway.namespace" . }}
+  labels:
+    {{- include "haproxy-unified-gateway.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    metadata:
+      labels:
+        {{- include "haproxy-unified-gateway.labels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "haproxy-unified-gateway.fullname" . }}-hugconf-cleanup
+      restartPolicy: Never
+      {{- with .Values.controller.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: hugconf-cleanup
+          image: {{ include "haproxy-unified-gateway.image" . }}
+          imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              APISERVER=https://kubernetes.default.svc
+              TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+              CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+              wget --header="Authorization: Bearer $TOKEN" \
+                --ca-certificate=$CACERT \
+                --method=DELETE \
+                -q -O /dev/null \
+                "$APISERVER/apis/gate.v3.haproxy.org/v3/namespaces/{{ include "haproxy-unified-gateway.namespace" . }}/hugconfs/{{ .Values.hugconf.name }}" 2>/dev/null || true
+  backoffLimit: 1
+{{- end }}

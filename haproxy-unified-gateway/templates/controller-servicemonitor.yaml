@@ -1,0 +1,21 @@
+{{- if and (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1") .Values.controller.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "haproxy-unified-gateway.serviceMonitorName" . }}
+  namespace: {{ include "haproxy-unified-gateway.namespace" . }}
+  labels:
+    {{- include "haproxy-unified-gateway.labels" . | nindent 4 }}
+    {{- with .Values.controller.serviceMonitor.extraLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  endpoints:
+    {{- toYaml .Values.controller.serviceMonitor.endpoints | nindent 4 }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "haproxy-unified-gateway.namespace" . }}
+  selector:
+    matchLabels:
+      {{- include "haproxy-unified-gateway.selectorLabels" . | nindent 6 }}
+{{- end }}

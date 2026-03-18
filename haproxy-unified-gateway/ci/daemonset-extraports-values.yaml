@@ -1,0 +1,21 @@
+## Test: DaemonSet with extra container and service ports, including host ports
+controller:
+  kind: DaemonSet
+  containerPort:
+    http: 31080
+    https: 31443
+    stat: 31024
+    custom: 8080
+  daemonset:
+    useHostPort: true
+    hostPorts:
+      http: 80
+      https: 443
+      stat: 1024
+      custom: 8080
+  service:
+    extraPorts:
+      - name: custom
+        port: 8080
+        targetPort: 8080
+        protocol: TCP

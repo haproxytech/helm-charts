@@ -1,0 +1,18 @@
+## Test: Deployment with ServiceMonitor (both stat and controller metrics endpoints)
+controller:
+  serviceMonitor:
+    enabled: true
+    extraLabels:
+      release: prometheus
+    endpoints:
+      - port: stat
+        path: /metrics
+        scheme: http
+        interval: 30s
+      - port: metrics
+        path: /metrics
+        scheme: https
+        interval: 30s
+        tlsConfig:
+          insecureSkipVerify: true
+        bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token

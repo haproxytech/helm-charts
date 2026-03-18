@@ -1,0 +1,64 @@
+{{- if .Values.crdjob.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "haproxy-unified-gateway.crdjob.fullname" . }}
+  namespace: {{ include "haproxy-unified-gateway.namespace" . }}
+  labels:
+    {{- include "haproxy-unified-gateway.crdjobLabels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,pre-upgrade
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "argocd.argoproj.io/hook": PostSync
+    {{- with .Values.crdjob.podAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- with .Values.crdjob.ttlSecondsAfterFinished }}
+  ttlSecondsAfterFinished: {{ . }}
+  {{- end }}
+  template:
+    metadata:
+      labels:
+        {{- include "haproxy-unified-gateway.crdjobLabels" . | nindent 8 }}
+      {{- with .Values.crdjob.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "haproxy-unified-gateway.fullname" . }}-crdjob
+      restartPolicy: Never
+      {{- with .Values.controller.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: crdjob
+          {{- if .Values.crdjob.image.repository }}
+          image: {{ printf "%s:%s" .Values.crdjob.image.repository (default .Chart.AppVersion .Values.crdjob.image.tag) }}
+          {{- else }}
+          image: {{ include "haproxy-unified-gateway.image" . }}
+          {{- end }}
+          imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+          command:
+            - /usr/local/sbin/hug
+            - --job-check-crd
+          {{- with .Values.crdjob.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.crdjob.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.crdjob.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.crdjob.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  backoffLimit: 0
+{{- end }}

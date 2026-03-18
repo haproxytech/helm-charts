@@ -1,0 +1,18 @@
+controller:
+  keda:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 20
+    pollingInterval: 30
+    cooldownPeriod: 300
+    restoreToOriginalReplicaCount: false
+    scaledObject:
+      annotations:
+        test-annotation: "test-value"
+    triggers:
+      - type: prometheus
+        metadata:
+          serverAddress: http://prometheus:9090
+          metricName: haproxy_process_idle_time_percent
+          threshold: '50'
+          query: avg(100-avg_over_time(haproxy_process_idle_time_percent{job="haproxy-unified-gateway"}[2m]))

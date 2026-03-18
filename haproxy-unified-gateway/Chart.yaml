@@ -1,0 +1,23 @@
+apiVersion: v2
+name: haproxy-unified-gateway
+description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API Controller
+type: application
+version: 0.1.0
+appVersion: "0.9.1"
+kubeVersion: ">=1.26.0-0"
+keywords:
+  - haproxy
+  - gateway-api
+  - gateway
+  - load-balancer
+home: https://github.com/haproxytech/helm-charts/tree/main/haproxy-unified-gateway
+sources:
+  - https://github.com/haproxytech/haproxy-unified-gateway
+icon: https://www.haproxy.com/favicon.ico
+maintainers:
+  - name: Zlatko Bratkovic
+    email: zbratkovic@haproxy.com
+annotations:
+  artifacthub.io/license: Apache-2.0
+  artifacthub.io/changes: |-
+    - Initial chart creation for HAProxy Unified Gateway.

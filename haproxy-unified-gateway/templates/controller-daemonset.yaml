@@ -1,0 +1,167 @@
+{{/*
+Copyright 2026 HAProxy Technologies LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/}}
+
+{{- if eq .Values.controller.kind "DaemonSet" }}
+{{- $useHostNetwork := .Values.controller.daemonset.useHostNetwork -}}
+{{- $useHostPort := .Values.controller.daemonset.useHostPort -}}
+{{- $hostPorts := .Values.controller.daemonset.hostPorts -}}
+{{- $hostIP := .Values.controller.daemonset.hostIP -}}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "haproxy-unified-gateway.fullname" . }}
+  namespace: {{ include "haproxy-unified-gateway.namespace" . }}
+  labels:
+    {{- include "haproxy-unified-gateway.labels" . | nindent 4 }}
+    {{- with .Values.controller.extraLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "haproxy-unified-gateway.selectorLabels" . | nindent 6 }}
+  {{- with .Values.controller.strategy }}
+  updateStrategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels:
+        {{- include "haproxy-unified-gateway.selectorLabels" . | nindent 8 }}
+        {{- with .Values.controller.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.controller.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "haproxy-unified-gateway.serviceAccountName" . }}
+      {{- with .Values.controller.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.controller.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.controller.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- if $useHostNetwork }}
+      hostNetwork: true
+      {{- end }}
+      {{- with .Values.controller.dnsPolicy }}
+      dnsPolicy: {{ . }}
+      {{- end }}
+      {{- with .Values.controller.dnsConfig }}
+      dnsConfig:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.controller.initContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ include "haproxy-unified-gateway.name" . }}
+          image: {{ include "haproxy-unified-gateway.image" . }}
+          imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+          args:
+            {{- if or .Values.hugconf.create .Values.controller.hugconfCrd }}
+            - --hugconf-crd={{ include "haproxy-unified-gateway.hugconfCrd" . }}
+            {{- end }}
+            {{- with .Values.controller.metricsAuth }}
+            - --metrics-auth={{ . }}
+            {{- end }}
+            {{- range .Values.controller.extraArgs }}
+            - {{ . }}
+            {{- end }}
+          ports:
+            {{- range $key, $value := .Values.controller.containerPort }}
+            - name: {{ $key }}
+              containerPort: {{ $value }}
+              protocol: TCP
+              {{- if and $useHostPort (index $hostPorts $key) }}
+              hostPort: {{ index $hostPorts $key }}
+              {{- end }}
+              {{- if $hostIP }}
+              hostIP: {{ $hostIP }}
+              {{- end }}
+            {{- end }}
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            {{- with .Values.controller.extraEnvs }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- with .Values.controller.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.controller.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.controller.startupProbe }}
+          startupProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.controller.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.controller.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.controller.extraVolumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        {{- with .Values.controller.extraContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.controller.extraVolumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.controller.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.controller.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.controller.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.controller.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

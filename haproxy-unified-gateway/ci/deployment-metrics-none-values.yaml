@@ -1,0 +1,14 @@
+## Test: Deployment with metricsAuth=none (plain HTTP controller metrics)
+controller:
+  metricsAuth: none
+  serviceMonitor:
+    enabled: true
+    endpoints:
+      - port: stat
+        path: /metrics
+        scheme: http
+        interval: 30s
+      - port: metrics
+        path: /metrics
+        scheme: http
+        interval: 30s

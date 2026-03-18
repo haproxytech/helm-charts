@@ -26,5 +26,9 @@
 Session.vim
 .netrwhist
 
+# ct config files (auto-downloaded by test/ct-test.sh)
+test/chart_schema.yaml
+test/lintconf.yaml
+
 # TODO
 TODO

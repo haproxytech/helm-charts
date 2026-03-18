@@ -1,0 +1,12 @@
+controller:
+  kind: DaemonSet
+  service:
+    type: NodePort
+    http:
+      port: 8080
+      targetPort: 8080
+      nodePort: 30080
+    https:
+      port: 8443
+      targetPort: 8443
+      nodePort: 30443
