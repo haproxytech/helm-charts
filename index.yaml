@@ -1002,6 +1002,35 @@ entries:
     version: 1.0.1
   haproxy-unified-gateway:
   - annotations:
+      artifacthub.io/changes: '- Fix Pod Security Standards issues'
+      artifacthub.io/license: Apache-2.0
+    apiVersion: v2
+    appVersion: 0.9.2
+    created: "2026-03-20T14:10:50.213982305Z"
+    description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API
+      Controller
+    digest: df49cbfcbc50e6f89aa4546ae29291a5a91b10cacc23b768acba235f8cec1fc7
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy-unified-gateway
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - haproxy
+    - gateway-api
+    - gateway
+    - load-balancer
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: zbratkovic@haproxy.com
+      name: Zlatko Bratkovic
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy-unified-gateway
+    sources:
+    - https://github.com/haproxytech/haproxy-unified-gateway
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-0.2.1/haproxy-unified-gateway-0.2.1.tgz
+    version: 0.2.1
+  - annotations:
       artifacthub.io/changes: '- Initial chart creation for HAProxy Unified Gateway.'
       artifacthub.io/license: Apache-2.0
     apiVersion: v2
@@ -5289,4 +5318,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-03-20T12:34:36.934051651Z"
+generated: "2026-03-20T14:10:50.214287247Z"
