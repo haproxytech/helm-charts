@@ -54,6 +54,12 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- if .Values.controller.unprivileged }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser:  1000
+        runAsGroup: 1000
+{{- end }}
       {{- with .Values.controller.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
@@ -133,9 +139,21 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with .Values.controller.securityContext }}
+          {{- if .Values.controller.unprivileged }}
           securityContext:
-            {{- toYaml . | nindent 12 }}
+            runAsNonRoot: true
+            runAsUser:  1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: {{ .Values.controller.allowPrivilegeEscalation }}
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - NET_BIND_SERVICE
+            {{- with .Values.controller.seccompProfile }}
+            seccompProfile:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
           {{- end }}
           {{- with .Values.controller.extraVolumeMounts }}
           volumeMounts:

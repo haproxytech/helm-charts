@@ -2,8 +2,8 @@ apiVersion: v2
 name: haproxy-unified-gateway
 description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API Controller
 type: application
-version: 0.1.0
-appVersion: "0.9.1"
+version: 0.2.0
+appVersion: 0.9.2
 kubeVersion: ">=1.26.0-0"
 keywords:
   - haproxy
@@ -13,7 +13,7 @@ keywords:
 home: https://github.com/haproxytech/helm-charts/tree/main/haproxy-unified-gateway
 sources:
   - https://github.com/haproxytech/haproxy-unified-gateway
-icon: https://www.haproxy.com/favicon.ico
+icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
 maintainers:
   - name: Zlatko Bratkovic
     email: zbratkovic@haproxy.com

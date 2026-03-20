@@ -1,4 +1,20 @@
 {{/*
+Copyright 2026 HAProxy Technologies LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/}}
+
+{{/*
 Expand the name of the chart.
 */}}
 {{- define "haproxy-unified-gateway.name" -}}
@@ -77,6 +93,27 @@ Controller image.
 {{- define "haproxy-unified-gateway.image" -}}
 {{- $tag := default .Chart.AppVersion .Values.controller.image.tag -}}
 {{- printf "%s:%s" .Values.controller.image.repository $tag }}
+{{- end }}
+
+{{/*
+CRD Job ServiceAccount/RBAC name.
+*/}}
+{{- define "haproxy-unified-gateway.crdjob.saName" -}}
+{{- printf "%s-crdjob" (include "haproxy-unified-gateway.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Metrics Service name.
+*/}}
+{{- define "haproxy-unified-gateway.metricsServiceName" -}}
+{{- printf "%s-metrics" (include "haproxy-unified-gateway.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+HugConf cleanup Job name.
+*/}}
+{{- define "haproxy-unified-gateway.hugconfCleanup.fullname" -}}
+{{- printf "%s-hugconf-cleanup" (include "haproxy-unified-gateway.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*

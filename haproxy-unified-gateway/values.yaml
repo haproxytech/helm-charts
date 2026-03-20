@@ -1,3 +1,17 @@
+# Copyright 2026 HAProxy Technologies LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 ## HAProxy Unified Gateway Helm Chart - values.yaml
 
 # -- PodSecurityPolicy configuration (deprecated in K8s 1.21, removed in 1.25)
@@ -80,19 +94,21 @@ controller:
     requests:
       memory: 2048Mi
 
-  # -- Security context for the controller container
-  securityContext:
-    runAsNonRoot: true
-    allowPrivilegeEscalation: false
-    runAsUser: 1000
-    runAsGroup: 1000
-    capabilities:
-      drop:
-        - ALL
-      add:
-        - NET_BIND_SERVICE
-    seccompProfile:
-      type: RuntimeDefault
+  ## Running container without root privileges
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  unprivileged: true
+
+  ## Privilege escalation
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  allowPrivilegeEscalation: false
+
+  ## Restricts container syscalls
+  ## ref: https://kubernetes.io/docs/tutorials/security/seccomp/
+  ## Supported types: RuntimeDefault, Localhost, Unconfined
+  ## Set to empty ({}) to disable seccomp profile
+  seccompProfile:
+    type: RuntimeDefault
+    # localhostProfile: my-profiles/profile.json  # only for type: Localhost
 
   # -- Pod-level security context
   podSecurityContext: {}
