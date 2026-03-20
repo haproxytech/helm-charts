@@ -45,6 +45,10 @@ spec:
     spec:
       serviceAccountName: {{ include "haproxy-unified-gateway.crdjob.saName" . }}
       restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       {{- with .Values.controller.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -57,6 +61,14 @@ spec:
           image: {{ include "haproxy-unified-gateway.image" . }}
           {{- end }}
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           command:
             - /usr/local/sbin/hug
             - --job-gwapi={{ .Values.gwapijob.version }}

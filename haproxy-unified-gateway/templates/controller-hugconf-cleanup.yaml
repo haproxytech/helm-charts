@@ -85,6 +85,10 @@ spec:
     spec:
       serviceAccountName: {{ include "haproxy-unified-gateway.hugconfCleanup.fullname" . }}
       restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       {{- with .Values.controller.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -93,6 +97,14 @@ spec:
         - name: hugconf-cleanup
           image: {{ include "haproxy-unified-gateway.image" . }}
           imagePullPolicy: {{ .Values.controller.image.pullPolicy }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
           command:
             - /bin/sh
             - -c
