@@ -97,13 +97,13 @@ spec:
             - /bin/sh
             - -c
             - |
-              APISERVER=https://kubernetes.default.svc
-              TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
-              CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-              wget --header="Authorization: Bearer $TOKEN" \
-                --ca-certificate=$CACERT \
+              APISERVER="https://kubernetes.default.svc"
+              TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
+              CACERT="/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+              wget --header="Authorization: Bearer ${TOKEN}" \
+                --ca-certificate="${CACERT}" \
                 --method=DELETE \
                 -q -O /dev/null \
-                "$APISERVER/apis/gate.v3.haproxy.org/v3/namespaces/{{ include "haproxy-unified-gateway.namespace" . }}/hugconfs/{{ .Values.hugconf.name }}" 2>/dev/null || true
+                "${APISERVER}/apis/gate.v3.haproxy.org/v3/namespaces/{{ include "haproxy-unified-gateway.namespace" . }}/hugconfs/{{ .Values.hugconf.name }}" 2>/dev/null || true
   backoffLimit: 1
 {{- end }}
