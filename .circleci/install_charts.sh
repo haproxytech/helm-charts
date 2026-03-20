@@ -8,6 +8,7 @@ readonly CT_VERSION=latest
 readonly KIND_VERSION=v0.31.0
 readonly CLUSTER_NAME=chart-testing
 readonly REPO_ROOT="${REPO_ROOT:-$(git rev-parse --show-toplevel)}"
+readonly KEDA_VERSION=2.19.0
 
 find_latest_tag() {
     if ! git describe --tags --abbrev=0 2>/dev/null; then
@@ -59,6 +60,10 @@ install_local_path_provisioner() {
     docker_exec kubectl apply -f "https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml"
 }
 
+install_keda() {
+    docker_exec kubectl apply -f "https://github.com/kedacore/keda/releases/download/v${KEDA_VERSION}/keda-${KEDA_VERSION}-core.yaml" || true
+}
+
 install_charts() {
     docker_exec ct install --all
     echo
@@ -106,6 +111,7 @@ main() {
 
             create_kind_cluster
             install_local_path_provisioner
+            install_keda
             install_charts
         else
             echo "Nothing to do. No chart changes detected."
