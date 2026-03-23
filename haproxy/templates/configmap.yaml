@@ -23,7 +23,7 @@ metadata:
   labels:
   {{- include "haproxy.labels" . | nindent 4 }}
 data:
-  {{ .Values.configMount.subPath | default "haproxy.cfg" }}: |
+  {{ .Values.configMount.subPath | default "haproxy.cfg" }}: |+
   {{ tpl .Values.config . | nindent 4 }}
 {{- end }}
 
