@@ -21,7 +21,4 @@ metadata:
   name: {{ include "kubernetes-ingress.namespace" . }}
   labels:
     {{- include "kubernetes-ingress.labels" . | nindent 4 }}
-  annotations:
-    "helm.sh/hook": "pre-install"
-    "helm.sh/hook-weight": "-1"
 {{- end -}}
