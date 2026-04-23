@@ -21,7 +21,4 @@ metadata:
   name: {{ include "haproxy-unified-gateway.namespace" . }}
   labels:
     {{- include "haproxy-unified-gateway.labels" . | nindent 4 }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-1"
 {{- end }}

@@ -31,7 +31,8 @@ podSecurityPolicy:
 rbac:
   create: true
 
-# -- Create a namespace (uses Helm pre-install hook)
+# -- Create a namespace as part of the release.
+# NOTE: do not combine this with `helm install --create-namespace`.
 namespace:
   create: false
 
