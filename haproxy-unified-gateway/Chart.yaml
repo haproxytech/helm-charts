@@ -16,7 +16,7 @@ apiVersion: v2
 name: haproxy-unified-gateway
 description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API Controller
 type: application
-version: 1.0.1
+version: 1.0.2
 appVersion: 1.0.2
 kubeVersion: ">=1.26.0-0"
 keywords:
