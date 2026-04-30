@@ -29,7 +29,6 @@ icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-
 maintainers:
   - name: Dinko Korunic
     email: dkorunic@haproxy.com
-engine: gotpl
 annotations:
   artifacthub.io/changes: |-
     - Use Ingress Controller 3.2.6 version for base image

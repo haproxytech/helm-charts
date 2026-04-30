@@ -28,7 +28,6 @@ icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/cha
 maintainers:
   - name: Dinko Korunic
     email: dkorunic@haproxy.com
-engine: gotpl
 annotations:
   artifacthub.io/changes: |
     - Update base image to HAProxy 3.3.6
