@@ -492,6 +492,11 @@ controller:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     # sessionAffinity: ""
 
+    ## Traffic distribution policy for the Service
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution
+    ## Supported values: "PreferSameZone", "PreferSameNode"
+    # trafficDistribution: ""
+
     ## Controller Metrics Service configuration
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     metrics:
