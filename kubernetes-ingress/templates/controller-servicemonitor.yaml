@@ -34,4 +34,5 @@ spec:
   selector:
     matchLabels:
       {{- include "kubernetes-ingress.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: metrics
 {{- end }}
