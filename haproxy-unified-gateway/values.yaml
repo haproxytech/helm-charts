@@ -195,16 +195,21 @@ controller:
     labels: {}
     # -- External traffic policy
     externalTrafficPolicy: ""
-    # -- HTTP port configuration
-    http:
-      port: 31080
-      targetPort: 31080
-      nodePort: 31080
-    # -- HTTPS port configuration
-    https:
-      port: 31443
-      targetPort: 31443
-      nodePort: 31443
+    # NOTE: http/https Service ports are NOT defined here. The HUG controller
+    # adds them automatically once Gateway resources exist (one port per
+    # listener, named `http-<port>` / `https-<port>`) and reallocates any
+    # NodePort. Values set under `http:` / `https:` had no effect because
+    # the controller overwrote them. See:
+    # https://github.com/haproxytech/helm-charts/issues/348
+    # The original entries are kept (commented out) for reference:
+    # http:
+    #   port: 31080
+    #   targetPort: 31080
+    #   nodePort: 31080
+    # https:
+    #   port: 31443
+    #   targetPort: 31443
+    #   nodePort: 31443
     # -- Stats port configuration
     stat:
       port: 31024

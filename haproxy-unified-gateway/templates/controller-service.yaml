@@ -36,7 +36,14 @@ spec:
   {{- end }}
   selector:
     {{- include "haproxy-unified-gateway.selectorLabels" . | nindent 4 }}
-  ports:
+  # NOTE: http/https Service ports are intentionally NOT rendered here.
+  # The HUG controller reconciles this Service against existing Gateway
+  # resources and adds one port per listener automatically (named
+  # `http-<port>` / `https-<port>`), allocating its own NodePorts.
+  # Defining these statically had no effect because the controller
+  # overwrites them — see https://github.com/haproxytech/helm-charts/issues/348
+  # The original templating is kept (commented out) for reference:
+  {{- /*
     - name: http
       port: {{ .Values.controller.service.http.port }}
       targetPort: {{ .Values.controller.service.http.targetPort }}
@@ -51,6 +58,8 @@ spec:
       {{- if and (eq .Values.controller.service.type "NodePort") .Values.controller.service.https.nodePort }}
       nodePort: {{ .Values.controller.service.https.nodePort }}
       {{- end }}
+  */}}
+  ports:
     - name: stat
       port: {{ .Values.controller.service.stat.port }}
       targetPort: {{ .Values.controller.service.stat.targetPort }}
