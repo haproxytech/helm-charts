@@ -16,7 +16,7 @@ apiVersion: v2
 name: haproxy-unified-gateway
 description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API Controller
 type: application
-version: 1.0.2
+version: 1.0.3
 appVersion: 1.0.2
 kubeVersion: ">=1.26.0-0"
 keywords:
@@ -36,4 +36,4 @@ maintainers:
 annotations:
   artifacthub.io/license: Apache-2.0
   artifacthub.io/changes: |-
-    - Use HAProxy Unified Gateway 1.0.2 version for base image
+    - Stop rendering controller.service.http and controller.service.https Service ports; the controller adds them per Gateway listener (see issue #348)
