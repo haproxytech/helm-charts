@@ -369,6 +369,16 @@ controller:
   configAnnotations: {}
   #   annotationKey: value
 
+  ## Auxiliary configuration for HAProxy
+  ## ref: https://www.haproxy.com/documentation/kubernetes-ingress/ingress-tutorials/auxiliary-config-file/
+  ## When set, creates a dedicated ConfigMap and mounts it at /etc/haproxy/haproxy-aux.cfg
+  auxiliaryConfig: ""
+  # auxiliaryConfig: |
+  #   cache mycache
+  #       total-max-size 4095
+  #       max-object-size 10000
+  #       max-age 30
+
   ## Controller Logging configuration
   ## Careful: this block will be ignored if you use config.cr-global.
   ## In this case, move your logging config in entry spec.log_targets in your CR.
