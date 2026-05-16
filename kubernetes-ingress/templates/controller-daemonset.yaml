@@ -250,6 +250,12 @@ spec:
             {{- else if gt (len .Values.controller.extraVolumeMounts) 0 }}
 {{ toYaml .Values.controller.extraVolumeMounts | indent 12 }}
             {{- end }}
+            {{- if .Values.controller.auxiliaryConfig }}
+            - name: haproxy-aux-cfg
+              mountPath: /etc/haproxy/haproxy-aux.cfg
+              subPath: haproxy-aux.cfg
+              readOnly: true
+            {{- end }}
         {{- if .Values.controller.extraContainers }}
           {{- if eq "string" (printf "%T" .Values.controller.extraContainers) }}
 {{ tpl .Values.controller.extraContainers . | indent 8 }}
@@ -276,6 +282,11 @@ spec:
 {{ tpl .Values.controller.extraVolumes . | indent 8 }}
         {{- else if gt (len .Values.controller.extraVolumes) 0 }}
 {{ toYaml .Values.controller.extraVolumes | indent 8 }}
+        {{- end }}
+        {{- if .Values.controller.auxiliaryConfig }}
+        - name: haproxy-aux-cfg
+          configMap:
+            name: {{ include "kubernetes-ingress.fullname" . }}-auxiliary
         {{- end }}
       {{- if .Values.controller.initContainers }}
       initContainers:
