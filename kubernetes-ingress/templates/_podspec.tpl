@@ -275,6 +275,12 @@ containers:
       {{- else if gt (len $ctlr.extraVolumeMounts) 0 }}
 {{ toYaml $ctlr.extraVolumeMounts | indent 6 }}
       {{- end }}
+      {{- if $ctlr.auxiliaryConfig }}
+      - name: haproxy-aux-cfg
+        mountPath: /etc/haproxy/haproxy-aux.cfg
+        subPath: haproxy-aux.cfg
+        readOnly: true
+      {{- end }}
   {{- if $ctlr.extraContainers }}
     {{- if eq "string" (printf "%T" $ctlr.extraContainers) }}
 {{ tpl $ctlr.extraContainers $root | indent 2 }}
@@ -297,6 +303,11 @@ volumes:
 {{ tpl $ctlr.extraVolumes $root | indent 2 }}
   {{- else if gt (len $ctlr.extraVolumes) 0 }}
 {{ toYaml $ctlr.extraVolumes | indent 2 }}
+  {{- end }}
+  {{- if $ctlr.auxiliaryConfig }}
+  - name: haproxy-aux-cfg
+    configMap:
+      name: {{ include "kubernetes-ingress.auxiliaryConfigName" $root }}
   {{- end }}
 {{- if $ctlr.initContainers }}
 initContainers:
