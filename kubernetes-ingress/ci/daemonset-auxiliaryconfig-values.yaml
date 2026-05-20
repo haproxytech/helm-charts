@@ -1,0 +1,7 @@
+controller:
+  kind: DaemonSet
+  auxiliaryConfig: |
+    cache mycache
+        total-max-size 4095
+        max-object-size 10000
+        max-age 30

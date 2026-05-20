@@ -231,4 +231,11 @@ Create a FQDN for the proxy pods.
 {{- printf "%s-%s" (include "kubernetes-ingress.fullname" . | trunc 58 | trimSuffix "-") "proxy" }}
 {{- end -}}
 
+{{/*
+Create a name for the auxiliary configmap.
+*/}}
+{{- define "kubernetes-ingress.auxiliaryConfigName" -}}
+{{- printf "%s-%s" (include "kubernetes-ingress.fullname" . | trunc 54 | trimSuffix "-") "auxiliary" }}
+{{- end -}}
+
 {{/* vim: set filetype=mustache: */}}
