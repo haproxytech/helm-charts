@@ -14,11 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */}}
 
-{{- if .Values.controller.podMonitor.enabled -}}
+{{- if .Values.controller.podMonitor.enabled }}
 {{- if not .Values.controller.prometheus.enabled -}}
 {{- fail "controller.podMonitor.enabled=true requires controller.prometheus.enabled=true (the controller exposes /metrics only when --prometheus is set)" -}}
-{{- end -}}
-{{- end -}}
+{{- end }}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:

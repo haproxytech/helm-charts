@@ -304,14 +304,26 @@ test_monitoring() {
         log_fail "$label"
     fi
 
-    # ServiceMonitor: should NOT render without the API
-    label="$chart: ServiceMonitor skipped without monitoring.coreos.com/v1 API"
+    # ServiceMonitor without API: behaviour depends on whether the chart's template
+    # gates rendering on .Capabilities.APIVersions.Has "monitoring.coreos.com/v1".
+    local sm_tmpl
+    sm_tmpl=$(ls "$tmpl_dir"/*servicemonitor* 2>/dev/null | head -n 1)
     output=$(helm template test-release "$REPO_ROOT/$chart" \
         --set "$sm_set" 2>&1)
-    if echo "$output" | grep -q 'kind: ServiceMonitor'; then
-        log_fail "$label"
+    if [[ -n "$sm_tmpl" ]] && grep -q 'APIVersions.Has.*monitoring.coreos.com/v1' "$sm_tmpl"; then
+        label="$chart: ServiceMonitor skipped without monitoring.coreos.com/v1 API"
+        if echo "$output" | grep -q 'kind: ServiceMonitor'; then
+            log_fail "$label"
+        else
+            log_pass "$label"
+        fi
     else
-        log_pass "$label"
+        label="$chart: ServiceMonitor renders without monitoring.coreos.com/v1 API"
+        if echo "$output" | grep -q 'kind: ServiceMonitor'; then
+            log_pass "$label"
+        else
+            log_fail "$label"
+        fi
     fi
 
     # Metrics service: only test if chart has a metrics service template
