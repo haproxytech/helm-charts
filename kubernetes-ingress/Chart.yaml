@@ -16,7 +16,7 @@ apiVersion: v2
 name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
-version: 1.49.0
+version: 1.50.0
 appVersion: 3.2.8
 kubeVersion: ">=1.23.0-0"
 keywords:
@@ -32,3 +32,7 @@ maintainers:
 annotations:
   artifacthub.io/changes: |-
     - Use Ingress Controller 3.2.8 version for base image
+    - Prevent ServiceMonitor from scraping metrics twice (#353)
+    - Fix missing trafficDistribution in controller-proxy-service (#355)
+    - Add trafficDistribution support for Service (#352)
+    - Fix namespace.create cascade delete conflict
