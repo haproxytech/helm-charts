@@ -11,8 +11,8 @@ RBAC authorization is disabled.
 Controller ingress.class is set to "{{ .Values.controller.ingressClass }}" so make sure to use same annotation for
 Ingress resource.
 {{- end}}
-{{- if .Values.controller.gatewayControllerName}}
-Controller Gateway Controller Name is set to "{{ .Values.controller.gatewayControllerName }}" so make sure
+{{- if and .Values.controller.kubernetesGateway.enabled .Values.controller.kubernetesGateway.gatewayControllerName }}
+Controller Gateway Controller Name is set to "{{ .Values.controller.kubernetesGateway.gatewayControllerName }}" so make sure
 that Gateway API CRDs are installed in Kubernetes.
 {{- end}}
 
@@ -62,7 +62,7 @@ Service ports mapped are:
 {{- end }}
 {{- range .Values.controller.service.tcpPorts }}
   - name: {{ .name | trunc 15 | trimSuffix "-" }}
-    containerPort: {{ .port }}
+    containerPort: {{ .targetPort }}
     protocol: TCP
 {{- if $useHostPort }}
     hostPort: {{ .port }}

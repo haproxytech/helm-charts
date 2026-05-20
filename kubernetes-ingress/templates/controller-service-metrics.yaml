@@ -38,9 +38,11 @@ metadata:
 {{- if .Values.controller.service.metrics.labels }}
 {{ toYaml .Values.controller.service.metrics.labels | indent 4 }}
 {{- end }}
+{{- with .Values.controller.service.metrics.annotations }}
   annotations:
-{{- range $key, $value := .Values.controller.service.metrics.annotations }}
+    {{- range $key, $value := . }}
     {{ $key }}: {{ $value | quote }}
+    {{- end }}
 {{- end }}
 spec:
   type: {{ .Values.controller.service.metrics.type }}

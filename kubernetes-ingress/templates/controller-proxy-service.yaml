@@ -22,13 +22,16 @@ metadata:
   namespace: {{ include "kubernetes-ingress.namespace" . }}
   labels:
     {{- include "kubernetes-ingress.serviceProxyLabels" . | nindent 4 }}
-    {{ (split ":" .Values.controller.sync.proxyParams.proxySvcLabelSelector)._0 }}: {{ (split ":" .Values.controller.sync.proxyParams.proxySvcLabelSelector)._1 }}
+    {{- $parts := splitn ":" 2 .Values.controller.sync.proxyParams.proxySvcLabelSelector }}
+    {{ $parts._0 }}: {{ $parts._1 }}
 {{- if .Values.controller.service.labels }}
 {{ toYaml .Values.controller.service.labels | indent 4 }}
 {{- end }}
+{{- with .Values.controller.service.annotations }}
   annotations:
-{{- range $key, $value := .Values.controller.service.annotations }}
+    {{- range $key, $value := . }}
     {{ $key }}: {{ $value | quote }}
+    {{- end }}
 {{- end }}
 spec:
   type: ClusterIP
@@ -40,9 +43,7 @@ spec:
     - name: http
       port: {{ .Values.controller.service.ports.http }}
       protocol: TCP
-      {{- if semverCompare ">=1.20.0-0" .Capabilities.KubeVersion.Version }}
       appProtocol: http
-      {{- end }}
       targetPort: {{ .Values.controller.service.targetPorts.http }}
     {{- if .Values.controller.service.nodePorts.http }}
       nodePort: {{ .Values.controller.service.nodePorts.http }}
@@ -52,9 +53,7 @@ spec:
     - name: https
       port: {{ .Values.controller.service.ports.https }}
       protocol: TCP
-      {{- if semverCompare ">=1.20.0-0" .Capabilities.KubeVersion.Version }}
       appProtocol: https
-      {{- end }}
       targetPort: {{ .Values.controller.service.targetPorts.https }}
     {{- if .Values.controller.service.nodePorts.https }}
       nodePort: {{ .Values.controller.service.nodePorts.https }}

@@ -124,13 +124,6 @@ Encode an imagePullSecret string.
 {{- end }}
 
 {{/*
-Encode an imagePullSecret string for the default backend.
-*/}}
-{{- define "kubernetes-ingress.defaultBackend.imagePullSecret" }}
-{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.defaultBackend.imageCredentials.registry (printf "%s:%s" .Values.defaultBackend.imageCredentials.username .Values.defaultBackend.imageCredentials.password | b64enc) | b64enc }}
-{{- end }}
-
-{{/*
 Generate default certificate for HAProxy.
 */}}
 {{- define "kubernetes-ingress.gen-certs" -}}
@@ -150,24 +143,6 @@ Create the name of the controller service account to use.
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Create the name of the backend service account to use - only used when podsecuritypolicy is also enabled
-*/}}
-{{- define "kubernetes-ingress.defaultBackend.serviceAccountName" -}}
-{{- if or .Values.serviceAccount.create .Values.defaultBackend.serviceAccount.create -}}
-    {{ default (printf "%s-%s" (include "kubernetes-ingress.fullname" .) .Values.defaultBackend.name) .Values.defaultBackend.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.defaultBackend.serviceAccount.name }}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified default backend name.
-*/}}
-{{- define "kubernetes-ingress.defaultBackend.fullname" -}}
-{{- printf "%s-%s" (include "kubernetes-ingress.fullname" .) .Values.defaultBackend.name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
@@ -243,10 +218,10 @@ Create a FQDN for the Service metrics.
 {{- end -}}
 
 {{/*
-Create a default fully qualified unique CRD job name.
+Create a default fully qualified CRD job name.
 */}}
 {{- define "kubernetes-ingress.crdjob.fullname" -}}
-{{- printf "%s-%s-%d" (include "kubernetes-ingress.fullname" .) "crdjob" .Release.Revision | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s" (include "kubernetes-ingress.fullname" .) "crdjob" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*

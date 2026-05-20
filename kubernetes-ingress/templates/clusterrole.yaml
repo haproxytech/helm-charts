@@ -86,7 +86,7 @@ rules:
 - apiGroups:
   - core.haproxy.org
   resources:
-     - '*'
+    - "*"
   verbs:
   - get
   - list
