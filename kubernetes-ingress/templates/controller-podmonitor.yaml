@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */}}
 
-{{- if and (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1") .Values.controller.podMonitor.enabled }}
+{{- if .Values.controller.podMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
