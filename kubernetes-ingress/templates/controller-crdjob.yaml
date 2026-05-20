@@ -51,7 +51,7 @@ spec:
       {{- end }}
     spec:
       restartPolicy: Never
-      serviceAccountName: {{ include "kubernetes-ingress.serviceAccountName" . }}
+      serviceAccountName: {{ include "kubernetes-ingress.crdjob.serviceAccountName" . }}
 {{- if .Values.controller.imageCredentials.registry }}
       imagePullSecrets:
       - name: {{ include "kubernetes-ingress.fullname" . }}

@@ -225,6 +225,28 @@ Create a default fully qualified CRD job name.
 {{- end -}}
 
 {{/*
+Create the name of the CRD job's dedicated ServiceAccount / ClusterRole / ClusterRoleBinding.
+*/}}
+{{- define "kubernetes-ingress.crdjob.saName" -}}
+{{- printf "%s-%s" (include "kubernetes-ingress.fullname" .) "crdjob" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Resolve the ServiceAccount the CRD job should run under.
+When rbac.create is true, prefer the dedicated crdjob SA (created as a pre-upgrade hook so it
+exists before the Job runs, even when --reset-values changes the controller's SA name).
+Otherwise fall back to the controller SA so users managing RBAC externally aren't forced
+into a new naming convention.
+*/}}
+{{- define "kubernetes-ingress.crdjob.serviceAccountName" -}}
+{{- if .Values.rbac.create -}}
+{{ include "kubernetes-ingress.crdjob.saName" . }}
+{{- else -}}
+{{ include "kubernetes-ingress.serviceAccountName" . }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create a FQDN for the proxy pods.
 */}}
 {{- define "kubernetes-ingress.serviceProxyName" -}}

@@ -369,6 +369,80 @@ test_monitoring() {
     fi
 }
 
+# 9. Run ct lint against each chart, exercising every ci/*-values.yaml file via chart-testing.
+# This catches issues helm lint misses: --strict mode violations, Chart.yaml schema mismatches,
+# and YAML lint problems in the ci/ values files themselves.
+test_ct_lint() {
+    local chart="$1"
+    local ci_dir="$REPO_ROOT/$chart/ci"
+    local label="$chart: ct lint (ci/ values files)"
+
+    if [ ! -d "$ci_dir" ]; then
+        return
+    fi
+
+    if ! command -v ct >/dev/null 2>&1; then
+        log_skip "$label (ct not installed)"
+        return
+    fi
+
+    local ct_config="$REPO_ROOT/test/ct.yaml"
+    local schema="$REPO_ROOT/test/chart_schema.yaml"
+    local lint_conf="$REPO_ROOT/test/lintconf.yaml"
+
+    if [ ! -f "$ct_config" ] || [ ! -f "$schema" ] || [ ! -f "$lint_conf" ]; then
+        log_skip "$label (run ./test/ct-test.sh lint once to fetch chart_schema.yaml and lintconf.yaml)"
+        return
+    fi
+
+    local output
+    if output=$(cd "$REPO_ROOT" && ct lint --config "$ct_config" --charts "$chart" --validate-maintainers=false 2>&1); then
+        log_pass "$label"
+    else
+        log_fail "$label"
+        echo "$output" | tail -20 | sed 's/^/    /'
+    fi
+}
+
+# 10. Verify auxiliary HAProxy configuration ConfigMap, Volume, and VolumeMount stay wired together
+test_auxiliary_config() {
+    local chart="$1"
+    local values_yaml="$REPO_ROOT/$chart/values.yaml"
+
+    if ! grep -q '^  auxiliaryConfig:' "$values_yaml" 2>/dev/null; then
+        return
+    fi
+
+    local label="$chart: auxiliary ConfigMap skipped when controller.auxiliaryConfig is empty"
+    local output
+    output=$(helm template test-release "$REPO_ROOT/$chart" 2>&1)
+    if echo "$output" | grep -qE 'name: .*-auxiliary$'; then
+        log_fail "$label"
+    else
+        log_pass "$label"
+    fi
+
+    output=$(helm template test-release "$REPO_ROOT/$chart" \
+        --set-string 'controller.auxiliaryConfig=# minimal aux content' 2>&1)
+
+    label="$chart: auxiliary ConfigMap renders when controller.auxiliaryConfig is set"
+    if echo "$output" | grep -qE 'name: test-release-.*-auxiliary$' \
+        && echo "$output" | grep -q 'haproxy-aux.cfg: |'; then
+        log_pass "$label"
+    else
+        log_fail "$label"
+    fi
+
+    label="$chart: auxiliary config Volume, VolumeMount, and ConfigMap wire to /etc/haproxy/haproxy-aux.cfg"
+    if echo "$output" | grep -q 'mountPath: /etc/haproxy/haproxy-aux.cfg' \
+        && echo "$output" | grep -q 'subPath: haproxy-aux.cfg' \
+        && echo "$output" | grep -q 'name: haproxy-aux-cfg'; then
+        log_pass "$label"
+    else
+        log_fail "$label"
+    fi
+}
+
 main() {
     local filter="${1:-}"
 
@@ -390,7 +464,9 @@ main() {
         test_hugconf_cleanup "$chart"
         test_metrics_port "$chart"
         test_monitoring "$chart"
+        test_auxiliary_config "$chart"
         test_ci_values "$chart"
+        test_ct_lint "$chart"
     done
 
     # Summary

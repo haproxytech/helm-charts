@@ -641,6 +641,8 @@ controller:
   serviceMonitor:
     ## Toggle the ServiceMonitor true if you have Prometheus Operator installed and configured
     ## Should not be enabled when controller.podMonitor.enabled is true
+    ## Note: this manifest is not capability-gated; if monitoring.coreos.com/v1 CRDs are
+    ## missing, helm install will fail with "no matches for kind ServiceMonitor".
     enabled: false
 
     ## Specify the labels to add to the ServiceMonitors to be selected for target discovery
@@ -663,6 +665,8 @@ controller:
   podMonitor:
     ## Toggle the PodMonitor true if you have Prometheus Operator installed and configured
     ## Should not be enabled when controller.serviceMonitor.enabled is true
+    ## Note: this manifest is not capability-gated; if monitoring.coreos.com/v1 CRDs are
+    ## missing, helm install will fail with "no matches for kind PodMonitor".
     enabled: false
 
     ## Specify the labels to add to the PodMonitors to be selected for target discovery
