@@ -31,6 +31,32 @@ maintainers:
     email: dkorunic@haproxy.com
 annotations:
   artifacthub.io/changes: |-
+    - Fail at template render when controller.{serviceMonitor,podMonitor}.enabled=true but controller.prometheus.enabled=false (the controller would not expose /metrics)
+    - Fail at template render when controller.keda.enabled=true but controller.keda.triggers is empty (KEDA admission would reject the ScaledObject)
+    - controller-defaultcertsecret.yaml now requires both tls.crt and tls.key in an existing Secret before reusing (avoids emitting a partially-populated kubernetes.io/tls Secret)
+    - Elide empty metadata.annotations block in controller-service.yaml, controller-service-metrics.yaml, and controller-proxy-service.yaml
+    - Fix blank line in controller-service.yaml spec when controller.service.clusterIP is unset
+    - Normalise extraLabels rendering in ServiceMonitor and PodMonitor to match the chart's `{{- toYaml ... | nindent N }}` convention
+    - Remove explicit serviceAccount.automountServiceAccountToken=true default from values.yaml; chart now defers to Kubernetes default (still true). Set the value explicitly to override
+    - README: correct Kubernetes version requirement (1.23+, not 1.22+); fix gateway-controller-name installation example to use controller.kubernetesGateway.{enabled,gatewayControllerName}; drop stale chart version from OCI install example
+    - Drop dead semverCompare branches for K8s <1.23 across HPA, PDB, IngressClass, Service, proxy Service, CRD job, and the emptyDir Memory medium gate in _podspec.tpl
+    - controller-defaultcertsecret.yaml now uses helm lookup to reuse an existing default cert across install retries instead of regenerating it
+    - controller-configmap.yaml elides empty data block when controller.config and controller.logging.traffic are both unset
+    - controller-proxy-service.yaml label parsing uses splitn (no longer breaks on values containing colons; computes once)
+    - Container-level securityContext no longer duplicates runAsNonRoot/User/Group (now inherited from pod-level); same rendered semantics
+    - clusterrole.yaml resource quoting normalised to "*" with 4-space indent throughout
+    - crdjob name no longer includes .Release.Revision; the before-hook-creation delete policy already handles cleanup. Upgrade note: the old revision-suffixed Job from the prior release will remain in-cluster until manually deleted
+    - values.yaml comments clarify topologySpreadConstraints DaemonSet behavior and probe port 1042 origin
+    - Decouple --prometheus and --pprof from controller.service.enablePorts.admin via new controller.prometheus.enabled and controller.pprof.enabled toggles (both default true). Behaviour change: users who set enablePorts.admin=false to disable Prometheus/pprof must now also set the new toggles. See README for migration notes.
+    - Extract shared pod template spec into _podspec.tpl partial; controller-{deployment,daemonset,proxy-deployment}.yaml now ~60 lines each (was ~300+). Same rendered output for Deployment and DaemonSet modes. Proxy-mode pod now also honors serviceAccount.automountServiceAccountToken, controller.extraEnvFrom, and controller.sysctls (previously omitted by oversight)
+    - Fix --quic-announce-port hard-wired to service.ports.https; auto-derive from topology (useHostNetwork/useHostPort) or override via controller.quic.announcePort
+    - Remove dead defaultBackend.* helpers and ci values left over from the v1.x in-controller default-backend migration
+    - Fix NOTES.txt referencing undefined controller.gatewayControllerName instead of controller.kubernetesGateway.gatewayControllerName
+    - Fix PodSecurityPolicy hostPorts ranges using containerPort values instead of the actual host-port mapping (caused admission failure under useHostPort)
+    - Fix PodSecurityPolicy ignoring controller.deployment.* host-port settings when controller.kind is Deployment
+    - Fix DaemonSet tcpPorts using service port instead of targetPort for containerPort (breaks useHostPort routing when port != targetPort)
+    - Fix PodSecurityPolicy duplicate metadata.annotations key silently dropping user-supplied annotations
+    - Fix PodSecurityPolicy rendering invalid apiVersion policy/v1 (PSP only exists as policy/v1beta1)
     - Use Ingress Controller 3.2.8 version for base image
     - Prevent ServiceMonitor from scraping metrics twice (#353)
     - Fix missing trafficDistribution in controller-proxy-service (#355)

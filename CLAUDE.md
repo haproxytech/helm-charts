@@ -72,17 +72,26 @@ This repo contains Helm charts for HAProxy products:
 
 ## kubernetes-ingress Chart
 
-- **Chart version**: follows its own semver (currently 1.49.x)
+- **Chart version**: see `kubernetes-ingress/Chart.yaml` (`version` + `appVersion`); follows its own semver
 - **Image**: `haproxytech/kubernetes-ingress`
 - **Supports**: Deployment + DaemonSet modes, IngressClass, Gateway API, HPA, KEDA, ServiceMonitor/PodMonitor, PDB, proxy service (fetch sync mode), ConfigMap-based HAProxy config, publish-service, default TLS cert generation
-- **Templates**: 25 files in `templates/`
-- **CI tests**: 38 test value files in `ci/`
+- **Templates**: see `kubernetes-ingress/templates/`
+- **CI tests**: see `kubernetes-ingress/ci/`
 - **Kubernetes**: >=1.23
 - **Maintainer**: Dinko Korunic
 
+## haproxy Chart
+
+Community HAProxy chart (not a controller — just runs HAProxy as a workload).
+- **Chart**: see `haproxy/Chart.yaml`
+- **Kubernetes**: >=1.17 (oldest of the three charts; widest compatibility surface)
+- **Templates**: Deployment + DaemonSet, ConfigMap-based config, optional HPA/KEDA, optional Ingress + HTTPRoute, PSP, ServiceMonitor
+- **CI tests**: `haproxy/ci/`
+- No CRDs, no controller logic — config is purely declarative via `values.yaml` → `configmap.yaml`
+
 ## haproxy-unified-gateway Chart
 
-- **Chart version**: 0.1.0 (appVersion 0.9.1)
+- **Chart version**: see `haproxy-unified-gateway/Chart.yaml` (`version` + `appVersion`)
 - **Image**: `haproxytech/haproxy-unified-gateway`
 - **Purpose**: Kubernetes Gateway API controller powered by HAProxy
 - **Kubernetes**: >=1.26
@@ -97,7 +106,7 @@ This repo contains Helm charts for HAProxy products:
 | `_helpers.tpl` | Name, labels, image, serviceAccount, hugconfCrd, serviceMonitorName, podMonitorName helpers |
 | `controller-deployment.yaml` | Deployment (when controller.kind=Deployment) |
 | `controller-daemonset.yaml` | DaemonSet with hostNetwork/hostPort support (when controller.kind=DaemonSet) |
-| `controller-service.yaml` | NodePort Service (HTTP 31080, HTTPS 31443, Stats 31024) |
+| `controller-service.yaml` | NodePort Service (stats port only; HTTP/HTTPS listener ports are added per Gateway by the controller — see PR #354) |
 | `controller-serviceaccount.yaml` | ServiceAccount |
 | `clusterrole.yaml` | RBAC: Gateway API resources, HUG CRDs (gate.v3.haproxy.org incl. globals/defaults), core K8s resources, auth/authz for kube-rbac metrics |
 | `clusterrolebinding.yaml` | ClusterRoleBinding |
@@ -154,62 +163,28 @@ HUG exposes two separate metrics endpoints:
 
 ### HUG Source Project
 
-Source code lives at: `/home/zlatko/src/gitlab.int.haproxy.com/zbratkovic/unified-k8s-gateway`
-
-Key paths in source:
-- `cmd/controller/main.go` - controller entry point
-- `hug/configuration/configuration.go` - CLI flags definition
-- `build/Dockerfile` - container image build
-- `api/definition/` - CRD definitions
-- `example/dev-init/` - example Gateway/HTTPRoute manifests
-- `documentation/metrics*.md` - metrics documentation
+Source repo: `gitlab.int.haproxy.com/zbratkovic/unified-k8s-gateway` (internal). When you have a local clone, the useful paths are:
+- `cmd/controller/main.go` – controller entry point
+- `hug/configuration/configuration.go` – CLI flags definition
+- `api/definition/` – CRD definitions
+- `documentation/metrics*.md` – metrics documentation
 
 ### HUG Controller Flags
 
-All flags (for `extraArgs`):
+Canonical flag list: `hug/configuration/configuration.go` in the HUG source (binary `--help` is also reliable).
 
-| Flag | Default | Description |
+Flags the chart treats specially (rest can be passed via `controller.extraArgs`):
+
+| Flag | How the chart sets it | Notes |
 |---|---|---|
-| `--hugconf-crd` | | `namespace/name` of the HugConf CRD |
-| `--controller-name` | `gate.haproxy.org/hug` | `spec.controllerName` GatewayClass selector |
-| `--ipv4-bind-address` | | IPv4 address to bind to |
-| `--ipv6-bind-address` | | IPv6 address to bind to |
-| `--log-type` | `json` | Log output type (`text` or `json`) |
-| `--job-gwapi` | | Install Gateway API experimental CRDs for given version (e.g. `1.3.0`) and exit |
-| `--namespaces` | | Comma-separated list of namespaces to monitor |
-| `--stats-port` | `1024` | Port for HAProxy stats |
-| `--controller-port` | `31060` | Port for controller metrics (prometheus) |
-| `--sync-period` | `0` | Period for HAProxy config computation (e.g. `5s`, `1m`) |
-| `--startup-sync-period` | `0` | Startup period for HAProxy config computation |
-| `--cache-resync-period` | `0` | Controller-runtime manager cache SyncPeriod (default: 10 hours) |
-| `--add-stats-port` | `true` | Add stats port bind to existing stats frontend |
-| `--force-restart-haproxy` | `false` | Force HAProxy restart at controller startup |
-| `--leader-election-enabled` | `false` | Enable leader election |
-| `--with-s6-overlay` | `false` | Use s6 overlay to start/stop/restart HAProxy |
-| `--with-pebble` | `false` | Use pebble to start/stop/restart HAProxy |
-| `--disable-ipv4` | `false` | Disable IPv4 support |
-| `--disable-ipv6` | `false` | Disable IPv6 support |
-| `--job-check-crd` | `false` | Run CRD refresh job and exit |
-| `-e` / `--external` | `false` | Use as external controller (out of k8s cluster) |
-| `--external-config-dir` | | Path to HAProxy configuration directory |
-| `--external-haproxy-binary` | | Path to HAProxy binary |
-| `--external-runtime-dir` | | Path to HAProxy runtime directory |
-| `--external-state-dir` | | Path to HAProxy state directory |
-| `--external-aux-dir` | | Path to HAProxy aux directory |
-| `--metrics-auth` | `none` | Metrics endpoint auth mode: `none`, `kube-rbac`, `basic` |
-| `--metrics-basic-auth-user` | | Basic auth username (when `--metrics-auth=basic`) |
-| `--metrics-basic-auth-password` | | Basic auth password (when `--metrics-auth=basic`) |
-| `-t` | `false` | Simulate running HAProxy (test mode) |
-
-Note: The HUG binary default for `--metrics-auth` is `none`, but the Helm chart overrides this to `kube-rbac` via `controller.metricsAuth`.
+| `--hugconf-crd` | Always, from `controller.hugconfCrd` or default `<release>-hugconf` | Required for the controller to find its HugConf CR |
+| `--metrics-auth` | From `controller.metricsAuth` (default `kube-rbac`) | **Chart overrides the binary default of `none`** — kube-rbac wires TokenReview/SubjectAccessReview into the ClusterRole |
+| `--stats-port` / `--controller-port` | Hard-coded ports 1024 / 31060 in the Service/probes | Changing requires aligning Service ports too |
+| `--job-check-crd` / `--job-gwapi` | Set by the CRD/Gateway-API hook jobs only | Not for the controller process |
 
 ## CI Values Files
 
-23 test value files in `haproxy-unified-gateway/ci/`:
-- 8 DaemonSet variants (default, customnodeport, extraargs, extraenvs, extraports, hostport, serviceannotation, strategy)
-- 15 Deployment variants (default, customnodeport, disabled-jobs, extraargs, extraenvs, extraports, hpa, hugconf, keda, keda-advanced, metrics-none, pdb, podmonitor, servicemonitor, strategy)
-
-Naming convention: `<mode>-<feature>-values.yaml`
+Naming convention: `<mode>-<feature>-values.yaml` under `haproxy-unified-gateway/ci/` (and analogous for `kubernetes-ingress/ci/`, `haproxy/ci/`). Every file there is exercised by both `local-test.sh` and `integration-test.sh`'s `ci` scenario.
 
 ## Testing
 
@@ -230,6 +205,8 @@ Tests: Chart.yaml metadata, helm lint, helm template, Deployment vs DaemonSet sw
 Tests on a real Kind cluster: default install, DaemonSet mode, HPA, PDB, metrics port (container port 31060, `--metrics-auth=kube-rbac` arg), ServiceMonitor/PodMonitor with metrics Service port verification, HugConf cleanup on uninstall, all ci/ values files.
 
 `TEST_FILTER` values: `defaults`, `daemonset`, `hpa`, `pdb`, `metrics-port`, `monitoring`, `hugconf-cleanup`, `ci`
+
+`CI_FILTER=<glob>` (used together with `TEST_FILTER=ci`) narrows ci/ tests to value files matching a glob, e.g. `TEST_FILTER=ci CI_FILTER='deployment-*' ./test/integration-test.sh haproxy-unified-gateway`.
 
 ### ct-test.sh
 

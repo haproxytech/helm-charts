@@ -25,6 +25,7 @@ metadata:
   annotations:
 {{ toYaml .Values.controller.configAnnotations | indent 4 }}
 {{- end }}
+{{- if or .Values.controller.logging.traffic .Values.controller.config }}
 data:
 {{- if .Values.controller.logging.traffic }}
   syslog-server: {{ include "kubernetes-ingress.syslogServer" . }}
@@ -34,5 +35,6 @@ data:
 {{ tpl .Values.controller.config . | indent 2 }}
 {{- else }}
 {{ toYaml .Values.controller.config | indent 2 }}
+{{- end }}
 {{- end }}
 {{- end }}

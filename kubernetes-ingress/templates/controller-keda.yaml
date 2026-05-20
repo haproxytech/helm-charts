@@ -15,6 +15,9 @@ limitations under the License.
 */}}
 
 {{- if and (eq .Values.controller.kind "Deployment") .Values.controller.keda.enabled }}
+{{- if not .Values.controller.keda.triggers -}}
+{{- fail "controller.keda.enabled=true requires at least one entry in controller.keda.triggers (KEDA's ScaledObject admission rejects an empty triggers list)" -}}
+{{- end }}
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:

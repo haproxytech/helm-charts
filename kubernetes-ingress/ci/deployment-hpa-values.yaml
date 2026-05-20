@@ -16,10 +16,3 @@ controller:
           - type: Pods
             value: 1
             periodSeconds: 600
-
-defaultBackend:
-  autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 2
-    targetCPUUtilizationPercentage: 50

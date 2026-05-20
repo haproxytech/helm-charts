@@ -43,7 +43,7 @@ namespace:
 serviceAccount:
   create: true
   name:
-  automountServiceAccountToken: true
+  # automountServiceAccountToken: true   # uncomment to override the Kubernetes default
 
 ## Namespace override
 ## Allow the release namespace to be overridden for multi-namespace deployments in combined charts
@@ -131,7 +131,33 @@ controller:
     stat: 1024
     admin: 6060
 
+  ## Enable the controller's Prometheus metrics endpoint (served on the stat port at /metrics).
+  ## Required for ServiceMonitor / PodMonitor scraping.
+  ## Defaults to true. Previously this was implicitly gated on controller.service.enablePorts.admin,
+  ## but the metrics endpoint is on the stat port, not the admin port — so the coupling was wrong.
+  prometheus:
+    enabled: true
+
+  ## Enable the controller's pprof debug endpoints (served on the admin port at /debug/pprof).
+  ## Defaults to true for backward compatibility. Consider disabling in production hardening
+  ## to reduce attack surface.
+  pprof:
+    enabled: true
+
+  ## QUIC (HTTP/3) configuration
+  ## announcePort overrides the port advertised to clients in Alt-Svc headers.
+  ## When empty, the chart auto-derives the announce port from the deployment topology:
+  ##   - useHostNetwork=true: containerPort.https
+  ##   - useHostPort=true:    deployment.hostPorts.https or daemonset.hostPorts.https (matching controller.kind)
+  ##   - default (Service):   service.ports.https
+  ## Set explicitly when clients reach the controller through a port-translating front-end
+  ## (e.g. a LoadBalancer that maps an external port to a different Service port).
+  quic:
+    announcePort: ""
+
   ## Controller Container liveness/readiness probe configuration
+  ## Port 1042 is the controller's built-in /healthz HTTP listener, bound
+  ## unconditionally by the controller binary — independent of containerPort above.
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
   livenessProbe:
     httpGet:
@@ -321,7 +347,8 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   affinity: {}
 
-  ## Topology spread constraints (only used in kind: Deployment)
+  ## Topology spread constraints (Deployment only; ignored for DaemonSet since
+  ## DaemonSets already run one pod per node — see _podspec.tpl).
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   topologySpreadConstraints: []
   # - maxSkew: 1
