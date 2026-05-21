@@ -111,6 +111,55 @@ delete_kind_cluster() {
     fi
 }
 
+# --- cluster prerequisites (mirror .circleci/install_charts.sh) ---
+
+# Add the helm repos required for the Prometheus Operator and KEDA installs.
+ensure_helm_repos() {
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts >/dev/null 2>&1 || true
+    helm repo add kedacore https://kedacore.github.io/charts >/dev/null 2>&1 || true
+    helm repo update >/dev/null
+}
+
+# Install kube-prometheus-stack into the default namespace. ct install runs
+# every ci/ values file including ServiceMonitor/PodMonitor and KEDA Prometheus
+# triggers, all of which target this exact release name and namespace.
+install_prometheus() {
+    if helm status prometheus >/dev/null 2>&1; then
+        echo -e "${YELLOW}prometheus already installed, skipping${NC}"
+        return
+    fi
+    echo -e "Installing kube-prometheus-stack..."
+    helm install prometheus prometheus-community/kube-prometheus-stack \
+        --set grafana.enabled=false \
+        --set alertmanager.enabled=false \
+        --set nodeExporter.enabled=false \
+        --set kubeStateMetrics.enabled=false \
+        --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false \
+        --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false \
+        --set prometheus.prometheusSpec.retention=1h \
+        --set prometheus.prometheusSpec.resources.requests.cpu=100m \
+        --set prometheus.prometheusSpec.resources.requests.memory=256Mi \
+        --set prometheus.prometheusSpec.resources.limits.memory=512Mi \
+        --wait \
+        --timeout 120s || true
+}
+
+# Install the KEDA operator (and its CRDs) into the default namespace.
+install_keda() {
+    if helm status keda >/dev/null 2>&1; then
+        echo -e "${YELLOW}keda already installed, skipping${NC}"
+        return
+    fi
+    echo -e "Installing KEDA..."
+    helm install keda kedacore/keda \
+        --set resources.operator.requests.cpu=50m \
+        --set resources.operator.requests.memory=64Mi \
+        --set resources.metricServer.requests.cpu=50m \
+        --set resources.metricServer.requests.memory=64Mi \
+        --wait \
+        --timeout 90s || true
+}
+
 # --- ct commands ---
 
 do_lint() {
@@ -149,6 +198,10 @@ do_install() {
     fi
 
     echo "Cluster: $(kubectl config current-context 2>/dev/null || echo 'unknown')"
+
+    ensure_helm_repos
+    install_prometheus
+    install_keda
 
     local ct_cmd=(ct install --config "$CT_CONFIG")
 

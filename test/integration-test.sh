@@ -41,7 +41,9 @@ SKIPPED=0
 FAILURES=()
 NAMESPACES=()
 KIND_CREATED=false
-KEDA_CRDS_INSTALLED=false
+KEDA_INSTALLED=false
+PROMETHEUS_INSTALLED=false
+HELM_REPOS_ADDED=false
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -348,21 +350,72 @@ test_install_defaults() {
     install_and_verify "$chart" "$label" "$ns"
 }
 
-# Install KEDA CRDs if not already installed.
-# Required for ci/ values files that enable KEDA ScaledObject.
-ensure_keda_crds() {
-    if $KEDA_CRDS_INSTALLED; then
+# Add the prometheus-community and kedacore Helm repos used by ensure_prometheus
+# and ensure_keda. Idempotent: subsequent calls short-circuit.
+ensure_helm_repos() {
+    if $HELM_REPOS_ADDED; then
         return 0
     fi
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts >/dev/null 2>&1 || true
+    helm repo add kedacore https://kedacore.github.io/charts >/dev/null 2>&1 || true
+    helm repo update >/dev/null 2>&1 || return 1
+    HELM_REPOS_ADDED=true
+}
 
-    local keda_crd_url="https://github.com/kedacore/keda/releases/download/v2.16.1/keda-2.16.1-crds.yaml"
-    if kubectl apply --server-side -f "$keda_crd_url" >/dev/null 2>&1; then
-        KEDA_CRDS_INSTALLED=true
-        log_info "Installed KEDA CRDs (ScaledObject, ScaledJob, TriggerAuthentication)"
+# Install kube-prometheus-stack (Prometheus Operator + Prometheus) into the
+# default namespace, mirroring .circleci/install_charts.sh:install_prometheus.
+# The CI KEDA values files target the Service name produced by this release
+# (prometheus-kube-prometheus-prometheus.default.svc), so the release name
+# "prometheus" and namespace "default" must match.
+ensure_prometheus() {
+    if $PROMETHEUS_INSTALLED; then
         return 0
-    else
-        return 1
     fi
+    ensure_helm_repos || return 1
+
+    log_info "Installing kube-prometheus-stack (this may take ~2 minutes)..."
+    if helm install prometheus prometheus-community/kube-prometheus-stack \
+        --set grafana.enabled=false \
+        --set alertmanager.enabled=false \
+        --set nodeExporter.enabled=false \
+        --set kubeStateMetrics.enabled=false \
+        --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false \
+        --set prometheus.prometheusSpec.serviceMonitorSelectorNilUsesHelmValues=false \
+        --set prometheus.prometheusSpec.retention=1h \
+        --set prometheus.prometheusSpec.resources.requests.cpu=100m \
+        --set prometheus.prometheusSpec.resources.requests.memory=256Mi \
+        --set prometheus.prometheusSpec.resources.limits.memory=512Mi \
+        --wait \
+        --timeout 120s >/dev/null 2>&1; then
+        PROMETHEUS_INSTALLED=true
+        log_info "Installed kube-prometheus-stack"
+        return 0
+    fi
+    return 1
+}
+
+# Install the KEDA operator into the default namespace, mirroring
+# .circleci/install_charts.sh:install_keda. Both the operator and the CRDs
+# (ScaledObject, ScaledJob, TriggerAuthentication) are deployed by this chart.
+ensure_keda() {
+    if $KEDA_INSTALLED; then
+        return 0
+    fi
+    ensure_helm_repos || return 1
+
+    log_info "Installing KEDA..."
+    if helm install keda kedacore/keda \
+        --set resources.operator.requests.cpu=50m \
+        --set resources.operator.requests.memory=64Mi \
+        --set resources.metricServer.requests.cpu=50m \
+        --set resources.metricServer.requests.memory=64Mi \
+        --wait \
+        --timeout 90s >/dev/null 2>&1; then
+        KEDA_INSTALLED=true
+        log_info "Installed KEDA"
+        return 0
+    fi
+    return 1
 }
 
 # Test: install with each ci/ values file
@@ -393,10 +446,25 @@ test_install_ci_values() {
 
         count=$((count + 1))
 
-        # Install KEDA CRDs if this values file enables KEDA
+        # KEDA values files reference a Prometheus trigger
+        # (prometheus-kube-prometheus-prometheus.default.svc:9090), so both
+        # operators must be present for the ScaledObject to reconcile.
         if [[ "$fname" == *keda* ]]; then
-            if ! ensure_keda_crds; then
-                log_skip "$chart: install ci/$fname - could not install KEDA CRDs"
+            if ! ensure_prometheus; then
+                log_skip "$chart: install ci/$fname - could not install Prometheus Operator"
+                continue
+            fi
+            if ! ensure_keda; then
+                log_skip "$chart: install ci/$fname - could not install KEDA"
+                continue
+            fi
+        fi
+
+        # ServiceMonitor/PodMonitor values files need the Prometheus Operator
+        # CRDs (and operator) to be reconciled.
+        if [[ "$fname" == *servicemonitor* || "$fname" == *podmonitor* ]]; then
+            if ! ensure_prometheus; then
+                log_skip "$chart: install ci/$fname - could not install Prometheus Operator"
                 continue
             fi
         fi
@@ -539,7 +607,8 @@ test_install_metrics_port() {
 }
 
 # Test: verify ServiceMonitor/PodMonitor install (if chart supports it)
-# Installs Prometheus Operator CRDs so the monitoring.coreos.com/v1 API is available,
+# Installs the full kube-prometheus-stack (matching .circleci/install_charts.sh)
+# so the monitoring.coreos.com/v1 API and the Prometheus Operator are present,
 # then verifies the resources are created.
 test_install_monitoring() {
     local chart="$1"
@@ -549,19 +618,9 @@ test_install_monitoring() {
         return
     fi
 
-    # Install Prometheus Operator CRDs so the API is available
-    local prom_crds_installed=false
-    local prom_crd_url="https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/jsonnet/prometheus-operator/podmonitors-crd.json"
-    local sm_crd_url="https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/jsonnet/prometheus-operator/servicemonitors-crd.json"
-
-    # Try to apply the CRDs; if curl/URLs fail, skip
-    if kubectl apply -f "$sm_crd_url" >/dev/null 2>&1 && \
-       kubectl apply -f "$prom_crd_url" >/dev/null 2>&1; then
-        prom_crds_installed=true
-        log_info "Installed Prometheus Operator CRDs (ServiceMonitor, PodMonitor)"
-    else
-        log_skip "$chart: install (ServiceMonitor) - could not install Prometheus Operator CRDs"
-        log_skip "$chart: install (PodMonitor) - could not install Prometheus Operator CRDs"
+    if ! ensure_prometheus; then
+        log_skip "$chart: install (ServiceMonitor) - could not install Prometheus Operator"
+        log_skip "$chart: install (PodMonitor) - could not install Prometheus Operator"
         return
     fi
 
