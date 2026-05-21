@@ -55,11 +55,12 @@ create_kind_cluster() {
 }
 
 install_local_path_provisioner() {
-    docker_exec kubectl delete storageclass standard
+    docker_exec kubectl delete storageclass standard || true
     docker_exec kubectl apply -f "https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml"
 }
 
 install_prometheus() {
+    docker_exec helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
     docker_exec helm install prometheus prometheus-community/kube-prometheus-stack \
         --set grafana.enabled=false \
         --set alertmanager.enabled=false \
@@ -72,17 +73,18 @@ install_prometheus() {
         --set prometheus.prometheusSpec.resources.requests.memory=256Mi \
         --set prometheus.prometheusSpec.resources.limits.memory=512Mi \
         --wait \
-        --timeout 120s || true
+        --timeout 120s
 }
 
 install_keda() {
+    docker_exec helm repo add kedacore https://kedacore.github.io/charts
     docker_exec helm install keda kedacore/keda \
         --set resources.operator.requests.cpu=50m \
         --set resources.operator.requests.memory=64Mi \
         --set resources.metricServer.requests.cpu=50m \
         --set resources.metricServer.requests.memory=64Mi \
         --wait \
-        --timeout 90s || true
+        --timeout 90s
 }
 
 install_charts() {
