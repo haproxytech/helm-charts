@@ -22,7 +22,7 @@ controller:
     triggers:
       - type: prometheus
         metadata:
-          serverAddress: http://prometheus:9090
+          serverAddress: http://prometheus-kube-prometheus-prometheus.default.svc:9090
           metricName: haproxy_process_idle_time_percent
           threshold: '50'
           query: avg(100-avg_over_time(haproxy_process_idle_time_percent{job="haproxy-unified-gateway"}[2m]))
