@@ -6,8 +6,11 @@ set -o pipefail
 
 readonly CT_VERSION=latest
 readonly KIND_VERSION=v0.31.0
+readonly CLOUD_PROVIDER_KIND_VERSION=v0.10.0
 readonly CLUSTER_NAME=chart-testing
 readonly REPO_ROOT="${REPO_ROOT:-$(git rev-parse --show-toplevel)}"
+readonly CLOUD_PROVIDER_KIND_PID_FILE=/tmp/cloud-provider-kind.pid
+readonly CLOUD_PROVIDER_KIND_LOG=/tmp/cloud-provider-kind.log
 
 find_latest_tag() {
     if ! git describe --tags --abbrev=0 2>/dev/null; then
@@ -28,6 +31,7 @@ create_ct_container() {
 cleanup() {
     echo "Removing ct container"
     docker kill ct >/dev/null 2>&1 || true
+    stop_cloud_provider_kind
 }
 
 docker_exec() {
@@ -52,6 +56,32 @@ create_kind_cluster() {
 
     docker_exec kubectl cluster-info
     docker_exec kubectl get nodes
+}
+
+install_cloud_provider_kind() {
+    echo "Installing cloud-provider-kind ${CLOUD_PROVIDER_KIND_VERSION}"
+    local version_no_v="${CLOUD_PROVIDER_KIND_VERSION#v}"
+    local tarball="cloud-provider-kind_${version_no_v}_linux_amd64.tar.gz"
+    curl -sSLO "https://github.com/kubernetes-sigs/cloud-provider-kind/releases/download/${CLOUD_PROVIDER_KIND_VERSION}/${tarball}"
+    sudo mkdir -p "/usr/local/cloud-provider-kind-${CLOUD_PROVIDER_KIND_VERSION}"
+    sudo tar -xzf "${tarball}" -C "/usr/local/cloud-provider-kind-${CLOUD_PROVIDER_KIND_VERSION}"
+    sudo ln -sf "/usr/local/cloud-provider-kind-${CLOUD_PROVIDER_KIND_VERSION}/cloud-provider-kind" /usr/local/bin/cloud-provider-kind
+    sudo chmod +x "/usr/local/cloud-provider-kind-${CLOUD_PROVIDER_KIND_VERSION}/cloud-provider-kind"
+    rm -f "${tarball}"
+
+    echo "Starting cloud-provider-kind in background"
+    nohup cloud-provider-kind >"${CLOUD_PROVIDER_KIND_LOG}" 2>&1 &
+    echo "$!" > "${CLOUD_PROVIDER_KIND_PID_FILE}"
+}
+
+stop_cloud_provider_kind() {
+    if [[ -f "${CLOUD_PROVIDER_KIND_PID_FILE}" ]]; then
+        local pid
+        pid="$(cat "${CLOUD_PROVIDER_KIND_PID_FILE}")"
+        echo "Stopping cloud-provider-kind (pid ${pid})"
+        kill "${pid}" >/dev/null 2>&1 || true
+        rm -f "${CLOUD_PROVIDER_KIND_PID_FILE}"
+    fi
 }
 
 install_local_path_provisioner() {
@@ -133,6 +163,7 @@ main() {
             trap cleanup EXIT
 
             create_kind_cluster
+            install_cloud_provider_kind
             install_local_path_provisioner
             install_prometheus
             install_keda
