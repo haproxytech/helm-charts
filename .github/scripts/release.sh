@@ -36,8 +36,20 @@ release_charts() {
     local tarballs=("${PACKAGE_PATH}"/*.tgz)
     shopt -u nullglob
 
+    local push_log
     for chart in "${tarballs[@]}"; do
-        helm push "${chart}" "oci://ghcr.io/${OWNER}/${GIT_REPO}"
+        # Mirror `cr upload --skip-existing` for OCI: tolerate re-pushing an
+        # already-published chart-version, but surface anything else (403
+        # permission, network, auth) so misconfigured packages still fail loud.
+        if ! push_log=$(helm push "${chart}" "oci://ghcr.io/${OWNER}/${GIT_REPO}" 2>&1); then
+            printf '%s\n' "${push_log}"
+            if printf '%s' "${push_log}" | grep -qiE 'already exists|409 Conflict'; then
+                echo "Skipping ${chart}: already present in GHCR"
+                continue
+            fi
+            exit 1
+        fi
+        printf '%s\n' "${push_log}"
     done
 }
 
