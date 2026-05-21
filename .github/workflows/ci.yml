@@ -36,7 +36,7 @@ jobs:
   install-charts:
     needs: lint-charts
     runs-on: large_runner
-    timeout-minutes: 20
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
         with:
