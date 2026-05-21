@@ -61,7 +61,7 @@ install_local_path_provisioner() {
 }
 
 install_keda() {
-    docker_exec kubectl apply -f "https://github.com/kedacore/keda/releases/download/v${KEDA_VERSION}/keda-${KEDA_VERSION}-core.yaml" || true
+    docker_exec kubectl apply --server-side -f "https://github.com/kedacore/keda/releases/download/v${KEDA_VERSION}/keda-${KEDA_VERSION}-core.yaml" || true
 }
 
 install_charts() {
