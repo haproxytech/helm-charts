@@ -4,7 +4,7 @@ Three test scripts are provided:
 
 1. **`local-test.sh`** — Offline lint + template validation (no cluster needed)
 2. **`integration-test.sh`** — Deploy to a real Kind cluster and verify resources
-3. **`ct-test.sh`** — Wrapper around [chart-testing](https://github.com/helm/chart-testing) (`ct`), matching what CircleCI runs
+3. **`ct-test.sh`** — Wrapper around [chart-testing](https://github.com/helm/chart-testing) (`ct`), matching what GitHub Actions runs
 
 ## 1. Offline Tests (`local-test.sh`)
 
@@ -151,7 +151,7 @@ When a test fails, the script automatically prints:
 ## 3. Chart Testing (`ct-test.sh`)
 
 Wrapper around [chart-testing](https://github.com/helm/chart-testing) (`ct`) — the same
-tool CircleCI uses. Runs `ct lint` and `ct install` locally so you can validate before pushing.
+tool GitHub Actions uses. Runs `ct lint` and `ct install` locally so you can validate before pushing.
 
 ### Prerequisites
 
@@ -221,7 +221,7 @@ so if it passes locally it will pass in CI.
 ## CI Values Files
 
 Both scripts use the `ci/` values files in each chart directory. These are the same
-files used by [chart-testing](https://github.com/helm/chart-testing) (`ct`) in CircleCI.
+files used by [chart-testing](https://github.com/helm/chart-testing) (`ct`) in GitHub Actions.
 
 Naming convention:
 ```
@@ -242,7 +242,7 @@ Examples:
    ./test/local-test.sh <chart-name>
    ```
 
-3. Verify ct lint passes (matches CircleCI):
+3. Verify ct lint passes (matches GitHub Actions):
 
    ```bash
    ./test/ct-test.sh lint <chart-name>
@@ -254,4 +254,4 @@ Examples:
    CI_FILTER="<your-new-file>" ./test/integration-test.sh <chart-name>
    ```
 
-5. The file is automatically picked up by all three scripts and CircleCI's `ct lint`.
+5. The file is automatically picked up by all three scripts and GitHub Actions' `ct lint`.

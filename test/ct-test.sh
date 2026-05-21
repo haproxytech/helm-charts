@@ -3,7 +3,7 @@
 # Chart-testing (ct) wrapper for local development.
 #
 # Uses ct to lint and optionally install Helm charts, matching what
-# CircleCI runs but locally against a Kind cluster.
+# GitHub Actions runs but locally against a Kind cluster.
 #
 # Prerequisites:
 #   - ct (https://github.com/helm/chart-testing)

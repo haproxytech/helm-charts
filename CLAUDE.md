@@ -24,7 +24,7 @@ helm template test-release haproxy-unified-gateway/ --set controller.kind=Daemon
 helm template test-release haproxy-unified-gateway/ --api-versions monitoring.coreos.com/v1
 ```
 
-### Chart-testing (ct) — matches CircleCI
+### Chart-testing (ct) — matches GitHub Actions
 
 ```bash
 # Lint all charts
@@ -194,7 +194,7 @@ Three test scripts in `test/`:
 |---|---|
 | `test/local-test.sh` | Offline lint + template validation (no cluster needed) |
 | `test/integration-test.sh` | Deploy to a real Kind cluster and verify resources |
-| `test/ct-test.sh` | Wrapper around `ct` (chart-testing), matches CircleCI pipeline |
+| `test/ct-test.sh` | Wrapper around `ct` (chart-testing), matches GitHub Actions pipeline |
 
 ### local-test.sh
 
@@ -210,7 +210,7 @@ Tests on a real Kind cluster: default install, DaemonSet mode, HPA, PDB, metrics
 
 ### ct-test.sh
 
-Runs `ct lint` and `ct install` locally, same as CircleCI. Auto-downloads `chart_schema.yaml` and `lintconf.yaml` from the ct release on first run (files are gitignored).
+Runs `ct lint` and `ct install` locally, same as GitHub Actions. Auto-downloads `chart_schema.yaml` and `lintconf.yaml` from the ct release on first run (files are gitignored).
 
 Modes: `lint`, `install`, `all`
 

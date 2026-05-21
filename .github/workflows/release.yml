@@ -1,0 +1,32 @@
+name: release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release-charts:
+    if: github.ref == 'refs/heads/main'
+    runs-on: large_runner
+    permissions:
+      contents: write
+      packages: write
+    concurrency:
+      group: release-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install tools (helm, cr)
+        run: bash .github/scripts/install_tools.sh
+      - name: Release
+        env:
+          CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HELM_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_REPOSITORY_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          GIT_USERNAME: github-actions[bot]
+          GIT_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: bash .github/scripts/release.sh

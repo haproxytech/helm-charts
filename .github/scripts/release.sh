@@ -16,12 +16,6 @@ readonly PACKAGE_PATH=.deploy
 readonly CHARTS_URL=https://haproxytech.github.io/helm-charts
 readonly REPO_ROOT="${REPO_ROOT:-$(git rev-parse --show-toplevel)}"
 
-find_latest_tag() {
-    if ! git describe --tags --abbrev=0 2>/dev/null; then
-        git rev-list --max-parents=0 --first-parent HEAD
-    fi
-}
-
 package_chart() {
     local chart="$1"
     helm dependency build "${chart}"
@@ -30,7 +24,10 @@ package_chart() {
 
 release_charts() {
     echo "Upload Helm chart packages to GitHub"
-    cr upload -o "${OWNER}" -r "${GIT_REPO}" -p "${PACKAGE_PATH}"
+    # --skip-existing makes the batch idempotent: a chart whose tag already
+    # has a GitHub release (re-package without version bump) no longer aborts
+    # the upload of unrelated charts queued behind it.
+    cr upload -o "${OWNER}" -r "${GIT_REPO}" -p "${PACKAGE_PATH}" --skip-existing
 
     echo "Upload Helm chart packages to GHCR OCI"
     printf '%s' "${HELM_GH_TOKEN}" | helm registry login ghcr.io --username "${OWNER}" --password-stdin
@@ -72,48 +69,38 @@ main() {
     echo "Fetching tags"
     git fetch --tags
 
-    local latest_tag
-    latest_tag=$(find_latest_tag)
-
-    local latest_tag_rev
-    latest_tag_rev=$(git rev-parse --verify "${latest_tag}")
-    echo "${latest_tag_rev} ${latest_tag} (latest tag)"
-
-    local head_rev
-    head_rev=$(git rev-parse --verify HEAD)
-    echo "${head_rev} HEAD"
-
-    if [[ "${latest_tag_rev}" == "${head_rev}" ]]; then
-        echo "No code changes. Nothing to release."
-        popd >/dev/null
-        exit
-    fi
-
     mkdir -p "${PACKAGE_PATH}"
 
-    echo "Identifying changed charts since tag ${latest_tag}"
-
-    local changed_charts=()
-    readarray -t changed_charts <<< "$(git diff --find-renames --name-only "${latest_tag_rev}" | grep 'Chart.yaml$' | awk -F/ 'NF>1 {print $1}' | sort -u)"
-
-    if [[ -n "${changed_charts[*]}" ]]; then
-        local release_pending=no
-        for chart in "${changed_charts[@]}"; do
-            if [[ -f "${chart}/Chart.yaml" ]]; then
-                release_pending=yes
-                echo "Packaging chart ${chart}"
-                package_chart "${chart}"
-            fi
-        done
-
-        if [[ "${release_pending}" == "yes" ]]; then
-            release_charts
-            update_index
-        else
-            echo "Nothing to do. No chart changes detected."
+    # Detect releasable charts by comparing each chart's `version:` field
+    # against the existence of a `<chart>-<version>` tag. Diffing Chart.yaml
+    # against the most recent tag in DAG (any chart) over-triggers: cosmetic
+    # edits (e.g. removing `engine: gotpl`) without a version bump still
+    # appear in the diff, then cr upload fails with 422 already_exists.
+    local chart_yaml chart current_version tag release_pending=no
+    shopt -s nullglob
+    for chart_yaml in */Chart.yaml; do
+        chart="${chart_yaml%/Chart.yaml}"
+        current_version=$(awk '$1=="version:"{print $2; exit}' "${chart_yaml}")
+        if [[ -z "${current_version}" ]]; then
+            echo "Skipping ${chart}: could not read version from Chart.yaml"
+            continue
         fi
+        tag="${chart}-${current_version}"
+        if git rev-parse --verify --quiet "refs/tags/${tag}" >/dev/null; then
+            echo "Skipping ${chart}: tag ${tag} already exists"
+            continue
+        fi
+        release_pending=yes
+        echo "Packaging chart ${chart} (version ${current_version})"
+        package_chart "${chart}"
+    done
+    shopt -u nullglob
+
+    if [[ "${release_pending}" == "yes" ]]; then
+        release_charts
+        update_index
     else
-        echo "Nothing to do. No chart changes detected."
+        echo "Nothing to do. No chart version bumps detected."
     fi
 
     popd >/dev/null || exit 1

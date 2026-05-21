@@ -3,7 +3,7 @@
 ## HAProxy Helm Charts
 
 ![GitHub](https://img.shields.io/github/license/haproxytech/helm-charts)
-[![CircleCI](https://circleci.com/gh/haproxytech/helm-charts/tree/main.svg?style=svg)](https://circleci.com/gh/haproxytech/helm-charts/tree/main)
+[![CI](https://github.com/haproxytech/helm-charts/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/haproxytech/helm-charts/actions/workflows/ci.yml)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/haproxytech)](https://artifacthub.io/packages/search?repo=haproxytech)
 
 This repository hosts official [HAProxy Technologies](https://www.haproxy.com/) Helm Charts for deploying [HAProxy Load Balancer](https://github.com/haproxy/haproxy) and [Ingress controller](https://github.com/haproxytech/kubernetes-ingress) on [Kubernetes](https://kubernetes.io/).
