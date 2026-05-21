@@ -31,7 +31,7 @@ cleanup() {
 }
 
 docker_exec() {
-    docker exec --interactive --tty ct "$@"
+    docker exec --interactive ct "$@"
 }
 
 create_kind_cluster() {
