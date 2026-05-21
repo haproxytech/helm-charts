@@ -1,4 +1,6 @@
 controller:
+  podMonitor:
+    enabled: true
   keda:
     enabled: true
     minReplicas: 2
@@ -6,7 +8,7 @@ controller:
     triggers:
       - type: prometheus
         metadata:
-          serverAddress: http://prometheus.monitoring.svc:9090
+          serverAddress: http://prometheus-kube-prometheus-prometheus.default.svc:9090
           metricName: haproxy_process_idle_time_percent
           threshold: "50"
           query: avg(haproxy_process_idle_time_percent)
