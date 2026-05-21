@@ -111,7 +111,7 @@ delete_kind_cluster() {
     fi
 }
 
-# --- cluster prerequisites (mirror .circleci/install_charts.sh) ---
+# --- cluster prerequisites (mirror .github/scripts/install_charts.sh) ---
 
 # Add the helm repos required for the Prometheus Operator and KEDA installs.
 ensure_helm_repos() {

@@ -214,9 +214,9 @@ Runs `ct lint` and `ct install` locally, same as CircleCI. Auto-downloads `chart
 
 Modes: `lint`, `install`, `all`
 
-### CircleCI Pipeline
+### GitHub Actions Pipeline
 
-`.circleci/config.yml` workflow: `lint-scripts` (shellcheck) -> `lint-charts` (ct lint) -> `install-charts` (ct install on Kind) -> `release-charts` (helm package + push to GitHub Releases, GHCR OCI, update gh-pages index).
+`.github/workflows/ci.yml` workflow: `lint-scripts` (shellcheck) -> `lint-charts` (ct lint) -> `install-charts` (ct install on Kind) -> `release-charts` (helm package + push to GitHub Releases, GHCR OCI, update gh-pages index). Helper scripts live in `.github/scripts/` (`install_charts.sh`, `install_tools.sh`, `release.sh`, `ct.yaml`). Auth for the release job uses the built-in `GITHUB_TOKEN` with `contents: write` + `packages: write`.
 
 ## Conventions
 

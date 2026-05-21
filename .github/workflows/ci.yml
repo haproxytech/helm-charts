@@ -1,0 +1,72 @@
+name: lint-test-release
+
+on:
+  push:
+    branches-ignore:
+      - gh-pages
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shellcheck
+        run: |
+          shellcheck -x .github/scripts/install_charts.sh
+          shellcheck -x .github/scripts/install_tools.sh
+          shellcheck -x .github/scripts/release.sh
+
+  lint-charts:
+    runs-on: ubuntu-latest
+    container:
+      image: quay.io/helmpack/chart-testing:latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Mark workspace safe for git
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: ct lint
+        run: ct lint --all --validate-maintainers=false --config .github/scripts/ct.yaml
+
+  install-charts:
+    needs: lint-charts
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install charts
+        run: bash .github/scripts/install_charts.sh
+
+  release-charts:
+    needs:
+      - lint-charts
+      - install-charts
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    concurrency:
+      group: release-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install tools (helm, cr)
+        run: bash .github/scripts/install_tools.sh
+      - name: Release
+        env:
+          CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HELM_GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_REPOSITORY_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          GIT_USERNAME: github-actions[bot]
+          GIT_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: bash .github/scripts/release.sh

@@ -206,9 +206,9 @@ SKIP_KIND=1 ./test/ct-test.sh install haproxy-unified-gateway
 kind delete cluster --name ct-dev
 ```
 
-### CircleCI Compatibility
+### GitHub Actions Compatibility
 
-The CircleCI pipeline (`.circleci/config.yml`) runs:
+The GitHub Actions pipeline (`.github/workflows/ci.yml`) runs:
 
 1. `ct lint --all` — validates Chart.yaml schema, runs `helm lint` with each `ci/*.yaml` file
 2. `ct install --all` — installs each chart with each `ci/*.yaml` file on a Kind cluster

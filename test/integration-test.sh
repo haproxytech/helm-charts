@@ -363,7 +363,7 @@ ensure_helm_repos() {
 }
 
 # Install kube-prometheus-stack (Prometheus Operator + Prometheus) into the
-# default namespace, mirroring .circleci/install_charts.sh:install_prometheus.
+# default namespace, mirroring .github/scripts/install_charts.sh:install_prometheus.
 # The CI KEDA values files target the Service name produced by this release
 # (prometheus-kube-prometheus-prometheus.default.svc), so the release name
 # "prometheus" and namespace "default" must match.
@@ -395,7 +395,7 @@ ensure_prometheus() {
 }
 
 # Install the KEDA operator into the default namespace, mirroring
-# .circleci/install_charts.sh:install_keda. Both the operator and the CRDs
+# .github/scripts/install_charts.sh:install_keda. Both the operator and the CRDs
 # (ScaledObject, ScaledJob, TriggerAuthentication) are deployed by this chart.
 ensure_keda() {
     if $KEDA_INSTALLED; then
@@ -607,7 +607,7 @@ test_install_metrics_port() {
 }
 
 # Test: verify ServiceMonitor/PodMonitor install (if chart supports it)
-# Installs the full kube-prometheus-stack (matching .circleci/install_charts.sh)
+# Installs the full kube-prometheus-stack (matching .github/scripts/install_charts.sh)
 # so the monitoring.coreos.com/v1 API and the Prometheus Operator are present,
 # then verifies the resources are created.
 test_install_monitoring() {

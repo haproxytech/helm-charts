@@ -18,7 +18,7 @@ find_latest_tag() {
 create_ct_container() {
     echo "Starting Chart Testing container"
     docker run --rm --interactive --detach --network host --name ct \
-        --volume "$(pwd)/.circleci/ct.yaml:/etc/ct/ct.yaml" \
+        --volume "$(pwd)/.github/scripts/ct.yaml:/etc/ct/ct.yaml" \
         --volume "$(pwd):/workdir" \
         --workdir /workdir \
         "quay.io/helmpack/chart-testing:${CT_VERSION}" \
