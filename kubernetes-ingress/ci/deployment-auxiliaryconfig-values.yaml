@@ -1,6 +1,6 @@
 controller:
   auxiliaryConfig: |
     cache mycache
-        total-max-size 4095
-        max-object-size 10000
+        total-max-size 4
+        max-object-size 2
         max-age 30
