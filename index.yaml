@@ -1058,6 +1058,43 @@ entries:
   haproxy-unified-gateway:
   - annotations:
       artifacthub.io/category: networking
+      artifacthub.io/changes: '- Use HAProxy Unified Gateway 1.0.3 version for base
+        image'
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/haproxy-unified-gateway:1.0.3
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 1.0.3
+    created: "2026-05-22T17:08:10.457011546Z"
+    description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API
+      Controller
+    digest: a9d1393703a2c743c5faa8fcd406d9b15cb3aa26fa6dd5fd4b76e5d12c4c89ec
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy-unified-gateway
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - haproxy
+    - gateway-api
+    - gateway
+    - load-balancer
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: zbratkovic@haproxy.com
+      name: Zlatko Bratkovic
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy-unified-gateway
+    sources:
+    - https://github.com/haproxytech/haproxy-unified-gateway
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-1.0.5/haproxy-unified-gateway-1.0.5.tgz
+    version: 1.0.5
+  - annotations:
+      artifacthub.io/category: networking
       artifacthub.io/changes: '- Stop rendering controller.service.http and controller.service.https
         Service ports; the controller adds them per Gateway listener (see issue #348)'
       artifacthub.io/images: |
@@ -5622,4 +5659,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-05-22T13:34:23.539681923Z"
+generated: "2026-05-22T17:08:10.457301833Z"
