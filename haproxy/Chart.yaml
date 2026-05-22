@@ -29,6 +29,14 @@ maintainers:
   - name: Dinko Korunic
     email: dkorunic@haproxy.com
 annotations:
+  artifacthub.io/category: networking
+  artifacthub.io/images: |
+    - name: haproxy
+      image: docker.io/haproxytech/haproxy-alpine:3.3.6
+  artifacthub.io/license: Apache-2.0
+  artifacthub.io/links: |
+    - name: support
+      url: https://github.com/haproxytech/helm-charts/issues
   artifacthub.io/changes: |
     - Update base image to HAProxy 3.3.6
     - Fix newline issue with YAML normalisation (#344)

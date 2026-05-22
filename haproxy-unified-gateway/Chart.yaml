@@ -34,6 +34,15 @@ maintainers:
   - name: Dinko Korunic
     email: dkorunic@haproxy.com
 annotations:
+  artifacthub.io/category: networking
+  artifacthub.io/images: |
+    - name: controller
+      image: docker.io/haproxytech/haproxy-unified-gateway:1.0.2
   artifacthub.io/license: Apache-2.0
+  artifacthub.io/links: |
+    - name: support
+      url: https://github.com/haproxytech/helm-charts/issues
+  artifacthub.io/operator: "true"
+  artifacthub.io/operatorCapabilities: full lifecycle
   artifacthub.io/changes: |-
     - Stop rendering controller.service.http and controller.service.https Service ports; the controller adds them per Gateway listener (see issue #348)

@@ -30,6 +30,16 @@ maintainers:
   - name: Dinko Korunic
     email: dkorunic@haproxy.com
 annotations:
+  artifacthub.io/category: networking
+  artifacthub.io/images: |
+    - name: controller
+      image: docker.io/haproxytech/kubernetes-ingress:3.2.8
+  artifacthub.io/license: Apache-2.0
+  artifacthub.io/links: |
+    - name: support
+      url: https://github.com/haproxytech/helm-charts/issues
+  artifacthub.io/operator: "true"
+  artifacthub.io/operatorCapabilities: full lifecycle
   artifacthub.io/changes: |-
     - Fix CRD pre-upgrade hook Job failing when the controller ServiceAccount name changes across upgrades (e.g. with --reset-values from a chart version where the fullname template produced a different name). The Job now uses a dedicated ServiceAccount + ClusterRole + ClusterRoleBinding created as pre-upgrade hooks (weight -5) so RBAC materialises before the Job (weight 0) in the same hook phase. New resources gated on rbac.create; least-privilege scope (customresourcedefinitions only). When rbac.create=false the Job falls back to the controller SA as before.
     - Fail at template render when controller.{serviceMonitor,podMonitor}.enabled=true but controller.prometheus.enabled=false (the controller would not expose /metrics)
@@ -39,16 +49,16 @@ annotations:
     - Fix blank line in controller-service.yaml spec when controller.service.clusterIP is unset
     - Normalise extraLabels rendering in ServiceMonitor and PodMonitor to match the chart's `{{- toYaml ... | nindent N }}` convention
     - Remove explicit serviceAccount.automountServiceAccountToken=true default from values.yaml; chart now defers to Kubernetes default (still true). Set the value explicitly to override
-    - README: correct Kubernetes version requirement (1.23+, not 1.22+); fix gateway-controller-name installation example to use controller.kubernetesGateway.{enabled,gatewayControllerName}; drop stale chart version from OCI install example
+    - "README: correct Kubernetes version requirement (1.23+, not 1.22+); fix gateway-controller-name installation example to use controller.kubernetesGateway.{enabled,gatewayControllerName}; drop stale chart version from OCI install example"
     - Drop dead semverCompare branches for K8s <1.23 across HPA, PDB, IngressClass, Service, proxy Service, CRD job, and the emptyDir Memory medium gate in _podspec.tpl
     - controller-defaultcertsecret.yaml now uses helm lookup to reuse an existing default cert across install retries instead of regenerating it
     - controller-configmap.yaml elides empty data block when controller.config and controller.logging.traffic are both unset
     - controller-proxy-service.yaml label parsing uses splitn (no longer breaks on values containing colons; computes once)
     - Container-level securityContext no longer duplicates runAsNonRoot/User/Group (now inherited from pod-level); same rendered semantics
     - clusterrole.yaml resource quoting normalised to "*" with 4-space indent throughout
-    - crdjob name no longer includes .Release.Revision; the before-hook-creation delete policy already handles cleanup. Upgrade note: the old revision-suffixed Job from the prior release will remain in-cluster until manually deleted
+    - "crdjob name no longer includes .Release.Revision; the before-hook-creation delete policy already handles cleanup. Upgrade note: the old revision-suffixed Job from the prior release will remain in-cluster until manually deleted"
     - values.yaml comments clarify topologySpreadConstraints DaemonSet behavior and probe port 1042 origin
-    - Decouple --prometheus and --pprof from controller.service.enablePorts.admin via new controller.prometheus.enabled and controller.pprof.enabled toggles (both default true). Behaviour change: users who set enablePorts.admin=false to disable Prometheus/pprof must now also set the new toggles. See README for migration notes.
+    - "Decouple --prometheus and --pprof from controller.service.enablePorts.admin via new controller.prometheus.enabled and controller.pprof.enabled toggles (both default true). Behaviour change: users who set enablePorts.admin=false to disable Prometheus/pprof must now also set the new toggles. See README for migration notes."
     - Extract shared pod template spec into _podspec.tpl partial; controller-{deployment,daemonset,proxy-deployment}.yaml now ~60 lines each (was ~300+). Same rendered output for Deployment and DaemonSet modes. Proxy-mode pod now also honors serviceAccount.automountServiceAccountToken, controller.extraEnvFrom, and controller.sysctls (previously omitted by oversight)
     - Fix --quic-announce-port hard-wired to service.ports.https; auto-derive from topology (useHostNetwork/useHostPort) or override via controller.quic.announcePort
     - Remove dead defaultBackend.* helpers and ci values left over from the v1.x in-controller default-backend migration

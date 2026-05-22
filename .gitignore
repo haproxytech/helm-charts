@@ -32,3 +32,6 @@ test/lintconf.yaml
 
 # TODO
 TODO
+
+# Claude/OpenCode docs
+docs/
