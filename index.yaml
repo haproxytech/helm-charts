@@ -1270,6 +1270,37 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/category: networking
+      artifacthub.io/changes: '- Use Ingress Controller 3.2.9 version for base image'
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/kubernetes-ingress:3.2.9
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.2.9
+    created: "2026-05-22T13:34:23.539316272Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 90920ec938be27e638b86e8267bde75d90058e61ca8c3c64ad27f05d0d5a73f1
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.52.0/kubernetes-ingress-1.52.0.tgz
+    version: 1.52.0
+  - annotations:
+      artifacthub.io/category: networking
       artifacthub.io/changes: |-
         - Fix CRD pre-upgrade hook Job failing when the controller ServiceAccount name changes across upgrades (e.g. with --reset-values from a chart version where the fullname template produced a different name). The Job now uses a dedicated ServiceAccount + ClusterRole + ClusterRoleBinding created as pre-upgrade hooks (weight -5) so RBAC materialises before the Job (weight 0) in the same hook phase. New resources gated on rbac.create; least-privilege scope (customresourcedefinitions only). When rbac.create=false the Job falls back to the controller SA as before.
         - Fail at template render when controller.{serviceMonitor,podMonitor}.enabled=true but controller.prometheus.enabled=false (the controller would not expose /metrics)
@@ -5591,4 +5622,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-05-22T08:20:14.89461384Z"
+generated: "2026-05-22T13:34:23.539681923Z"
