@@ -16,7 +16,7 @@ apiVersion: v2
 name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
-version: 1.51.1
+version: 1.52.0
 appVersion: 3.2.9
 kubeVersion: ">=1.23.0-0"
 keywords:
@@ -33,7 +33,7 @@ annotations:
   artifacthub.io/category: networking
   artifacthub.io/images: |
     - name: controller
-      image: docker.io/haproxytech/kubernetes-ingress:3.2.8
+      image: docker.io/haproxytech/kubernetes-ingress:3.2.9
   artifacthub.io/license: Apache-2.0
   artifacthub.io/links: |
     - name: support
