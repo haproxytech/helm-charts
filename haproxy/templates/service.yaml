@@ -38,6 +38,9 @@ spec:
   {{- if .Values.service.internalTrafficPolicy }}
   internalTrafficPolicy: {{ .Values.service.internalTrafficPolicy }}
   {{- end }}
+  {{- if and (semverCompare ">=1.31.0-0" .Capabilities.KubeVersion.Version) .Values.service.trafficDistribution }}
+  trafficDistribution: {{ .Values.service.trafficDistribution }}
+  {{- end }}
   {{- with .Values.service.clusterIP }}
   clusterIP: {{ . | quote}}
   {{- end }}
