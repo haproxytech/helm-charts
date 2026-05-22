@@ -17,7 +17,7 @@ name: haproxy-unified-gateway
 description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API Controller
 type: application
 version: 1.0.4
-appVersion: 1.0.2
+appVersion: 1.0.3
 kubeVersion: ">=1.26.0-0"
 keywords:
   - haproxy
@@ -37,10 +37,10 @@ annotations:
   artifacthub.io/category: networking
   artifacthub.io/images: |
     - name: controller
-      image: docker.io/haproxytech/haproxy-unified-gateway:1.0.2
+      image: docker.io/haproxytech/haproxy-unified-gateway:1.0.3
   artifacthub.io/license: Apache-2.0
   artifacthub.io/links: |
     - name: support
       url: https://github.com/haproxytech/helm-charts/issues
   artifacthub.io/changes: |-
-    - Stop rendering controller.service.http and controller.service.https Service ports; the controller adds them per Gateway listener (see issue #348)
+    - Use HAProxy Unified Gateway 1.0.3 version for base image
