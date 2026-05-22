@@ -16,8 +16,8 @@ apiVersion: v2
 name: haproxy
 description: A Helm chart for HAProxy on Kubernetes
 type: application
-version: 1.28.1
-appVersion: 3.3.6
+version: 1.29.0
+appVersion: 3.3.10
 kubeVersion: ">=1.17.0-0"
 keywords:
   - haproxy
@@ -38,5 +38,4 @@ annotations:
     - name: support
       url: https://github.com/haproxytech/helm-charts/issues
   artifacthub.io/changes: |
-    - Update base image to HAProxy 3.3.6
-    - Fix newline issue with YAML normalisation (#344)
+    - Update base image to HAProxy 3.3.10
