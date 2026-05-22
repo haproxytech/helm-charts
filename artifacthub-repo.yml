@@ -1,7 +1,7 @@
 # Artifact Hub repository metadata file
 # See: https://github.com/artifacthub/hub/blob/master/docs/metadata/artifacthub-repo.yml
 #
-repositoryID: f0e6a3c0-4133-45a8-b6c7-e974a39fab54
+repositoryID: 6d365889-ac69-4e6c-88a4-9d59900663ed
 owners:
   - name: Dinko Korunic
     email: dkorunic@haproxy.com
