@@ -38,8 +38,6 @@ annotations:
   artifacthub.io/links: |
     - name: support
       url: https://github.com/haproxytech/helm-charts/issues
-  artifacthub.io/operator: "true"
-  artifacthub.io/operatorCapabilities: full lifecycle
   artifacthub.io/changes: |-
     - Fix CRD pre-upgrade hook Job failing when the controller ServiceAccount name changes across upgrades (e.g. with --reset-values from a chart version where the fullname template produced a different name). The Job now uses a dedicated ServiceAccount + ClusterRole + ClusterRoleBinding created as pre-upgrade hooks (weight -5) so RBAC materialises before the Job (weight 0) in the same hook phase. New resources gated on rbac.create; least-privilege scope (customresourcedefinitions only). When rbac.create=false the Job falls back to the controller SA as before.
     - Fail at template render when controller.{serviceMonitor,podMonitor}.enabled=true but controller.prometheus.enabled=false (the controller would not expose /metrics)

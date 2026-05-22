@@ -42,7 +42,5 @@ annotations:
   artifacthub.io/links: |
     - name: support
       url: https://github.com/haproxytech/helm-charts/issues
-  artifacthub.io/operator: "true"
-  artifacthub.io/operatorCapabilities: full lifecycle
   artifacthub.io/changes: |-
     - Stop rendering controller.service.http and controller.service.https Service ports; the controller adds them per Gateway listener (see issue #348)
