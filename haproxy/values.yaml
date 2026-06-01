@@ -189,13 +189,20 @@ rawContainerPorts: []
 #   name: custom-http
 #   protocol: TCP
 
-## Deployment strategy definition
+## *Deployment* strategy definition
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 strategy: {}
 #  rollingUpdate:
 #    maxSurge: 25%
 #    maxUnavailable: 25%
 #  type: RollingUpdate
+
+## *DaemonSet* update strategy definition
+## ref: https://kubernetes.io/docs/reference/kubernetes-api/apps/daemon-set-v1/#DaemonSetUpdateStrategy
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
 
 ## Pod PriorityClass
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass

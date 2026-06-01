@@ -27,10 +27,10 @@ metadata:
     {{- include "haproxy.labels" . | nindent 4 }}
 spec:
   minReadySeconds: {{ .Values.minReadySeconds }}
+  {{- with .Values.updateStrategy }}
   updateStrategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "haproxy.selectorLabels" . | nindent 6 }}
