@@ -1,0 +1,15 @@
+## Test: HugConf with globalRef/defaultsRef populated and a custom HugConf name.
+## Exercises the `globalRef`/`defaultsRef` `{{- with }}` blocks in
+## controller-hugconf.yaml (default values leave them empty) and the custom
+## hugconf.name path, which the --hugconf-crd arg tracks automatically via the
+## hugconfCrd helper (<namespace>/<hugconf.name>).
+hugconf:
+  name: custom-hugconf
+  globalRef:
+    group: gate.v3.haproxy.org
+    kind: Global
+    name: global
+  defaultsRef:
+    group: gate.v3.haproxy.org
+    kind: Defaults
+    name: haproxytech

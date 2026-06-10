@@ -1,0 +1,11 @@
+## Test: unprivileged=false with a custom pod-level securityContext.
+## Exercises the branches where _podspec.tpl drops the container securityContext
+## (capabilities/seccomp/allowPrivilegeEscalation) and the automatic
+## runAsNonRoot/runAsUser pod securityContext, while still merging an explicit
+## controller.podSecurityContext.
+controller:
+  unprivileged: false
+  podSecurityContext:
+    fsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000

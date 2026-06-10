@@ -1,0 +1,12 @@
+## Test: NodePort Service with externalTrafficPolicy and a fixed stat nodePort.
+## Exercises the `externalTrafficPolicy` block and the
+## `eq type "NodePort" && stat.nodePort` conditional in controller-service.yaml
+## (default leaves nodePort empty so the conditional never renders).
+controller:
+  service:
+    type: NodePort
+    externalTrafficPolicy: Local
+    stat:
+      port: 31024
+      targetPort: 31024
+      nodePort: 31024

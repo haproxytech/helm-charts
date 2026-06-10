@@ -1,0 +1,10 @@
+## Test: hugconf.create=false with an explicit controller.hugconfCrd.
+## Exercises the branch where the chart does NOT create the HugConf CR (and
+## skips its post-install hook), while the --hugconf-crd arg is still rendered
+## because controller.hugconfCrd is set (the `or hugconf.create .hugconfCrd`
+## condition in _podspec.tpl). This is the supported "bring your own HugConf"
+## configuration.
+controller:
+  hugconfCrd: default/hugconf
+hugconf:
+  create: false

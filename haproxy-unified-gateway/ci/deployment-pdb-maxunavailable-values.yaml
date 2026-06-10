@@ -1,0 +1,9 @@
+## Test: PodDisruptionBudget using maxUnavailable.
+## Exercises the maxUnavailable branch in controller-poddisruptionbudget.yaml,
+## which takes precedence over the default minAvailable: 1 (the existing
+## deployment-pdb fixture only covers the minAvailable path).
+controller:
+  replicaCount: 2
+  podDisruptionBudget:
+    enabled: true
+    maxUnavailable: 1

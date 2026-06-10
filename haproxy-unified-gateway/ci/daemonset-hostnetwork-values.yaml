@@ -1,0 +1,9 @@
+## Test: DaemonSet with hostNetwork enabled (and matching dnsPolicy)
+## Exercises the `hostNetwork: true` branch in _podspec.tpl, which is only
+## reachable via controller.daemonset.useHostNetwork in DaemonSet mode.
+controller:
+  kind: DaemonSet
+  # hostNetwork pods must use ClusterFirstWithHostNet to keep cluster DNS
+  dnsPolicy: ClusterFirstWithHostNet
+  daemonset:
+    useHostNetwork: true
