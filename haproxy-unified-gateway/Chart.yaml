@@ -43,4 +43,14 @@ annotations:
     - name: support
       url: https://github.com/haproxytech/helm-charts/issues
   artifacthub.io/changes: |-
-    - Use HAProxy Unified Gateway 1.0.4 version for base image
+    - Extract shared controller pod template into _podspec.tpl partial
+    - Add fail-fast guards for empty KEDA triggers and serviceMonitor/podMonitor conflict
+    - Remove unreachable PodSecurityPolicy templates (chart requires K8s >=1.26)
+    - Simplify HPA to autoscaling/v2 and drop revision suffix from CRD/Gateway API job names
+    - Scope ServiceMonitor selector to the metrics Service to avoid duplicate scraping
+    - Fix pod securityContext being silently dropped when podSecurityContext is set with unprivileged
+    - Fix invalid kubectl label selector printed in NOTES.txt
+    - Scope HugConf cleanup hook RBAC to a namespaced Role/RoleBinding
+    - Default PodDisruptionBudget to minAvailable 1 when no threshold is set
+    - Document that CPU-based autoscaling requires a CPU resource request
+    - Drop redundant container-level runAs fields (inherited from pod securityContext)

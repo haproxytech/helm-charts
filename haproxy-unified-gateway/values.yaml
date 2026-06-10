@@ -14,19 +14,6 @@
 
 ## HAProxy Unified Gateway Helm Chart - values.yaml
 
-# -- PodSecurityPolicy configuration (deprecated in K8s 1.21, removed in 1.25)
-podSecurityPolicy:
-  ## Specify pod annotations
-  ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor
-  ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp
-  ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#sysctl
-  annotations: {}
-    # apparmor.security.beta.kubernetes.io/allowedProfileNames: runtime/default
-    # apparmor.security.beta.kubernetes.io/defaultProfileName: runtime/default
-    # seccomp.security.alpha.kubernetes.io/allowedProfileNames: runtime/default
-    # seccomp.security.alpha.kubernetes.io/defaultProfileName: runtime/default
-  enabled: false
-
 # -- Create RBAC resources
 rbac:
   create: true
@@ -76,6 +63,10 @@ controller:
   # - none: HTTP, no authentication
   # - kube-rbac: HTTPS with Kubernetes TokenReview/SubjectAccessReview
   # - basic: HTTPS with HTTP Basic Authentication (set credentials via extraArgs)
+  # IMPORTANT: the default serviceMonitor/podMonitor `metrics` endpoint below
+  # assumes this is "kube-rbac" (scheme: https + bearer token). If you set this
+  # to "none", you MUST also change those endpoints to scheme: http and drop the
+  # tlsConfig/bearerTokenFile, otherwise scraping the metrics port will fail.
   metricsAuth: kube-rbac
 
   # -- Extra arguments to pass to the controller
@@ -274,6 +265,11 @@ controller:
         bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
 
   # -- HorizontalPodAutoscaler configuration
+  # NOTE: targetCPUUtilizationPercentage requires a CPU *request* to be set
+  # under controller.resources.requests.cpu — without it the HPA cannot compute
+  # CPU utilization and will not scale (kubectl shows <unknown> / FailedGetResourceMetric).
+  # The default resources below set only memory, so either add a CPU request or
+  # switch to targetMemoryUtilizationPercentage (memory is requested by default).
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -312,6 +308,9 @@ controller:
       #     query: avg(100-avg_over_time(haproxy_process_idle_time_percent{job="haproxy-unified-gateway"}[2m]))
 
   # -- PodDisruptionBudget configuration
+  # If neither minAvailable nor maxUnavailable is set, the chart defaults to
+  # minAvailable: 1. maxUnavailable takes precedence when both are set (a PDB
+  # may only specify one).
   podDisruptionBudget:
     enabled: false
     # minAvailable: 1

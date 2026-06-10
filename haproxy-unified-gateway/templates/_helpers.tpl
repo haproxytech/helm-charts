@@ -126,10 +126,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-CRD Job fullname (includes revision for uniqueness).
+CRD Job fullname. The before-hook-creation delete policy handles cleanup,
+so the name is stable across revisions (no revision suffix needed).
 */}}
 {{- define "haproxy-unified-gateway.crdjob.fullname" -}}
-{{- printf "%s-crdjob-%d" (include "haproxy-unified-gateway.fullname" .) .Release.Revision | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-crdjob" (include "haproxy-unified-gateway.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -142,10 +143,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
-Gateway API Job fullname (includes revision for uniqueness).
+Gateway API Job fullname. The before-hook-creation delete policy handles
+cleanup, so the name is stable across revisions (no revision suffix needed).
 */}}
 {{- define "haproxy-unified-gateway.gwapijob.fullname" -}}
-{{- printf "%s-gwapijob-%d" (include "haproxy-unified-gateway.fullname" .) .Release.Revision | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-gwapijob" (include "haproxy-unified-gateway.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*

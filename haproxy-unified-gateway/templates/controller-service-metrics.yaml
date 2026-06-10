@@ -22,6 +22,7 @@ metadata:
   namespace: {{ include "haproxy-unified-gateway.namespace" . }}
   labels:
     {{- include "haproxy-unified-gateway.labels" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
     {{- with .Values.controller.service.metrics.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */}}
 
+{{- if and .Values.controller.serviceMonitor.enabled .Values.controller.podMonitor.enabled }}
+{{- fail "controller.serviceMonitor.enabled and controller.podMonitor.enabled are mutually exclusive; enable only one" }}
+{{- end }}
 {{- if and (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1") .Values.controller.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -34,4 +37,5 @@ spec:
   selector:
     matchLabels:
       {{- include "haproxy-unified-gateway.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: metrics
 {{- end }}

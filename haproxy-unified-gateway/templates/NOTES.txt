@@ -46,6 +46,6 @@ A post-install/pre-upgrade Job will install Gateway API CRDs (v{{ .Values.gwapij
 {{- end }}
 
 To check the controller status:
-  kubectl get pods -n {{ include "haproxy-unified-gateway.namespace" . }} -l "{{ include "haproxy-unified-gateway.selectorLabels" . | replace "\n" "," }}"
+  kubectl get pods -n {{ include "haproxy-unified-gateway.namespace" . }} -l "app.kubernetes.io/name={{ include "haproxy-unified-gateway.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
 
 For more information, visit: https://github.com/haproxytech/haproxy-unified-gateway

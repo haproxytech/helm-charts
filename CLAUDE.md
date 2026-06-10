@@ -121,9 +121,6 @@ Community HAProxy chart (not a controller — just runs HAProxy as a workload).
 | `controller-podmonitor.yaml` | PodMonitor for Prometheus Operator (disabled by default, gated behind `.Capabilities.APIVersions`) |
 | `controller-service-metrics.yaml` | ClusterIP metrics Service with stat + metrics ports (created when serviceMonitor is enabled) |
 | `controller-poddisruptionbudget.yaml` | PDB (disabled by default) |
-| `controller-podsecuritypolicy.yaml` | PSP (disabled by default, K8s <1.25 only) |
-| `controller-role.yaml` | Role for PSP usage |
-| `controller-rolebinding.yaml` | RoleBinding for PSP Role |
 | `namespace.yaml` | Optional namespace creation (pre-install hook) |
 | `NOTES.txt` | Post-install instructions |
 

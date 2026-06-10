@@ -26,10 +26,9 @@ spec:
   selector:
     matchLabels:
       {{- include "haproxy-unified-gateway.selectorLabels" . | nindent 6 }}
-  {{- if .Values.controller.podDisruptionBudget.minAvailable }}
-  minAvailable: {{ .Values.controller.podDisruptionBudget.minAvailable }}
-  {{- end }}
   {{- if .Values.controller.podDisruptionBudget.maxUnavailable }}
   maxUnavailable: {{ .Values.controller.podDisruptionBudget.maxUnavailable }}
+  {{- else }}
+  minAvailable: {{ .Values.controller.podDisruptionBudget.minAvailable | default 1 }}
   {{- end }}
 {{- end }}

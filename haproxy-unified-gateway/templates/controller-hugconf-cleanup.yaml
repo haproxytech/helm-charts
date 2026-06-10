@@ -28,9 +28,10 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: Role
 metadata:
   name: {{ include "haproxy-unified-gateway.hugconfCleanup.fullname" . }}
+  namespace: {{ include "haproxy-unified-gateway.namespace" . }}
   labels:
     {{- include "haproxy-unified-gateway.labels" . | nindent 4 }}
   annotations:
@@ -47,9 +48,10 @@ rules:
       - delete
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: RoleBinding
 metadata:
   name: {{ include "haproxy-unified-gateway.hugconfCleanup.fullname" . }}
+  namespace: {{ include "haproxy-unified-gateway.namespace" . }}
   labels:
     {{- include "haproxy-unified-gateway.labels" . | nindent 4 }}
   annotations:
@@ -58,7 +60,7 @@ metadata:
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: Role
   name: {{ include "haproxy-unified-gateway.hugconfCleanup.fullname" . }}
 subjects:
   - kind: ServiceAccount
