@@ -17,7 +17,7 @@ name: haproxy-unified-gateway
 description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API Controller
 type: application
 version: 1.0.6
-appVersion: 1.0.4
+appVersion: 1.0.5
 kubeVersion: ">=1.26.0-0"
 keywords:
   - haproxy
@@ -37,20 +37,10 @@ annotations:
   artifacthub.io/category: networking
   artifacthub.io/images: |
     - name: controller
-      image: docker.io/haproxytech/haproxy-unified-gateway:1.0.4
+      image: docker.io/haproxytech/haproxy-unified-gateway:1.0.5
   artifacthub.io/license: Apache-2.0
   artifacthub.io/links: |
     - name: support
       url: https://github.com/haproxytech/helm-charts/issues
   artifacthub.io/changes: |-
-    - Extract shared controller pod template into _podspec.tpl partial
-    - Add fail-fast guards for empty KEDA triggers and serviceMonitor/podMonitor conflict
-    - Remove unreachable PodSecurityPolicy templates (chart requires K8s >=1.26)
-    - Simplify HPA to autoscaling/v2 and drop revision suffix from CRD/Gateway API job names
-    - Scope ServiceMonitor selector to the metrics Service to avoid duplicate scraping
-    - Fix pod securityContext being silently dropped when podSecurityContext is set with unprivileged
-    - Fix invalid kubectl label selector printed in NOTES.txt
-    - Scope HugConf cleanup hook RBAC to a namespaced Role/RoleBinding
-    - Default PodDisruptionBudget to minAvailable 1 when no threshold is set
-    - Document that CPU-based autoscaling requires a CPU resource request
-    - Drop redundant container-level runAs fields (inherited from pod securityContext)
+    - Use HAProxy Unified Gateway 1.0.5 version for base image
