@@ -186,6 +186,9 @@ controller:
     labels: {}
     # -- External traffic policy
     externalTrafficPolicy: ""
+    # -- LoadBalancer IP
+    # ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
+    loadBalancerIP: ""
     # NOTE: http/https Service ports are NOT defined here. The HUG controller
     # adds them automatically once Gateway resources exist (one port per
     # listener, named `http-<port>` / `https-<port>`) and reallocates any

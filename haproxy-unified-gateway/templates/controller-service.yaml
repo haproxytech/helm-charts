@@ -34,6 +34,11 @@ spec:
   {{- with .Values.controller.service.externalTrafficPolicy }}
   externalTrafficPolicy: {{ . }}
   {{- end }}
+{{- if (eq .Values.controller.service.type "LoadBalancer") }}
+{{- if .Values.controller.service.loadBalancerIP }}
+  loadBalancerIP: "{{ .Values.controller.service.loadBalancerIP }}"
+{{- end }}
+{{- end }}
   selector:
     {{- include "haproxy-unified-gateway.selectorLabels" . | nindent 4 }}
   # NOTE: http/https Service ports are intentionally NOT rendered here.

@@ -120,6 +120,27 @@ helm install my-release haproxytech/haproxy-unified-gateway \
 
 **_NOTE_**: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string.
 
+### Installing with LoadBalancer IP
+
+When using a LoadBalancer service type, you can request a specific IP address (provider-dependent):
+
+```console
+helm install my-release haproxytech/haproxy-unified-gateway \
+  --set controller.service.type=LoadBalancer \
+  --set controller.service.loadBalancerIP="203.0.113.10"
+```
+
+Or using a values file:
+
+```yaml
+controller:
+  service:
+    type: LoadBalancer
+    loadBalancerIP: "203.0.113.10"
+```
+
+**_NOTE_**: Not all cloud providers support this field. Refer to your cloud provider's documentation for LoadBalancer IP allocation.
+
 ### Installing with Horizontal Pod Autoscaler (HPA)
 
 [HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) automatically scales number of replicas in Deployment and adjusts replica count for the controller:
