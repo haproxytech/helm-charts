@@ -512,6 +512,13 @@ A Helm `post-install` / `pre-upgrade` hook Job that applies the controller's CRD
 | `crdjob.nodeSelector` / `.tolerations` / `.affinity` | Scheduling controls for the Job pod. | `{}` / `[]` / `{}` |
 | `crdjob.resources.requests` / `.limits` | CPU/memory requests and (optional) limits for the Job container. | `cpu: 250m`, `memory: 400Mi` (no limits) |
 
+### Extra Objects
+
+Declare additional arbitrary raw CR manifests to deploy as a part of the helm release.
+
+|---|---|---|
+| `extraObjects` | Extra raw objects to template | `[]` |
+
 ### Migration notes (1.50.0)
 
 - **Prometheus / pprof decoupled from `admin` port.** Previously, setting `controller.service.enablePorts.admin=false` implicitly disabled the controller's `/metrics` and `/debug/pprof` endpoints. Starting in 1.50.0, the dedicated toggles `controller.prometheus.enabled` and `controller.pprof.enabled` control these (both default `true`). If you were relying on the old coupling, set the new toggles to `false` explicitly.

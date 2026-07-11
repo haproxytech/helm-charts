@@ -260,4 +260,26 @@ Create a name for the auxiliary configmap.
 {{- printf "%s-%s" (include "kubernetes-ingress.fullname" . | trunc 54 | trimSuffix "-") "auxiliary" }}
 {{- end -}}
 
+{{/*
+Create extra raw objects labels
+*/}}
+{{- define "kubernetes-ingress.extraRawLabels" -}}
+metadata:
+  labels:
+    {{- include "kubernetes-ingress.labels" $ | nindent 4 }}
+{{- end }}
+
+{{/*
+Render extra raw objects that might contain templates
+*/}}
+{{- define "kubernetes-ingress.renderExtraObjects" -}}
+  {{- $labels := fromYaml (include "kubernetes-ingress.extraRawLabels" .context) -}}
+  {{- $value := typeIs "string" .value | ternary .value (.value | toYaml) }}
+  {{- if contains "{{" (toString $value) }}
+    {{- toYaml (merge (fromYaml (tpl $value .context)) $labels) }}
+  {{- else }}
+    {{- toYaml (merge $value $labels) }}
+  {{- end }}
+{{- end -}}
+
 {{/* vim: set filetype=mustache: */}}
