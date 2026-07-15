@@ -276,10 +276,9 @@ Render extra raw objects that might contain templates
   {{- $labels := fromYaml (include "kubernetes-ingress.extraRawLabels" .context) -}}
   {{- $value := typeIs "string" .value | ternary .value (.value | toYaml) }}
   {{- if contains "{{" (toString $value) }}
-    {{- toYaml (merge (fromYaml (tpl $value .context)) $labels) }}
-  {{- else }}
-    {{- toYaml (merge $value $labels) }}
+    {{- $value = tpl $value .context }}
   {{- end }}
+  {{- toYaml (merge (fromYaml $value) $labels) }}
 {{- end -}}
 
 {{/* vim: set filetype=mustache: */}}

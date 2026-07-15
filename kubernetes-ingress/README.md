@@ -516,8 +516,9 @@ A Helm `post-install` / `pre-upgrade` hook Job that applies the controller's CRD
 
 Declare additional arbitrary raw CR manifests to deploy as a part of the helm release.
 
+| Key | Description | Default |
 |---|---|---|
-| `extraObjects` | Extra raw objects to template | `[]` |
+| `extraObjects` | Extra raw objects to template. | `[]` |
 
 ### Migration notes (1.50.0)
 
