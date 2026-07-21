@@ -17,7 +17,7 @@ name: haproxy-unified-gateway
 description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API Controller
 type: application
 version: 1.1.0
-appVersion: 1.0.5
+appVersion: 1.0.6
 kubeVersion: ">=1.26.0-0"
 keywords:
   - haproxy
@@ -37,12 +37,10 @@ annotations:
   artifacthub.io/category: networking
   artifacthub.io/images: |
     - name: controller
-      image: docker.io/haproxytech/haproxy-unified-gateway:1.0.5
+      image: docker.io/haproxytech/haproxy-unified-gateway:1.0.6
   artifacthub.io/license: Apache-2.0
   artifacthub.io/links: |
     - name: support
       url: https://github.com/haproxytech/helm-charts/issues
   artifacthub.io/changes: |-
-    - Use HAProxy Unified Gateway 1.0.5 version for base image
-    - Add CI coverage for high-priority value branches
-    - Refactor pod template and fix chart issues
+    - Use HAProxy Unified Gateway 1.0.6 version for base image
