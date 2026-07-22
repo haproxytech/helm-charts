@@ -514,12 +514,11 @@ A Helm `post-install` / `pre-upgrade` hook Job that applies the controller's CRD
 
 ### Extra Objects
 
-Declare additional CRs to deploy as a part of the helm release.
+Declare additional arbitrary raw CR manifests to deploy as a part of the helm release.
 
 | Key | Description | Default |
 |---|---|---|
-| `extraManifests` | Extra arbitrary raw objects. | `[]` |
-| `extraTemplates` | Extra arbitrary templated objects. | `[]` |
+| `extraObjects` | Extra raw objects to template. | `[]` |
 
 ### Migration notes (1.50.0)
 

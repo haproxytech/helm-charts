@@ -261,54 +261,24 @@ Create a name for the auxiliary configmap.
 {{- end -}}
 
 {{/*
-Create an extra object base with labels.
+Create extra raw objects labels
 */}}
-{{- define "kubernetes-ingress.extraObjectLabels" -}}
+{{- define "kubernetes-ingress.extraRawLabels" -}}
 metadata:
   labels:
     {{- include "kubernetes-ingress.labels" $ | nindent 4 }}
 {{- end }}
 
 {{/*
-Ensure an extra object is a Kubernetes CR.
-It must be a map with at least apiVersion, kind, metadata.name, spec or data keys.
+Render extra raw objects that might contain templates
 */}}
-{{- define "kubernetes-ingress.validateExtraObject" -}}
-{{- $obj := . -}}
-{{- $tplName := "kubernetes-ingress.validateExtraObject" -}}
-{{- if not (kindIs "map" $obj) -}}
-{{- fail (printf "%s: expected a map, got %s" $tplName (kindOf $obj)) -}}
+{{- define "kubernetes-ingress.renderExtraObjects" -}}
+  {{- $labels := fromYaml (include "kubernetes-ingress.extraRawLabels" .context) -}}
+  {{- $value := typeIs "string" .value | ternary .value (.value | toYaml) }}
+  {{- if contains "{{" (toString $value) }}
+    {{- $value = tpl $value .context }}
+  {{- end }}
+  {{- toYaml (merge (fromYaml $value) $labels) }}
 {{- end -}}
-{{- if not (hasKey $obj "apiVersion") -}}
-{{- fail (printf "%s: object is missing required key 'apiVersion'" $tplName) -}}
-{{- end -}}
-{{- if not (kindIs "string" $obj.apiVersion) -}}
-{{- fail (printf "%s: 'apiVersion' must be a string, got %s" $tplName (kindOf $obj.apiVersion)) -}}
-{{- end -}}
-{{- $_ := required (printf "%s: 'apiVersion' must not be empty" $tplName) $obj.apiVersion -}}
-{{- if not (hasKey $obj "kind") -}}
-{{- fail (printf "%s: object is missing required key 'kind'" $tplName) -}}
-{{- end -}}
-{{- if not (kindIs "string" $obj.kind) -}}
-{{- fail (printf "%s: 'kind' must be a string, got %s" $tplName (kindOf $obj.kind)) -}}
-{{- end -}}
-{{- $_ := required (printf "%s: 'kind' must not be empty" $tplName) $obj.kind -}}
-{{- if not (hasKey $obj "metadata") -}}
-{{- fail (printf "%s: object is missing required key 'metadata'" $tplName) -}}
-{{- end -}}
-{{- if not (kindIs "map" $obj.metadata) -}}
-{{- fail (printf "%s: 'metadata' must be a map, got %s" $tplName (kindOf $obj.metadata)) -}}
-{{- end -}}
-{{- if not (hasKey $obj.metadata "name") -}}
-{{- fail (printf "%s: object is missing required key 'metadata.name'" $tplName) -}}
-{{- end -}}
-{{- if not (kindIs "string" $obj.metadata.name) -}}
-{{- fail (printf "%s: 'metadata.name' must be a string, got %s" $tplName (kindOf $obj.metadata.name)) -}}
-{{- end -}}
-{{- $_ := required (printf "%s: 'metadata.name' must not be empty" $tplName) $obj.metadata.name -}}
-{{- if not (or (hasKey $obj "spec") (hasKey $obj "data")) -}}
-{{- fail (printf "%s: object must have either 'spec' or 'data' key" $tplName) -}}
-{{- end -}}
-{{- end }}
 
 {{/* vim: set filetype=mustache: */}}

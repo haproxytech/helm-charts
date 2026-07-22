@@ -1,15 +1,4 @@
-{{- if or .Values.extraManifests .Values.extraTemplates }}
-{{- $objBase := fromYaml (include "kubernetes-ingress.extraObjectLabels" .) -}}
-{{- range .Values.extraManifests }}
-{{- $obj := . -}}
-{{- include "kubernetes-ingress.validateExtraObject" $obj }}
+{{- range .Values.extraObjects }}
 ---
-{{ toYaml (merge $obj $objBase) }}
-{{- end }}
-{{- range .Values.extraTemplates }}
-{{- $obj := fromYaml (tpl . $) -}}
-{{- include "kubernetes-ingress.validateExtraObject" $obj }}
----
-{{ toYaml (merge $obj $objBase) }}
-{{- end }}
+{{ include "kubernetes-ingress.renderExtraObjects" (dict "value" . "context" $) }}
 {{- end }}
