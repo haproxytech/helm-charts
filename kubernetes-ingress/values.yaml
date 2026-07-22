@@ -736,16 +736,31 @@ crdjob:
       cpu: 250m
       memory: 400Mi
 
-## Extra raw objects to template
+## Extra arbitrary raw objects
 ## Note: this manifest is not capability-gated; if specific CRDs are
 ## missing, helm install will fail; this being said, this manifest
 ## is not intended to be used to deploy ingress.v3.haproxy.org/v3 CRs
 ## since their CRDs are installed/upgraded via a post-install/pre-upgrade job
-extraObjects: []
+extraManifests: []
   # - apiVersion: v1
   #   kind: ConfigMap
   #   metadata:
-  #     name: "{{ .Release.Name }}-extra-conf"
+  #     name: example-extra-conf
+  #   data:
+  #     extra.conf: |
+  #       example config
+
+## Extra arbitrary templated objects
+## Note: this manifest is not capability-gated; if specific CRDs are
+## missing, helm install will fail; this being said, this manifest
+## is not intended to be used to deploy ingress.v3.haproxy.org/v3 CRs
+## since their CRDs are installed/upgraded via a post-install/pre-upgrade job
+extraTemplates: []
+  # - |
+  #   apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: {{ .Release.Name }}-extra-conf
   #   data:
   #     extra.conf: |
   #       example config

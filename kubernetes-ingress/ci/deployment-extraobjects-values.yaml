@@ -1,0 +1,17 @@
+extraManifests:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: example-extra-conf-1
+    data:
+      extra.conf: |
+        example config
+extraTemplates:
+  - |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: {{ .Release.Name }}-extra-conf-2
+    data:
+      extra.conf: |
+        example config

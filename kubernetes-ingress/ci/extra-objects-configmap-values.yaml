@@ -1,8 +1,0 @@
-extraObjects:
-  - apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: "{{ .Release.Name }}-extra-conf"
-    data:
-      extra.conf: |
-        example config
