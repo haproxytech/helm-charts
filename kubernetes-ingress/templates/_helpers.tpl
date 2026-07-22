@@ -260,4 +260,72 @@ Create a name for the auxiliary configmap.
 {{- printf "%s-%s" (include "kubernetes-ingress.fullname" . | trunc 54 | trimSuffix "-") "auxiliary" }}
 {{- end -}}
 
+{{/*
+Create extra raw objects labels.
+*/}}
+{{- define "kubernetes-ingress.extraRawLabels" -}}
+metadata:
+  labels:
+    {{- include "kubernetes-ingress.labels" $ | nindent 4 }}
+{{- end }}
+
+{{/*
+Ensure an extra object is a Kubernetes CR.
+It must be a map with at least apiVersion, kind, metadata.name, spec or data keys.
+*/}}
+{{- define "kubernetes-ingress.validateExtraObject" -}}
+{{- $obj := . -}}
+{{- $tplName := "kubernetes-ingress.validateExtraObject" -}}
+{{- if not (kindIs "map" $obj) -}}
+{{- fail (printf "%s: expected a map, got %s" $tplName (kindOf $obj)) -}}
+{{- end -}}
+{{- if not (hasKey $obj "apiVersion") -}}
+{{- fail (printf "%s: object is missing required key 'apiVersion'" $tplName) -}}
+{{- end -}}
+{{- if not (kindIs "string" $obj.apiVersion) -}}
+{{- fail (printf "%s: 'apiVersion' must be a string, got %s" $tplName (kindOf $obj.apiVersion)) -}}
+{{- end -}}
+{{- $_ := required (printf "%s: 'apiVersion' must not be empty" $tplName) $obj.apiVersion -}}
+{{- if not (hasKey $obj "kind") -}}
+{{- fail (printf "%s: object is missing required key 'kind'" $tplName) -}}
+{{- end -}}
+{{- if not (kindIs "string" $obj.kind) -}}
+{{- fail (printf "%s: 'kind' must be a string, got %s" $tplName (kindOf $obj.kind)) -}}
+{{- end -}}
+{{- $_ := required (printf "%s: 'kind' must not be empty" $tplName) $obj.kind -}}
+{{- if not (hasKey $obj "metadata") -}}
+{{- fail (printf "%s: object is missing required key 'metadata'" $tplName) -}}
+{{- end -}}
+{{- if not (kindIs "map" $obj.metadata) -}}
+{{- fail (printf "%s: 'metadata' must be a map, got %s" $tplName (kindOf $obj.metadata)) -}}
+{{- end -}}
+{{- if not (hasKey $obj.metadata "name") -}}
+{{- fail (printf "%s: object is missing required key 'metadata.name'" $tplName) -}}
+{{- end -}}
+{{- if not (kindIs "string" $obj.metadata.name) -}}
+{{- fail (printf "%s: 'metadata.name' must be a string, got %s" $tplName (kindOf $obj.metadata.name)) -}}
+{{- end -}}
+{{- $_ := required (printf "%s: 'metadata.name' must not be empty" $tplName) $obj.metadata.name -}}
+{{- if not (or (hasKey $obj "spec") (hasKey $obj "data")) -}}
+{{- fail (printf "%s: object must have either 'spec' or 'data' key" $tplName) -}}
+{{- end -}}
+{{- end }}
+
+{{/*
+Render an extra object that might contain templates.
+*/}}
+{{- define "kubernetes-ingress.renderExtraObject" -}}
+{{- $labels := fromYaml (include "kubernetes-ingress.extraRawLabels" .context) -}}
+{{- if typeIs "string" .value }}
+  {{- /* string form is an explicit opt-in to templating */ -}}
+  {{- $templatedValue := fromYaml (tpl .value .context) -}}
+  {{- include "kubernetes-ingress.validateExtraObject" $templatedValue }}
+  {{- toYaml (merge $templatedValue $labels) }}
+{{- else }}
+  {{- /* map form is emitted verbatim; foreign {{ }} left untouched */ -}}
+  {{- include "kubernetes-ingress.validateExtraObject" .value }}
+  {{- toYaml (merge (deepCopy .value) $labels) }}
+{{- end }}
+{{- end -}}
+
 {{/* vim: set filetype=mustache: */}}
