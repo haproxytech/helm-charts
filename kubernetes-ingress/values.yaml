@@ -742,10 +742,20 @@ crdjob:
 ## is not intended to be used to deploy ingress.v3.haproxy.org/v3 CRs
 ## since their CRDs are installed/upgraded via a post-install/pre-upgrade job
 extraObjects: []
+  ## Use maps to declare raw manifests
   # - apiVersion: v1
   #   kind: ConfigMap
   #   metadata:
-  #     name: "{{ .Release.Name }}-extra-conf"
+  #     name: extra-conf-1
   #   data:
   #     extra.conf: |
-  #       example config
+  #       example_config_1
+  ## Use multiline strings to declare templated manifests
+  # - |
+  #   apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: {{ .Release.Name }}-extra-conf-2
+  #   data:
+  #     extra.conf: |
+  #       example_config_2

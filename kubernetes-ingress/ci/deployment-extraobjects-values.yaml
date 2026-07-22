@@ -1,0 +1,16 @@
+extraObjects:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: extra-conf-1
+    data:
+      extra.conf: |
+        example_config_1
+  - |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: {{ .Release.Name }}-extra-conf-2
+    data:
+      extra.conf: |
+        example_config_2
