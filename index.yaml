@@ -5,6 +5,38 @@ entries:
       artifacthub.io/category: networking
       artifacthub.io/changes: |
         - Update base image to HAProxy 3.3.10
+        - Add support for loadBalancerClass
+      artifacthub.io/images: |
+        - name: haproxy
+          image: docker.io/haproxytech/haproxy-alpine:3.3.6
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.3.10
+    created: "2026-08-17T12:23:06.242173629Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 44294aef06d1d3f68d50ed63b55127169cecab66ccf879203c312fafac310292
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.30.0/haproxy-1.30.0.tgz
+    version: 1.30.0
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/changes: |
+        - Update base image to HAProxy 3.3.10
       artifacthub.io/images: |
         - name: haproxy
           image: docker.io/haproxytech/haproxy-alpine:3.3.6
@@ -5837,4 +5869,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-08-17T10:59:11.421343913Z"
+generated: "2026-08-17T12:23:06.242575101Z"
