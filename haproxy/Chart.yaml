@@ -16,7 +16,7 @@ apiVersion: v2
 name: haproxy
 description: A Helm chart for HAProxy on Kubernetes
 type: application
-version: 1.29.0
+version: 1.30.0
 appVersion: 3.3.10
 kubeVersion: ">=1.17.0-0"
 keywords:
@@ -39,3 +39,4 @@ annotations:
       url: https://github.com/haproxytech/helm-charts/issues
   artifacthub.io/changes: |
     - Update base image to HAProxy 3.3.10
+    - Add support for loadBalancerClass

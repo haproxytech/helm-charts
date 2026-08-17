@@ -135,6 +135,21 @@ helm install my-haproxy4 haproxytech/haproxy \
 
 **_NOTE_**: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string.
 
+### Selecting a LoadBalancer implementation
+
+When more than one load balancer controller runs in a cluster, `service.loadBalancerClass` picks which one reconciles the Service. Leaving it unset uses the cluster's default implementation:
+
+```console
+helm install my-haproxy5 haproxytech/haproxy \
+  --set service.type=LoadBalancer \
+  --set service.loadBalancerClass="example.com/internal-lb" \
+  --set service.loadBalancerSourceRanges[0]="192.0.2.0/24"
+```
+
+**_NOTE_**: `loadBalancerClass` renders only when `service.type` is `LoadBalancer` and the cluster is Kubernetes 1.21 or newer (the field is GA as of 1.24). On older clusters it is omitted.
+
+**_NOTE_**: `loadBalancerClass` is immutable while the Service stays type `LoadBalancer`. Kubernetes rejects a change on an existing Service, so `helm upgrade` cannot alter it in place - the Service has to be recreated.
+
 ### Using values from YAML file
 
 As opposed to using many `--set` invocations, much simpler approach is to define value overrides in a separate YAML file and specify them when invoking Helm.

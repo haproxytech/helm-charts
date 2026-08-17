@@ -51,6 +51,11 @@ spec:
   loadBalancerSourceRanges:
   {{- toYaml . | nindent 2 }}
   {{- end }}
+  {{- /* loadBalancerClass exists from Kubernetes 1.21 (GA 1.24) and the API
+         server forbids it unless type is LoadBalancer, so gate on both. */}}
+  {{- if and (semverCompare ">=1.21.0-0" .Capabilities.KubeVersion.Version) (eq .Values.service.type "LoadBalancer") .Values.service.loadBalancerClass }}
+  loadBalancerClass: {{ .Values.service.loadBalancerClass | quote }}
+  {{- end }}
   {{- if .Values.service.ipFamilies }}
   ipFamilies:
   {{- toYaml .Values.service.ipFamilies | nindent 2 }}

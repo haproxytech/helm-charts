@@ -467,7 +467,7 @@ test_loadbalancer_fields() {
     local label="$chart: LoadBalancer fields absent with default Service type"
     local output
     output=$(helm template test-release "$REPO_ROOT/$chart" 2>&1)
-    if echo "$output" | grep -qE '^\s+loadBalancer(IP|Class|SourceRanges):'; then
+    if echo "$output" | grep -qE '^[[:space:]]+loadBalancer(IP|Class|SourceRanges):'; then
         log_fail "$label"
     else
         log_pass "$label"

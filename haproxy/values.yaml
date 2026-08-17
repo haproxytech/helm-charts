@@ -506,6 +506,12 @@ service:
   # ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/
   loadBalancerSourceRanges: []
 
+  ## Class of load balancer implementation, rendered only when type is
+  ## LoadBalancer and Kubernetes is >= 1.21 (GA in 1.24). Immutable while the
+  ## Service stays type LoadBalancer, so helm upgrade cannot change it in place
+  # ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+  loadBalancerClass: null
+
   ## Service ExternalIPs
   # ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
   externalIPs: []
