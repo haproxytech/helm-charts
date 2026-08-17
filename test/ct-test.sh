@@ -167,7 +167,10 @@ do_lint() {
 
     echo -e "\n${BOLD}=== ct lint ===${NC}"
 
-    local ct_cmd=(ct lint --config "$CT_CONFIG")
+    # --validate-maintainers=false matches .github/workflows/ci.yml. Chart.yaml
+    # lists maintainers by display name ("Dinko Korunic"), but ct resolves each
+    # entry as a GitHub username, so the check fails with a 404.
+    local ct_cmd=(ct lint --config "$CT_CONFIG" --validate-maintainers=false)
 
     if [ -n "$chart_arg" ]; then
         ct_cmd+=(--charts "$REPO_ROOT/$chart_arg")
