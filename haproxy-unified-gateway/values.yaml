@@ -187,8 +187,18 @@ controller:
     # -- External traffic policy
     externalTrafficPolicy: ""
     # -- LoadBalancer IP
+    # Deprecated since Kubernetes 1.24 in favour of provider-specific
+    # annotations; prefer `loadBalancerClass` to select an implementation
     # ref: https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer
     loadBalancerIP: ""
+    # -- Source IP ranges permitted to access the load balancer
+    # ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/
+    loadBalancerSourceRanges: []
+    # -- Class of load balancer implementation
+    # Immutable while the Service stays type LoadBalancer: changing it on an
+    # existing Service is rejected, so the Service must be recreated
+    # ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-class
+    loadBalancerClass: null
     # NOTE: http/https Service ports are NOT defined here. The HUG controller
     # adds them automatically once Gateway resources exist (one port per
     # listener, named `http-<port>` / `https-<port>`) and reallocates any

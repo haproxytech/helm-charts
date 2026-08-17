@@ -141,6 +141,42 @@ controller:
 
 **_NOTE_**: Not all cloud providers support this field. Refer to your cloud provider's documentation for LoadBalancer IP allocation.
 
+**_NOTE_**: `loadBalancerIP` is deprecated as of Kubernetes 1.24 in favour of provider-specific annotations. To select a particular load balancer implementation, prefer `loadBalancerClass` below.
+
+### Selecting a LoadBalancer implementation
+
+When more than one load balancer controller runs in a cluster, `loadBalancerClass` picks which one reconciles the Service. Leaving it unset uses the cluster's default implementation. Available since chart `1.2.0`.
+
+```console
+helm install my-release haproxytech/haproxy-unified-gateway \
+  --set controller.service.type=LoadBalancer \
+  --set controller.service.loadBalancerClass="example.com/internal-lb"
+```
+
+Or using a values file, together with a source IP allowlist:
+
+```yaml
+controller:
+  service:
+    type: LoadBalancer
+    loadBalancerClass: example.com/internal-lb
+    loadBalancerSourceRanges:
+      - 192.0.2.0/24
+      - 198.51.100.0/24
+```
+
+| Key | Description | Default |
+|---|---|---|
+| `controller.service.loadBalancerIP` | Requested LB IP (provider-dependent, deprecated since Kubernetes 1.24). | `""` |
+| `controller.service.loadBalancerSourceRanges` | CIDR allowlist for the LB. | `[]` |
+| `controller.service.loadBalancerClass` | `LoadBalancerClass` selecting the LB implementation. | `null` |
+
+All three fields render only when `controller.service.type` is `LoadBalancer`.
+
+**_NOTE_**: `loadBalancerClass` is immutable while the Service stays type `LoadBalancer`. Kubernetes rejects a change on an existing Service, so `helm upgrade` cannot alter it in place - the Service has to be recreated (for example by deleting it and re-running the upgrade).
+
+**_NOTE_**: `loadBalancerSourceRanges` is only enforced by providers that implement it; check your provider's documentation before relying on it as a security control.
+
 ### Installing with Horizontal Pod Autoscaler (HPA)
 
 [HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) automatically scales number of replicas in Deployment and adjusts replica count for the controller:

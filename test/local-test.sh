@@ -443,6 +443,70 @@ test_auxiliary_config() {
     fi
 }
 
+# 11. Verify LoadBalancer-only Service fields render only for type=LoadBalancer
+# These cannot be covered by a ci/ values file: `ct install` and
+# integration-test.sh both use `helm install --wait`, which blocks until a
+# LoadBalancer Service reports status.loadBalancer.ingress. That needs
+# cloud-provider-kind, which haproxy-unified-gateway cannot run alongside (it
+# installs Gateway API CRDs v1.4.0, conflicting with the chart's pinned v1.3.0
+# gwapijob) - see LB_CHARTS in .github/scripts/install_charts.sh.
+test_loadbalancer_fields() {
+    local chart="$1"
+    local values_yaml="$REPO_ROOT/$chart/values.yaml"
+
+    if ! grep -q 'loadBalancerClass:' "$values_yaml" 2>/dev/null; then
+        return
+    fi
+
+    local prefix="controller.service"
+    if ! grep -q '^  service:' "$values_yaml" 2>/dev/null; then
+        prefix="service"
+    fi
+
+    # Default type is not LoadBalancer, so none of the fields may appear
+    local label="$chart: LoadBalancer fields absent with default Service type"
+    local output
+    output=$(helm template test-release "$REPO_ROOT/$chart" 2>&1)
+    if echo "$output" | grep -qE '^\s+loadBalancer(IP|Class|SourceRanges):'; then
+        log_fail "$label"
+    else
+        log_pass "$label"
+    fi
+
+    output=$(helm template test-release "$REPO_ROOT/$chart" \
+        --set "${prefix}.type=LoadBalancer" \
+        --set "${prefix}.loadBalancerIP=203.0.113.10" \
+        --set "${prefix}.loadBalancerClass=example.com/internal-lb" \
+        --set "${prefix}.loadBalancerSourceRanges[0]=192.0.2.0/24" 2>&1)
+
+    label="$chart: loadBalancerClass renders for type=LoadBalancer"
+    if echo "$output" | grep -q 'loadBalancerClass: "example.com/internal-lb"'; then
+        log_pass "$label"
+    else
+        log_fail "$label"
+    fi
+
+    label="$chart: loadBalancerIP and loadBalancerSourceRanges render for type=LoadBalancer"
+    if echo "$output" | grep -q 'loadBalancerIP: "203.0.113.10"' \
+        && echo "$output" | grep -A1 'loadBalancerSourceRanges:' | grep -q '192.0.2.0/24'; then
+        log_pass "$label"
+    else
+        log_fail "$label"
+    fi
+
+    # loadBalancerClass is meaningless outside type=LoadBalancer and the API
+    # server rejects it there, so the guard must suppress it
+    label="$chart: loadBalancerClass suppressed when type is not LoadBalancer"
+    output=$(helm template test-release "$REPO_ROOT/$chart" \
+        --set "${prefix}.type=ClusterIP" \
+        --set "${prefix}.loadBalancerClass=example.com/internal-lb" 2>&1)
+    if echo "$output" | grep -q 'loadBalancerClass:'; then
+        log_fail "$label"
+    else
+        log_pass "$label"
+    fi
+}
+
 main() {
     local filter="${1:-}"
 
@@ -465,6 +529,7 @@ main() {
         test_metrics_port "$chart"
         test_monitoring "$chart"
         test_auxiliary_config "$chart"
+        test_loadbalancer_fields "$chart"
         test_ci_values "$chart"
         test_ct_lint "$chart"
     done
