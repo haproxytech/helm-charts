@@ -735,3 +735,44 @@ crdjob:
     requests:
       cpu: 250m
       memory: 400Mi
+
+## Extra raw objects to template
+## Each entry must carry apiVersion, kind and metadata.name (or
+## metadata.generateName). Chart labels are added, and metadata.namespace
+## defaults to the release namespace (honouring namespaceOverride) unless the
+## object sets it; set "namespace: null" to leave a cluster-scoped object
+## without one.
+## Note: this manifest is not capability-gated; if specific CRDs are
+## missing, helm install will fail; this being said, this manifest
+## is not intended to be used to deploy ingress.v3.haproxy.org/v3 CRs
+## since their CRDs are installed/upgraded via a post-install/pre-upgrade job
+extraObjects: []
+  ## Use maps to declare raw manifests. They are emitted verbatim, so any
+  ## foreign Go template syntax ({{ }} in Grafana dashboards, Prometheus rules,
+  ## Alertmanager templates) is left untouched.
+  # - apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: extra-conf-1
+  #   data:
+  #     extra.conf: |
+  #       example_config_1
+  ## Use multiline strings to declare templated manifests. This is an explicit
+  ## opt-in to templating, so every {{ }} is evaluated against the chart
+  ## context. A single string may hold several '---' separated documents.
+  # - |
+  #   apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: {{ .Release.Name }}-extra-conf-2
+  #   data:
+  #     extra.conf: |
+  #       example_config_2
+  #   ---
+  #   apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: {{ .Release.Name }}-extra-conf-3
+  #   data:
+  #     extra.conf: |
+  #       example_config_3
