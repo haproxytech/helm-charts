@@ -514,11 +514,49 @@ A Helm `post-install` / `pre-upgrade` hook Job that applies the controller's CRD
 
 ### Extra Objects
 
-Declare additional arbitrary raw CR manifests to deploy as a part of the helm release.
+Declare additional arbitrary manifests to deploy as part of the Helm release. Available since chart `1.53.0`.
 
 | Key | Description | Default |
 |---|---|---|
 | `extraObjects` | Extra raw objects to template. | `[]` |
+
+Each entry may be written in one of two forms, and the form decides whether it gets templated:
+
+- **Map form** is emitted verbatim. Any foreign Go template syntax survives untouched, which is what you want for Grafana dashboards, Prometheus recording/alerting rules and Alertmanager templates that contain their own `{{ }}`.
+- **String form** is an explicit opt-in to templating: the whole string is passed through `tpl`, so every `{{ }}` is evaluated against the chart context. One string may hold several `---` separated documents.
+
+```yaml
+extraObjects:
+  # map form: verbatim, foreign {{ }} preserved
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: prometheus-rules
+    data:
+      rules.yaml: |
+        - alert: Example
+          annotations:
+            summary: "{{ $labels.instance }} is down"
+  # string form: templated, multiple documents
+  - |
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: {{ .Release.Name }}-extra-a
+    data:
+      extra.conf: example_a
+    ---
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: {{ .Release.Name }}-extra-b
+    data:
+      extra.conf: example_b
+```
+
+Every entry must carry `apiVersion`, `kind` and either `metadata.name` or `metadata.generateName`; the body shape is not validated. Chart labels are merged in, and `metadata.namespace` defaults to the release namespace (honouring `namespaceOverride`) unless the object sets it. For a cluster-scoped object, set `namespace: null` to leave it without one.
+
+Note that this manifest is not capability-gated: if the CRD backing an extra object is missing, `helm install` fails. It is also not intended for `ingress.v3.haproxy.org/v3` CRs, whose CRDs are installed by the `post-install` / `pre-upgrade` job described above.
 
 ### Migration notes (1.50.0)
 

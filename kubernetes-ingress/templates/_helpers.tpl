@@ -266,12 +266,19 @@ Create extra raw objects labels.
 {{- define "kubernetes-ingress.extraRawLabels" -}}
 metadata:
   labels:
-    {{- include "kubernetes-ingress.labels" $ | nindent 4 }}
+    {{- include "kubernetes-ingress.labels" . | nindent 4 }}
 {{- end }}
 
 {{/*
-Ensure an extra object is a Kubernetes CR.
-It must be a map with at least apiVersion, kind, metadata.name, spec or data keys.
+Ensure an extra object looks like a Kubernetes manifest.
+It must be a map carrying apiVersion, kind and either metadata.name or
+metadata.generateName.
+
+The body shape is deliberately not checked. Requiring 'spec' or 'data' would
+reject plenty of valid kinds that carry neither: ServiceAccount, ClusterRole
+and Role ('rules'), RoleBinding ('roleRef'/'subjects'), Secret ('stringData'),
+PriorityClass ('value'), StorageClass ('provisioner'), Endpoints ('subsets'),
+ConfigMap with only 'binaryData'. The API server is the authority on the body.
 */}}
 {{- define "kubernetes-ingress.validateExtraObject" -}}
 {{- $obj := . -}}
@@ -299,33 +306,67 @@ It must be a map with at least apiVersion, kind, metadata.name, spec or data key
 {{- if not (kindIs "map" $obj.metadata) -}}
 {{- fail (printf "%s: 'metadata' must be a map, got %s" $tplName (kindOf $obj.metadata)) -}}
 {{- end -}}
-{{- if not (hasKey $obj.metadata "name") -}}
-{{- fail (printf "%s: object is missing required key 'metadata.name'" $tplName) -}}
+{{- if not (or (hasKey $obj.metadata "name") (hasKey $obj.metadata "generateName")) -}}
+{{- fail (printf "%s: object is missing required key 'metadata.name' (or 'metadata.generateName')" $tplName) -}}
 {{- end -}}
-{{- if not (kindIs "string" $obj.metadata.name) -}}
-{{- fail (printf "%s: 'metadata.name' must be a string, got %s" $tplName (kindOf $obj.metadata.name)) -}}
+{{- range $key := list "name" "generateName" -}}
+{{- if hasKey $obj.metadata $key -}}
+{{- $value := get $obj.metadata $key -}}
+{{- if not (kindIs "string" $value) -}}
+{{- fail (printf "%s: 'metadata.%s' must be a string, got %s" $tplName $key (kindOf $value)) -}}
 {{- end -}}
-{{- $_ := required (printf "%s: 'metadata.name' must not be empty" $tplName) $obj.metadata.name -}}
-{{- if not (or (hasKey $obj "spec") (hasKey $obj "data")) -}}
-{{- fail (printf "%s: object must have either 'spec' or 'data' key" $tplName) -}}
+{{- $_ := required (printf "%s: 'metadata.%s' must not be empty" $tplName $key) $value -}}
+{{- end -}}
 {{- end -}}
 {{- end }}
 
 {{/*
-Render an extra object that might contain templates.
+Render one extraObjects entry, which may expand to several documents.
+
+Map form is emitted verbatim so that foreign {{ }} (Grafana dashboards,
+Prometheus rules, Alertmanager templates) survives untouched. String form is an
+explicit opt-in to templating and may hold multiple '---' separated documents.
+
+Emitted documents are '---' joined, so the caller supplies only the leading
+separator.
 */}}
 {{- define "kubernetes-ingress.renderExtraObject" -}}
-{{- $labels := fromYaml (include "kubernetes-ingress.extraRawLabels" .context) -}}
-{{- if typeIs "string" .value }}
-  {{- /* string form is an explicit opt-in to templating */ -}}
-  {{- $templatedValue := fromYaml (tpl .value .context) -}}
-  {{- include "kubernetes-ingress.validateExtraObject" $templatedValue }}
-  {{- toYaml (merge $templatedValue $labels) }}
-{{- else }}
-  {{- /* map form is emitted verbatim; foreign {{ }} left untouched */ -}}
-  {{- include "kubernetes-ingress.validateExtraObject" .value }}
-  {{- toYaml (merge (deepCopy .value) $labels) }}
-{{- end }}
+{{- $context := .context -}}
+{{- $docs := list -}}
+{{- if typeIs "string" .value -}}
+{{- /* string form is an explicit opt-in to templating */ -}}
+{{- range $raw := regexSplit "(?m)^---[[:blank:]]*$" (tpl .value $context) -1 -}}
+{{- if trim $raw -}}
+{{- $parsed := fromYaml $raw -}}
+{{- /* fromYaml never errors out: on a parse failure it returns
+       {"Error": "<reason>"}, which would otherwise reach validateExtraObject
+       and be reported as a misleading missing 'apiVersion'. */ -}}
+{{- if and (hasKey $parsed "Error") (not (hasKey $parsed "apiVersion")) -}}
+{{- fail (printf "kubernetes-ingress.extraObjects: could not parse manifest as YAML: %v" (get $parsed "Error")) -}}
+{{- end -}}
+{{- $docs = append $docs $parsed -}}
+{{- end -}}
+{{- end -}}
+{{- if not $docs -}}
+{{- fail "kubernetes-ingress.extraObjects: entry rendered to an empty manifest" -}}
+{{- end -}}
+{{- else -}}
+{{- /* map form is emitted verbatim; foreign {{ }} left untouched */ -}}
+{{- $docs = append $docs (deepCopy .value) -}}
+{{- end -}}
+{{- $labels := fromYaml (include "kubernetes-ingress.extraRawLabels" $context) -}}
+{{- $rendered := list -}}
+{{- range $doc := $docs -}}
+{{- include "kubernetes-ingress.validateExtraObject" $doc -}}
+{{- /* keep extra objects in the same namespace as the rest of the release,
+       honouring namespaceOverride; an explicit metadata.namespace always wins,
+       and 'namespace: null' opts a cluster-scoped object out entirely */ -}}
+{{- if not (hasKey $doc.metadata "namespace") -}}
+{{- $_ := set $doc.metadata "namespace" (include "kubernetes-ingress.namespace" $context) -}}
+{{- end -}}
+{{- $rendered = append $rendered (toYaml (merge $doc $labels)) -}}
+{{- end -}}
+{{- join "\n---\n" $rendered -}}
 {{- end -}}
 
 {{/* vim: set filetype=mustache: */}}
