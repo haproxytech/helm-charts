@@ -1487,6 +1487,37 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/category: networking
+      artifacthub.io/changes: '- Fix crdjob resources (#377)'
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/kubernetes-ingress:3.2.13
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.2.13
+    created: "2026-08-19T16:39:29.223388969Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 97df9963d12a910e24bf1f5173882d2a9d5b02257cca784f5ae6200a6162b45b
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.53.1/kubernetes-ingress-1.53.1.tgz
+    version: 1.53.1
+  - annotations:
+      artifacthub.io/category: networking
       artifacthub.io/changes: |-
         - Use Ingress Controller 3.2.13 version for base image
         - Add extraObjects for templating arbitrary manifests as part of the release
@@ -5903,4 +5934,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-08-17T12:54:15.361721727Z"
+generated: "2026-08-19T16:39:29.223814983Z"
