@@ -78,6 +78,8 @@ spec:
           command:
             - /haproxy-ingress-controller
             - --job-check-crd
+          resources:
+            {{- toYaml .Values.crdjob.resources | nindent 12 }}
           {{- if .Values.controller.unprivileged }}
           securityContext:
             runAsNonRoot: true
@@ -93,8 +95,6 @@ spec:
             seccompProfile:
               type: RuntimeDefault
             {{- end }}
-          resources:
-            {{- toYaml .Values.crdjob.resources | nindent 12 }}
           {{- end }}
       {{- with .Values.crdjob.nodeSelector }}
       nodeSelector:
