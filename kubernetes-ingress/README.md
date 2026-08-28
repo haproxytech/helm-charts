@@ -509,6 +509,7 @@ A Helm `post-install` / `pre-upgrade` hook Job that applies the controller's CRD
 |---|---|---|
 | `crdjob.podAnnotations` | Annotations on the Job pod. | `{}` |
 | `crdjob.ttlSecondsAfterFinished` | Seconds after which the Job is garbage-collected. | `600` |
+| `crdjob.activeDeadlineSeconds` | Seconds the Job may stay active before Kubernetes terminates it and marks it `DeadlineExceeded`. Omitted when unset, so the Job runs without a deadline. | _unset_ |
 | `crdjob.nodeSelector` / `.tolerations` / `.affinity` | Scheduling controls for the Job pod. | `{}` / `[]` / `{}` |
 | `crdjob.resources.requests` / `.limits` | CPU/memory requests and (optional) limits for the Job container. | `cpu: 250m`, `memory: 400Mi` (no limits) |
 

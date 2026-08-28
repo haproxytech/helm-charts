@@ -710,7 +710,8 @@ crdjob:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/ttlafterfinished/
   ttlSecondsAfterFinished: 600
 
-  ## Specifies the duration in seconds relative to the startTime that the job maybe continuously active before the system tries to terminate it
+  ## Duration in seconds relative to the startTime that the job may be continuously active before the system tries to terminate it
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/job/#job-termination-and-cleanup
   activeDeadlineSeconds:
 
   ## Pod Node assignment
