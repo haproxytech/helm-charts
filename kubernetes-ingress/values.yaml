@@ -701,6 +701,9 @@ controller:
 
 ## CRD job default values
 crdjob:
+  ## Enable or disable the CRD job
+  enabled: true
+  
   ## Additional annotations to add to the pod container metadata
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   podAnnotations: {}

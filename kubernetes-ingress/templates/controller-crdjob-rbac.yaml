@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */}}
-
+{{- if .Values.crdjob.enabled }}
 {{- if .Values.rbac.create -}}
 apiVersion: v1
 kind: ServiceAccount
@@ -75,4 +75,5 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "kubernetes-ingress.crdjob.saName" . }}
     namespace: {{ include "kubernetes-ingress.namespace" . }}
+{{- end -}}
 {{- end -}}
