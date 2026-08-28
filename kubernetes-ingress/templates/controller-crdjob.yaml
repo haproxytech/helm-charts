@@ -33,6 +33,9 @@ spec:
 {{- if .Values.crdjob.ttlSecondsAfterFinished }}
   ttlSecondsAfterFinished: {{ .Values.crdjob.ttlSecondsAfterFinished }}
 {{- end }}
+{{- if .Values.crdjob.activeDeadlineSeconds }}
+  activeDeadlineSeconds: {{ .Values.crdjob.activeDeadlineSeconds }}
+{{- end }}
   backoffLimit: 0
   template:
     metadata:
