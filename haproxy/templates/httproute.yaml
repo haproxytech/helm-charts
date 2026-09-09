@@ -34,7 +34,7 @@ spec:
       {{- toYaml . | nindent 8 }}
     {{- end }}
       backendRefs:
-        - name: {{ $fullName }}
+        - name: {{ $.Values.service.name | default $fullName }}
           port: {{ $svcPort }}
     {{- end }}
 {{- end }}
