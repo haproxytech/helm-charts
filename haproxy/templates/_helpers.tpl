@@ -89,6 +89,13 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
+Create the name of the service to use
+*/}}
+{{- define "haproxy.serviceName" -}}
+{{- default (include "haproxy.fullname" .) .Values.service.name }}
+{{- end }}
+
+{{/*
 Create includes name
 */}}
 {{- define "haproxy.includes" -}}

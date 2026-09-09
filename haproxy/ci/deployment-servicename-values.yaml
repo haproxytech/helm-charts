@@ -1,0 +1,5 @@
+kind: Deployment
+service:
+  name: haproxy-custom-svc
+ingress:
+  enabled: true

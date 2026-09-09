@@ -492,6 +492,13 @@ PodDisruptionBudget:
 ## Service configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
+  ## Service name override
+  ## Defaults to the chart fullname, ie. "<release>-haproxy"
+  ## NOTE: renaming the Service of an existing release replaces it, so the
+  ## ClusterIP changes and, with type LoadBalancer, the cloud provider tears down
+  ## the old load balancer and provisions a new one with a new external address
+  name: ""
+
   type: ClusterIP   # can be 'ClusterIP', 'NodePort', 'LoadBalancer'
 
   ## Service ClusterIP

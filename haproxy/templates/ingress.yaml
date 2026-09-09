@@ -43,11 +43,11 @@ spec:
             backend:
               {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
               service:
-                name: {{ $fullName }}
+                name: {{ include "haproxy.serviceName" $ | quote }}
                 port:
                   number: {{ $svcPort }}
               {{- else }}
-              serviceName: {{ $fullName }}
+              serviceName: {{ include "haproxy.serviceName" $ | quote }}
               servicePort: {{ $svcPort }}
               {{- end }}
           {{- end }}
