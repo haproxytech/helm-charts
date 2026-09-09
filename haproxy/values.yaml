@@ -492,6 +492,7 @@ PodDisruptionBudget:
 ## Service configuration
 ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
+  name: ""          # overrides the service name whose default is .Release.Name
   type: ClusterIP   # can be 'ClusterIP', 'NodePort', 'LoadBalancer'
 
   ## Service ClusterIP

@@ -17,7 +17,7 @@ limitations under the License.
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "haproxy.fullname" . }}
+  name: {{ .Values.service.name | default (include "haproxy.fullname" .) }}
   namespace: {{ include "haproxy.namespace" . }}
   labels:
     {{- include "haproxy.labels" . | nindent 4 }}
