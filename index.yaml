@@ -1487,6 +1487,37 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/category: networking
+      artifacthub.io/changes: '- Use Ingress Controller 3.2.15 version for base image'
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/kubernetes-ingress:3.2.15
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.2.15
+    created: "2026-09-15T08:06:18.480025151Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: d1212304568bd3a100f69ebf1433ecaf698de26ddae85db049a95c9338b48f89
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.54.1/kubernetes-ingress-1.54.1.tgz
+    version: 1.54.1
+  - annotations:
+      artifacthub.io/category: networking
       artifacthub.io/changes: |-
         - Use Ingress Controller 3.2.14 version for base image
         - Add activeDeadlineSeconds to crdjob configuration (#381)
@@ -5967,4 +5998,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-08-31T10:08:52.404411019Z"
+generated: "2026-09-15T08:06:18.480334868Z"
