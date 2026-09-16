@@ -17,7 +17,7 @@ name: haproxy
 description: A Helm chart for HAProxy on Kubernetes
 type: application
 version: 1.30.2
-appVersion: 3.4.3
+appVersion: 3.4.4
 kubeVersion: ">=1.17.0-0"
 keywords:
   - haproxy
@@ -32,10 +32,11 @@ annotations:
   artifacthub.io/category: networking
   artifacthub.io/images: |
     - name: haproxy
-      image: docker.io/haproxytech/haproxy-alpine:3.4.3
+      image: docker.io/haproxytech/haproxy-alpine:3.4.4
   artifacthub.io/license: Apache-2.0
   artifacthub.io/links: |
     - name: support
       url: https://github.com/haproxytech/helm-charts/issues
   artifacthub.io/changes: |
     - Do not render the PodSecurityPolicy Role and RoleBinding on Kubernetes 1.25 and newer
+    - Update base image to HAProxy 3.4.4
