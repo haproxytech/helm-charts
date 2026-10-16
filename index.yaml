@@ -1156,6 +1156,43 @@ entries:
   haproxy-unified-gateway:
   - annotations:
       artifacthub.io/category: networking
+      artifacthub.io/changes: '- Use HAProxy Unified Gateway 1.0.8 version for base
+        image'
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/haproxy-unified-gateway:1.0.8
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 1.0.8
+    created: "2026-10-16T16:43:04.924379402Z"
+    description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API
+      Controller
+    digest: a88913e38ef7455843ffdab771ebbf73a4e374ce20294273e4d508e636c0d84e
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy-unified-gateway
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - haproxy
+    - gateway-api
+    - gateway
+    - load-balancer
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: zbratkovic@haproxy.com
+      name: Zlatko Bratkovic
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy-unified-gateway
+    sources:
+    - https://github.com/haproxytech/haproxy-unified-gateway
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-1.2.1/haproxy-unified-gateway-1.2.1.tgz
+    version: 1.2.1
+  - annotations:
+      artifacthub.io/category: networking
       artifacthub.io/changes: |-
         - Use HAProxy Unified Gateway 1.0.7 version for base image
         - Add support for loadBalancerClass and loadBalancerSourceRanges
@@ -1517,6 +1554,39 @@ entries:
     - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-0.2.0/haproxy-unified-gateway-0.2.0.tgz
     version: 0.2.0
   kubernetes-ingress:
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/changes: |-
+        - use Ingress Controller 3.2.17 version for base image
+        - gate PSP Role and RoleBinding on k8s < 1.25 (#384)
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/kubernetes-ingress:3.2.17
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.2.17
+    created: "2026-10-16T16:43:05.188736013Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 1d3258dc0979e94c4ae5c4cd1c05e4ac6291a5a8bada4ab046b16f107c6d1750
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.54.3/kubernetes-ingress-1.54.3.tgz
+    version: 1.54.3
   - annotations:
       artifacthub.io/category: networking
       artifacthub.io/changes: '- Do not render the PodSecurityPolicy Role and RoleBinding
@@ -6062,4 +6132,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-09-16T13:12:18.190979854Z"
+generated: "2026-10-16T16:43:05.189183589Z"
