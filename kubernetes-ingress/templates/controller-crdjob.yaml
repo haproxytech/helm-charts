@@ -55,6 +55,9 @@ spec:
     spec:
       restartPolicy: Never
       serviceAccountName: {{ include "kubernetes-ingress.crdjob.serviceAccountName" . }}
+{{- if hasKey .Values.serviceAccount "automountServiceAccountToken" }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
+{{- end }}
 {{- if .Values.controller.imageCredentials.registry }}
       imagePullSecrets:
       - name: {{ include "kubernetes-ingress.fullname" . }}
