@@ -1156,6 +1156,43 @@ entries:
   haproxy-unified-gateway:
   - annotations:
       artifacthub.io/category: networking
+      artifacthub.io/changes: '- Use HAProxy Unified Gateway 1.0.10 version for base
+        image'
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/haproxy-unified-gateway:1.0.10
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 1.0.10
+    created: "2026-10-30T17:25:00.854803813Z"
+    description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API
+      Controller
+    digest: 175d0c568e6a8d1a410597dc3d0ee260bb5f974080199bd60a7abcbf96dc68c7
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy-unified-gateway
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - haproxy
+    - gateway-api
+    - gateway
+    - load-balancer
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: zbratkovic@haproxy.com
+      name: Zlatko Bratkovic
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy-unified-gateway
+    sources:
+    - https://github.com/haproxytech/haproxy-unified-gateway
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-1.2.3/haproxy-unified-gateway-1.2.3.tgz
+    version: 1.2.3
+  - annotations:
+      artifacthub.io/category: networking
       artifacthub.io/changes: '- Use HAProxy Unified Gateway 1.0.9 version for base
         image'
       artifacthub.io/images: |
@@ -6200,4 +6237,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-10-30T16:25:59.353574845Z"
+generated: "2026-10-30T17:25:00.85507553Z"
