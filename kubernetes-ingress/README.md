@@ -477,6 +477,10 @@ To override defaults, either pass a values file with `-f my-values.yaml` (recomm
 | `controller.extraContainers` | Additional sidecar containers. | `[]` |
 | `controller.extraVolumeMounts` | Extra `volumeMounts` on the controller container (needed e.g. when running with `readOnlyRootFilesystem`). | `[]` |
 | `controller.extraVolumes` | Extra `volumes` on the pod. | `[]` |
+| `controller.tlsTicketKeys.enabled` | Mount a Secret with TLS session ticket keys and set the `tls-ticket-keys` controller config key (shared across replicas). | `false` |
+| `controller.tlsTicketKeys.existingSecret` | Existing Secret holding the ticket keys file (3 base64 keys, one per line). Required when enabled. | `""` |
+| `controller.tlsTicketKeys.secretKey` | Key of the file inside the Secret. | `tls-ticket-keys` |
+| `controller.tlsTicketKeys.mountPath` | Directory where the Secret file is mounted. | `/etc/haproxy/tls-ticket-keys` |
 
 ### Prometheus integrations (ServiceMonitor / PodMonitor)
 

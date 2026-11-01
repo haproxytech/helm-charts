@@ -612,6 +612,16 @@ controller:
     #   command: ["/bin/sh"]
     #   args: ["-c", "while true; do date; sleep 5;done"]
 
+  ## Share TLS session ticket keys across replicas (sets the `tls-ticket-keys` controller config key)
+  ## Rotation of the Secret content is up to the user
+  tlsTicketKeys:
+    enabled: false
+    ## Existing Secret holding the ticket keys file (3 base64 keys, one per line)
+    existingSecret: ""
+    ## Key of the file inside the Secret
+    secretKey: tls-ticket-keys
+    mountPath: /etc/haproxy/tls-ticket-keys
+
   ## Additional volumeMounts to the controller main container
   extraVolumeMounts: []
     ## Example empty volume mounts when using securityContext->readOnlyRootFilesystem
