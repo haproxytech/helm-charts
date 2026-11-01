@@ -275,6 +275,11 @@ containers:
       {{- else if gt (len $ctlr.extraVolumeMounts) 0 }}
 {{ toYaml $ctlr.extraVolumeMounts | indent 6 }}
       {{- end }}
+      {{- if and $ctlr.tlsTicketKeys $ctlr.tlsTicketKeys.enabled }}
+      - name: tls-ticket-keys
+        mountPath: {{ $ctlr.tlsTicketKeys.mountPath }}
+        readOnly: true
+      {{- end }}
       {{- if $ctlr.auxiliaryConfig }}
       - name: haproxy-aux-cfg
         mountPath: /etc/haproxy/haproxy-aux.cfg
@@ -303,6 +308,14 @@ volumes:
 {{ tpl $ctlr.extraVolumes $root | indent 2 }}
   {{- else if gt (len $ctlr.extraVolumes) 0 }}
 {{ toYaml $ctlr.extraVolumes | indent 2 }}
+  {{- end }}
+  {{- if and $ctlr.tlsTicketKeys $ctlr.tlsTicketKeys.enabled }}
+  - name: tls-ticket-keys
+    secret:
+      secretName: {{ required "controller.tlsTicketKeys.existingSecret is required when controller.tlsTicketKeys.enabled is true" $ctlr.tlsTicketKeys.existingSecret }}
+      items:
+        - key: {{ $ctlr.tlsTicketKeys.secretKey }}
+          path: {{ $ctlr.tlsTicketKeys.secretKey }}
   {{- end }}
   {{- if $ctlr.auxiliaryConfig }}
   - name: haproxy-aux-cfg

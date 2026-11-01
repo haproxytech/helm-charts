@@ -25,7 +25,11 @@ metadata:
   annotations:
 {{ toYaml .Values.controller.configAnnotations | indent 4 }}
 {{- end }}
-{{- if or .Values.controller.logging.traffic .Values.controller.config }}
+{{- $tlsTicketKeys := .Values.controller.tlsTicketKeys | default dict }}
+{{- if and $tlsTicketKeys.enabled (not $tlsTicketKeys.existingSecret) }}
+{{- fail "controller.tlsTicketKeys.existingSecret is required when controller.tlsTicketKeys.enabled is true" }}
+{{- end }}
+{{- if or .Values.controller.logging.traffic .Values.controller.config $tlsTicketKeys.enabled }}
 data:
 {{- if .Values.controller.logging.traffic }}
   syslog-server: {{ include "kubernetes-ingress.syslogServer" . }}
@@ -35,6 +39,16 @@ data:
 {{ tpl .Values.controller.config . | indent 2 }}
 {{- else }}
 {{ toYaml .Values.controller.config | indent 2 }}
+{{- end }}
+{{- end }}
+{{- if $tlsTicketKeys.enabled }}
+{{- /* A user-set controller.config["tls-ticket-keys"] wins */}}
+{{- if eq "string" (printf "%T" .Values.controller.config) }}
+{{- if not (regexMatch "(?m)^\\s*tls-ticket-keys:" (tpl .Values.controller.config .)) }}
+  tls-ticket-keys: {{ printf "%s/%s" $tlsTicketKeys.mountPath $tlsTicketKeys.secretKey | quote }}
+{{- end }}
+{{- else if not (hasKey (.Values.controller.config | default dict) "tls-ticket-keys") }}
+  tls-ticket-keys: {{ printf "%s/%s" $tlsTicketKeys.mountPath $tlsTicketKeys.secretKey | quote }}
 {{- end }}
 {{- end }}
 {{- end }}

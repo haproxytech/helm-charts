@@ -1,0 +1,5 @@
+controller:
+  kind: Deployment
+  tlsTicketKeys:
+    enabled: true
+    existingSecret: tls-ticket-keys

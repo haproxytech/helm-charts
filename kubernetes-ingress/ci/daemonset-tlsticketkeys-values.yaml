@@ -1,0 +1,5 @@
+controller:
+  kind: DaemonSet
+  tlsTicketKeys:
+    enabled: true
+    existingSecret: tls-ticket-keys
