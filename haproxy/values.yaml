@@ -92,7 +92,7 @@ minReadySeconds: 0
 ## Command line arguments to pass to HAProxy
 args:
   enabled: true    # EE images require disabling this due to S6-overlay
-  # ref: http://cbonte.github.io/haproxy-dconv/2.6/management.html#3
+  # ref: https://docs.haproxy.org/3.4/management.html#3
   defaults: ["-f", "/usr/local/etc/haproxy/haproxy.cfg"]
   extraArgs: []    # EE images require disabling this due to S6-overlay
 
@@ -252,7 +252,7 @@ extraVolumes: []
 #   emptyDir: {}
 
 ## HAProxy daemon configuration
-# ref: https://www.haproxy.org/download/2.6/doc/configuration.txt
+# ref: https://docs.haproxy.org/3.4/configuration.html
 config: |
   global
     log stdout format raw local0
@@ -277,8 +277,8 @@ configMount:
   subPath: ""                                       # EE images use hapee-lb.cfg
 
 ## Basic features : Maps
-# ref: http://cbonte.github.io/haproxy-dconv/2.6/configuration.html#7.3.1-map
-# ref: http://cbonte.github.io/haproxy-dconv/2.6/intro.html#3.3.8
+# ref: https://docs.haproxy.org/3.4/configuration.html#7-map
+# ref: https://docs.haproxy.org/3.4/intro.html#3.4.2
 includes:
   # routes.map: |
   #   www.example.com/v1     www.example2.com/v2
