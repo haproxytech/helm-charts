@@ -4,6 +4,37 @@ entries:
   - annotations:
       artifacthub.io/category: networking
       artifacthub.io/changes: |
+        - Update base image to HAProxy 3.4.7
+      artifacthub.io/images: |
+        - name: haproxy
+          image: docker.io/haproxytech/haproxy-alpine:3.4.7
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.4.7
+    created: "2026-11-12T12:41:12.887731385Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: ab9f2f913e30c7cd114a1b394e4b7d7d4a2cab5c170b0d98cc45109d71dd19b0
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.30.3/haproxy-1.30.3.tgz
+    version: 1.30.3
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/changes: |
         - Do not render the PodSecurityPolicy Role and RoleBinding on Kubernetes 1.25 and newer
         - Update base image to HAProxy 3.4.4
       artifacthub.io/images: |
@@ -6268,4 +6299,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-11-12T12:32:37.475549748Z"
+generated: "2026-11-12T12:41:12.887999466Z"
