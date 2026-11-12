@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   bump:
+    if: github.ref == 'refs/heads/main'
     runs-on: large_runner
     permissions:
       contents: write
@@ -33,6 +34,12 @@ jobs:
             | jq -r '.results[].name' \
             | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' \
             | sort -V | tail -1)
+
+          # Both are fed to arithmetic expansion below, which evaluates its
+          # operand as a bash expression -- never trust them unvalidated.
+          for v in "$cur" "$ver"; do
+            [[ $v =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "malformed version in $CHART: $v"; exit 1; }
+          done
 
           echo "current appVersion: $cur, latest release tag: $latest"
           if [ -z "$latest" ] || [ "$latest" = "$cur" ] || \
