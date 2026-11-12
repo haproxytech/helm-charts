@@ -4,6 +4,38 @@ entries:
   - annotations:
       artifacthub.io/category: networking
       artifacthub.io/changes: |
+        - Document memory limits and what HAProxy's memory use depends on
+        - Note in NOTES.txt when no memory limit is set
+      artifacthub.io/images: |
+        - name: haproxy
+          image: docker.io/haproxytech/haproxy-alpine:3.4.7
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.4.7
+    created: "2026-11-12T14:55:43.006150214Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 06e52df4d156b517a5ec136f3c1fba9f71971d3a97024775a9688f4c3015fafc
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.30.4/haproxy-1.30.4.tgz
+    version: 1.30.4
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/changes: |
         - Update base image to HAProxy 3.4.7
       artifacthub.io/images: |
         - name: haproxy
@@ -1187,6 +1219,43 @@ entries:
   haproxy-unified-gateway:
   - annotations:
       artifacthub.io/category: networking
+      artifacthub.io/changes: '- Add a default controller CPU request so HPA targetCPUUtilizationPercentage
+        has a reference'
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/haproxy-unified-gateway:1.1.0
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 1.1.0
+    created: "2026-11-12T14:55:43.432243733Z"
+    description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API
+      Controller
+    digest: 000a0d7d0a233407832d1349a8ff467ca5609f2091cd9e1a890dd3656669ace9
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy-unified-gateway
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - haproxy
+    - gateway-api
+    - gateway
+    - load-balancer
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: zbratkovic@haproxy.com
+      name: Zlatko Bratkovic
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy-unified-gateway
+    sources:
+    - https://github.com/haproxytech/haproxy-unified-gateway
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-1.3.2/haproxy-unified-gateway-1.3.2.tgz
+    version: 1.3.2
+  - annotations:
+      artifacthub.io/category: networking
       artifacthub.io/changes: |-
         - Use HAProxy Unified Gateway 1.1.0 version for base image
         - Install Gateway API 1.7.0 CRDs, required by HAProxy Unified Gateway 1.1.0
@@ -1697,6 +1766,40 @@ entries:
     - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-0.2.0/haproxy-unified-gateway-0.2.0.tgz
     version: 0.2.0
   kubernetes-ingress:
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/changes: |-
+        - Set a default controller memory limit of 2560Mi and request of 2048Mi, matching the haproxy-unified-gateway chart
+        - Document how the image sizes HAProxy and the controller from the container memory limit
+        - Warn in NOTES.txt when the controller has no memory limit
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/kubernetes-ingress:3.4.0
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.4.0
+    created: "2026-11-12T14:55:43.798710456Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 2640a20b5e770631887cd41a723c80bfce8322b3a852414c8b663f2b2c778be2
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.56.0/kubernetes-ingress-1.56.0.tgz
+    version: 1.56.0
   - annotations:
       artifacthub.io/category: networking
       artifacthub.io/changes: '- Use Ingress Controller 3.4.0 version for base image'
@@ -6337,4 +6440,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-11-12T14:39:23.181239719Z"
+generated: "2026-11-12T14:55:43.799019895Z"
