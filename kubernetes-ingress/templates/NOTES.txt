@@ -16,6 +16,23 @@ Controller Gateway Controller Name is set to "{{ .Values.controller.kubernetesGa
 that Gateway API CRDs are installed in Kubernetes.
 {{- end}}
 
+{{- $memLimit := dig "limits" "memory" "" (.Values.controller.resources | default dict) }}
+{{- if not $memLimit }}
+
+WARNING: no memory limit is set for the controller container.
+
+The image sizes both processes from the memory available to the container:
+HAProxy is given about 66% of it and the controller's GOMEMLIMIT about 33%.
+With no limit that budget is the node's total memory, so every replica sizes
+itself to the whole node, the controller's garbage collector reclaims far
+later than you would expect, and under memory pressure the node's OOM killer
+chooses a victim instead of this pod being held to a limit of its own.
+
+Set controller.resources.limits.memory to a value sized for your
+configuration, for example:
+  --set controller.resources.limits.memory=2560Mi
+{{- end }}
+
 Service ports mapped are:
 {{- if eq .Values.controller.kind "Deployment" }}
 {{- range $key, $value := .Values.controller.containerPort }}

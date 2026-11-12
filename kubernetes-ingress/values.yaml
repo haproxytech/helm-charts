@@ -251,14 +251,22 @@ controller:
     secret: null
 
   ## Compute Resources for controller container
+  ## The image sizes HAProxy and the controller from the memory available to
+  ## the container, so a memory limit is what bounds them: HAProxy is given
+  ## about 66% of it and the controller's GOMEMLIMIT about 33%. Without a
+  ## limit that budget is the node's total memory, so every replica sizes
+  ## itself to the whole node.
+  ## The CPU request is a scheduling floor, and it is also what the HPA
+  ## measures targetCPUUtilizationPercentage against, so it is kept. No CPU
+  ## limit is set, because only a limit causes CFS throttling.
+  ## With kind: DaemonSet the memory request is reserved on every node.
   ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   resources:
-  #  limits:
-  #    cpu: 250m
-  #    memory: 400Mi
+    limits:
+      memory: 2560Mi
     requests:
       cpu: 250m
-      memory: 400Mi
+      memory: 2048Mi
 
   ## Horizontal Pod Scaler
   ## Only to be used with Deployment kind

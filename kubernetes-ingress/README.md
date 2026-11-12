@@ -390,7 +390,7 @@ To override defaults, either pass a values file with `-f my-values.yaml` (recomm
 
 | Key | Description | Default |
 |---|---|---|
-| `controller.resources.requests` / `.limits` | CPU/memory requests and (optional) limits for the controller container. | `cpu: 250m`, `memory: 400Mi` (no limits) |
+| `controller.resources.requests` / `.limits` | Requests and limits for the controller container. No CPU limit is set, so the container is never throttled. See [Memory limits and sizing](#memory-limits-and-sizing). | `requests: cpu 250m, memory 2048Mi`, `limits.memory: 2560Mi` |
 | `controller.autoscaling.enabled` | Enable HPA (Deployment only). | `false` |
 | `controller.autoscaling.minReplicas` / `.maxReplicas` | HPA bounds. | `2` / `20` |
 | `controller.autoscaling.targetCPUUtilizationPercentage` | CPU utilisation target. | `80` |
@@ -408,6 +408,46 @@ To override defaults, either pass a values file with `-f my-values.yaml` (recomm
 | `controller.keda.triggers` | List of KEDA triggers (required when `keda.enabled=true`; chart fails at render if empty). | `[]` |
 | `controller.PodDisruptionBudget.enable` | Create a PDB (Deployment only). | `false` |
 | `controller.PodDisruptionBudget.maxUnavailable` / `.minAvailable` | PDB constraints (set one). | _unset_ |
+
+#### Memory limits and sizing
+
+The controller image runs HAProxy and the controller under a supervisor that
+sizes both from **the memory available to the container**: HAProxy is given
+about 66% of it, and the controller's `GOMEMLIMIT` about 33%. The memory limit
+is therefore not only a cap, it is the input to that calculation.
+
+With no limit set, the memory available to the container is the node's total
+memory. On a 16 GB node each replica sizes itself to roughly the whole node
+(HAProxy ~10.5 GB, controller ~5.3 GB), regardless of how small its request
+is. Three things follow:
+
+- every replica assumes the whole node, including replicas sharing one node;
+- the controller's garbage collector barely reclaims until it approaches its
+  share, so memory use looks far higher than the workload needs;
+- there is no pod-level ceiling, so under pressure the node's OOM killer picks
+  a victim, which may be an unrelated workload, instead of this pod being
+  restarted against its own limit.
+
+The chart therefore ships `limits.memory: 2560Mi` with `requests.memory:
+2048Mi`, giving HAProxy roughly 1.7 GB and the controller roughly 850 MB.
+
+No CPU *limit* is set, so the container is never throttled, but a
+`requests.cpu` of `250m` is kept: a CPU request is a scheduling floor rather
+than a cap, and the HPA measures `targetCPUUtilizationPercentage` against it,
+so removing it would leave the chart's default CPU-based autoscaling unable to
+read a utilisation figure at all.
+
+With `controller.kind: DaemonSet` the memory request is reserved on **every
+node** the DaemonSet covers, so budget accordingly on large clusters or set a
+smaller `controller.resources` for that mode.
+
+There is no single correct value: a 20-line configuration and one with large
+stick tables, extensive maps or 30,000 lines of configuration have very
+different needs. Size the limit for your configuration and raise it if the
+controller is OOM-killed at startup (see
+[kubernetes-ingress#799](https://github.com/haproxytech/kubernetes-ingress/issues/799)).
+Setting `controller.resources` replaces the whole block, so a limit you set
+yourself always wins.
 
 ### Scheduling
 

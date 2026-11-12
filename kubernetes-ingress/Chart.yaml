@@ -16,7 +16,7 @@ apiVersion: v2
 name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
-version: 1.55.0
+version: 1.56.0
 appVersion: 3.4.0
 kubeVersion: ">=1.23.0-0"
 keywords:
@@ -39,4 +39,6 @@ annotations:
     - name: support
       url: https://github.com/haproxytech/helm-charts/issues
   artifacthub.io/changes: |-
-    - Use Ingress Controller 3.4.0 version for base image
+    - Set a default controller memory limit of 2560Mi and request of 2048Mi, matching the haproxy-unified-gateway chart
+    - Document how the image sizes HAProxy and the controller from the container memory limit
+    - Warn in NOTES.txt when the controller has no memory limit
