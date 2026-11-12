@@ -1187,6 +1187,44 @@ entries:
   haproxy-unified-gateway:
   - annotations:
       artifacthub.io/category: networking
+      artifacthub.io/changes: |-
+        - Use HAProxy Unified Gateway 1.1.0 version for base image
+        - Install Gateway API 1.7.0 CRDs, required by HAProxy Unified Gateway 1.1.0
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/haproxy-unified-gateway:1.1.0
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 1.1.0
+    created: "2026-11-12T14:39:23.181063566Z"
+    description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API
+      Controller
+    digest: 2f681edb45968c81cef381685e504b7ecd63b1b1eaf264a39fc4c0a109658155
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy-unified-gateway
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - haproxy
+    - gateway-api
+    - gateway
+    - load-balancer
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: zbratkovic@haproxy.com
+      name: Zlatko Bratkovic
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy-unified-gateway
+    sources:
+    - https://github.com/haproxytech/haproxy-unified-gateway
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-1.3.0/haproxy-unified-gateway-1.3.0.tgz
+    version: 1.3.0
+  - annotations:
+      artifacthub.io/category: networking
       artifacthub.io/changes: '- Use HAProxy Unified Gateway 1.0.10 version for base
         image'
       artifacthub.io/images: |
@@ -6299,4 +6337,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-11-12T12:41:12.887999466Z"
+generated: "2026-11-12T14:39:23.181239719Z"
