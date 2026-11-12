@@ -536,11 +536,20 @@ controller:
     limits:
       memory: 2560Mi
     requests:
+      cpu: 250m
       memory: 2048Mi
 ```
 
-which gives HAProxy roughly 1.7 GB and the controller roughly 850 MB. CPU is
-intentionally left unset so the container is never throttled.
+which gives HAProxy roughly 1.7 GB and the controller roughly 850 MB.
+
+No CPU *limit* is set, so the container is never throttled, but a
+`requests.cpu` of `250m` is kept: a CPU request is a scheduling floor rather
+than a cap, and the HPA measures `targetCPUUtilizationPercentage` against it,
+so without it the chart's default CPU-based autoscaling has no utilisation
+figure to read.
+
+With `controller.kind: DaemonSet` the memory request is reserved on **every
+node** the DaemonSet covers, so budget accordingly on large clusters.
 
 If you remove the limit, the memory available to the container becomes the
 node's total memory, and every replica sizes itself to the whole node no
