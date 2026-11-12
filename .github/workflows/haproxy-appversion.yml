@@ -14,13 +14,12 @@ jobs:
     runs-on: large_runner
     permissions:
       contents: write
-      pull-requests: write
     steps:
       - uses: actions/checkout@v4
+      - uses: azure/setup-helm@v4
 
       - name: Bump appVersion to latest haproxy-alpine release
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CHART: haproxy/Chart.yaml
           IMAGE: haproxytech/haproxy-alpine
         run: |
@@ -48,12 +47,6 @@ jobs:
             exit 0
           fi
 
-          branch="appversion/haproxy-$latest"
-          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
-            echo "$branch already exists, nothing to do"
-            exit 0
-          fi
-
           IFS=. read -r cmaj cmin _ <<<"$cur"
           IFS=. read -r lmaj lmin _ <<<"$latest"
           IFS=. read -r vmaj vmin vpat <<<"$ver"
@@ -76,11 +69,11 @@ jobs:
             { drop = 0; print }
           ' "$CHART" > "$CHART.new" && mv "$CHART.new" "$CHART"
 
+          # Nothing else validates this push: GITHUB_TOKEN commits do not
+          # trigger the ci.yml workflow, so lint the chart here instead.
+          helm lint haproxy/
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git switch -c "$branch"
           git commit -s -am "MINOR: haproxy: update appVersion to $latest"
-          git push -u origin "$branch"
-          gh pr create \
-            --title "MINOR: haproxy: update appVersion to $latest" \
-            --body "Automated bump: haproxy-alpine $cur -> $latest, chart version $ver -> $new."
+          git push origin HEAD:main
