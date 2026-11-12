@@ -16,7 +16,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - uses: azure/setup-helm@v4
+      - name: Install tools (helm, cr)
+        run: bash .github/scripts/install_tools.sh
 
       - name: Bump appVersion to latest haproxy-alpine release
         env:
