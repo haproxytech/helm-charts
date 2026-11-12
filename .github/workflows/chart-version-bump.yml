@@ -1,0 +1,122 @@
+name: chart-version-bump
+
+# haproxyci opens appVersion PRs that never touch the chart "version:" field
+# (see #399, #401). Once CI is green on such a PR, merge it and push the
+# matching "RELEASE: Tag release" commit that a maintainer used to add by hand.
+
+on:
+  workflow_run:
+    workflows: ["lint-test-release"]
+    types:
+      - completed
+
+permissions:
+  contents: read
+
+concurrency:
+  group: chart-version-bump
+
+jobs:
+  bump:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'pull_request'
+    runs-on: large_runner
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      # Deliberately main, never the pull request head: this job holds a
+      # write token and must not run anything out of a contributor's fork.
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Install tools (helm, cr)
+        run: bash .github/scripts/install_tools.sh
+
+      - name: Merge appVersion PR and tag the chart release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+          BOT: haproxyci
+          CHARTS: kubernetes-ingress|haproxy-unified-gateway
+        run: |
+          set -euo pipefail
+
+          pr=$(gh api "repos/$REPO/commits/$SHA/pulls" \
+            --jq '[.[] | select(.state == "open" and .base.ref == "main")][0].number // empty')
+          [ -n "$pr" ] || { echo "no open PR for $SHA"; exit 0; }
+
+          author=$(gh pr view "$pr" --repo "$REPO" --json author --jq '.author.login')
+          head=$(gh pr view "$pr" --repo "$REPO" --json headRefOid --jq '.headRefOid')
+          [ "$author" = "$BOT" ] || { echo "PR #$pr is from $author, not $BOT"; exit 0; }
+          [ "$head" = "$SHA" ] || { echo "PR #$pr moved past the tested commit"; exit 0; }
+
+          # Must touch exactly one supported Chart.yaml and nothing else, so
+          # this never auto-merges template or script changes.
+          files=$(gh pr diff "$pr" --repo "$REPO" --name-only)
+          chart=$(printf '%s\n' "$files" | sed -nE "s%^($CHARTS)/Chart.yaml\$%\1%p")
+          if [ "$(printf '%s\n' "$files" | wc -l)" -ne 1 ] || [ -z "$chart" ]; then
+            echo "PR #$pr does not change exactly one supported Chart.yaml:"
+            printf '%s\n' "$files"
+            exit 0
+          fi
+
+          old=$(awk '/^appVersion:/ {print $2; exit}' "$chart/Chart.yaml")
+          ver=$(awk '/^version:/ {print $2; exit}' "$chart/Chart.yaml")
+          new=$(gh api "repos/$REPO/contents/$chart/Chart.yaml?ref=$SHA" \
+            -H "Accept: application/vnd.github.raw" \
+            | awk '/^appVersion:/ {print $2; exit}')
+
+          # $new comes from a fork and all three reach arithmetic expansion,
+          # which evaluates its operand as a bash expression.
+          for v in "$old" "$ver" "$new"; do
+            [[ $v =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "malformed version: $v"; exit 1; }
+          done
+
+          echo "PR #$pr: $chart appVersion $old -> $new"
+          if [ "$new" = "$old" ] || \
+             [ "$(printf '%s\n%s\n' "$old" "$new" | sort -V | tail -1)" != "$new" ]; then
+            echo "appVersion is not newer, leaving PR #$pr alone"
+            exit 0
+          fi
+
+          IFS=. read -r omaj omin _ <<<"$old"
+          IFS=. read -r nmaj nmin _ <<<"$new"
+          IFS=. read -r vmaj vmin vpat <<<"$ver"
+          if   [ "$nmaj" != "$omaj" ]; then bump="$((vmaj + 1)).0.0";        sev=MAJOR
+          elif [ "$nmin" != "$omin" ]; then bump="${vmaj}.$((vmin + 1)).0";  sev=MAJOR
+          else                              bump="${vmaj}.${vmin}.$((vpat + 1))"; sev=MINOR
+          fi
+          echo "chart version: $ver -> $bump (RELEASE/$sev)"
+
+          gh pr merge "$pr" --repo "$REPO" --squash --match-head-commit "$SHA" \
+            --subject "MINOR: $chart: update appVersion to $new (#$pr)"
+
+          git fetch origin main
+          git checkout -B main origin/main
+          landed=$(awk '/^appVersion:/ {print $2; exit}' "$chart/Chart.yaml")
+          [ "$landed" = "$new" ] || { echo "merge of #$pr did not land as expected"; exit 1; }
+
+          sed -i "s|^version: .*|version: $bump|" "$chart/Chart.yaml"
+
+          # A GITHUB_TOKEN push does not trigger ci.yml, so lint here instead.
+          helm lint "$chart/"
+
+          # Reuse the chart's own changelog entries for the commit body, the
+          # way the hand-written release commits do.
+          changes=$(awk '
+            /^  artifacthub.io\/changes: \|-?$/ { f = 1; next }
+            f && /^    - / { sub(/^    /, ""); print; next }
+            f { exit }
+          ' "$chart/Chart.yaml")
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          printf '%s\n\n%s\n%s\n' \
+            "RELEASE/$sev: $chart: Tag release $bump" \
+            "Changes in $chart:" \
+            "$changes" \
+            | git commit -s -a -F -
+          git push origin HEAD:main
