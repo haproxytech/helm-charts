@@ -362,6 +362,43 @@ initContainers:
       privileged: true
 ```
 
+## Memory limits
+
+The chart sets memory and CPU **requests** but no limits by default:
+
+```yaml
+resources:
+  requests:
+    cpu: 250m
+    memory: 128Mi
+```
+
+A request only influences scheduling. Without a limit the container may use as
+much memory as the node has, and under memory pressure the node's OOM killer
+chooses which pod to evict, which may be an unrelated workload, instead of
+this pod being restarted against a ceiling of its own. A limit also contains
+runaway growth, such as stick tables or maps growing unchecked.
+
+How much HAProxy needs depends entirely on its configuration: buffers,
+concurrent connections, stick table size, map and ACL files, and SSL session
+caches all contribute. Size a limit against your own configuration under load,
+for example:
+
+```yaml
+resources:
+  limits:
+    memory: 256Mi
+  requests:
+    cpu: 250m
+    memory: 128Mi
+```
+
+Note that this chart runs the `haproxytech/haproxy-alpine` image, which starts
+HAProxy directly. The limit is a cap and nothing more. This differs from the
+`kubernetes-ingress` and `haproxy-unified-gateway` charts, whose image derives
+HAProxy's and the controller's memory budgets *from* the container limit, so
+that leaving it unset changes how those processes size themselves.
+
 ## Upgrading the chart
 
 To upgrade the _my-release_ deployment:

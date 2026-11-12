@@ -16,7 +16,7 @@ apiVersion: v2
 name: haproxy
 description: A Helm chart for HAProxy on Kubernetes
 type: application
-version: 1.30.3
+version: 1.30.4
 appVersion: 3.4.7
 kubeVersion: ">=1.17.0-0"
 keywords:
@@ -38,4 +38,5 @@ annotations:
     - name: support
       url: https://github.com/haproxytech/helm-charts/issues
   artifacthub.io/changes: |
-    - Update base image to HAProxy 3.4.7
+    - Document memory limits and what HAProxy's memory use depends on
+    - Note in NOTES.txt when no memory limit is set

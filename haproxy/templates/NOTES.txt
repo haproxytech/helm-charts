@@ -49,6 +49,21 @@ initContainers:
     securityContext:
       privileged: true
 
+{{- $memLimit := dig "limits" "memory" "" (.Values.resources | default dict) }}
+{{- if not $memLimit }}
+
+NOTE: no memory limit is set (resources.limits.memory).
+
+The container may then use as much memory as the node has, and under memory
+pressure the node's OOM killer chooses which pod to evict, possibly an
+unrelated workload, instead of this pod being restarted against a ceiling of
+its own. How much HAProxy needs depends on your configuration: buffers,
+concurrent connections, stick tables, maps and SSL caches all contribute.
+
+Set a limit sized against your own configuration, for example:
+  --set resources.limits.memory=256Mi
+{{- end }}
+
 Node IP can be found with:
   $ kubectl --namespace {{ template "haproxy.namespace" . }} get nodes -o jsonpath="{.items[0].status.addresses[1].address}"
 
