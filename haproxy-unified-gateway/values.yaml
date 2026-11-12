@@ -390,7 +390,7 @@ gwapijob:
   # -- Enable the Gateway API CRD installation Job (Helm hook)
   enabled: true
   # -- Gateway API version to install
-  version: "1.3.0"
+  version: "1.7.0"
   # -- Additional pod annotations
   podAnnotations: {}
   # -- TTL for completed jobs (seconds)
