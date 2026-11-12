@@ -16,7 +16,7 @@ apiVersion: v2
 name: haproxy-unified-gateway
 description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API Controller
 type: application
-version: 1.3.0
+version: 1.3.1
 appVersion: 1.1.0
 kubeVersion: ">=1.26.0-0"
 keywords:
@@ -43,5 +43,5 @@ annotations:
     - name: support
       url: https://github.com/haproxytech/helm-charts/issues
   artifacthub.io/changes: |-
-    - Use HAProxy Unified Gateway 1.1.0 version for base image
-    - Install Gateway API 1.7.0 CRDs, required by HAProxy Unified Gateway 1.1.0
+    - Document how the image sizes HAProxy and the controller from the container memory limit
+    - Warn in NOTES.txt when the controller has no memory limit

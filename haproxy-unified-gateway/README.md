@@ -521,6 +521,45 @@ helm install my-release haproxytech/haproxy-unified-gateway \
   --set gwapijob.enabled=false
 ```
 
+## Memory limits and sizing
+
+The controller image runs HAProxy and the controller under a supervisor that
+sizes both from **the memory available to the container**: HAProxy is given
+about 66% of it, and the controller's `GOMEMLIMIT` about 33%. The memory limit
+is therefore not only a cap, it is the input to that calculation.
+
+The chart ships a limit for that reason:
+
+```yaml
+controller:
+  resources:
+    limits:
+      memory: 2560Mi
+    requests:
+      memory: 2048Mi
+```
+
+which gives HAProxy roughly 1.7 GB and the controller roughly 850 MB. CPU is
+intentionally left unset so the container is never throttled.
+
+If you remove the limit, the memory available to the container becomes the
+node's total memory, and every replica sizes itself to the whole node no
+matter how small its request is. The controller's garbage collector then
+reclaims far later than the workload warrants, and with no pod-level ceiling
+the node's OOM killer chooses a victim under pressure, possibly an unrelated
+workload, instead of this pod being restarted against its own limit. The chart
+prints a warning after install when that is the case.
+
+There is no single correct value, since a small Gateway configuration and one
+with large maps or many routes have very different needs. Size the limit for
+your configuration. Setting `controller.resources` replaces the whole block,
+so a limit you set yourself always wins.
+
+The CRD and Gateway API Jobs (`crdjob.resources`, `gwapijob.resources`) are
+unset by default. They are short-lived and only install CRDs, but they run the
+same image, so set limits on them too if your policy requires every container
+to have one.
+
 ## Upgrading the chart
 
 To upgrade the _my-release_ deployment:
