@@ -8,12 +8,16 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: haproxy-appversion
+
 jobs:
   bump:
     if: github.ref == 'refs/heads/main'
     runs-on: large_runner
     permissions:
       contents: write
+      actions: write
     steps:
       - uses: actions/checkout@v4
       - name: Install tools (helm, cr)
@@ -21,6 +25,7 @@ jobs:
 
       - name: Bump appVersion to latest haproxy-alpine release
         env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CHART: haproxy/Chart.yaml
           IMAGE: haproxytech/haproxy-alpine
         run: |
@@ -30,10 +35,12 @@ jobs:
           ver=$(awk '/^version:/ {print $2; exit}' "$CHART")
 
           # Only plain X.Y.Z release tags: skips -dev, -rc, s6-* and friends.
+          # A Docker Hub hiccup or an empty match must leave $latest empty for
+          # the guard below rather than abort the step through pipefail.
           latest=$(curl -fsSL "https://hub.docker.com/v2/repositories/${IMAGE}/tags?page_size=100&ordering=last_updated" \
             | jq -r '.results[].name' \
             | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' \
-            | sort -V | tail -1)
+            | sort -V | tail -1) || true
 
           # Both are fed to arithmetic expansion below, which evaluates its
           # operand as a bash expression -- never trust them unvalidated.
@@ -65,7 +72,7 @@ jobs:
 
           # Replace the artifacthub changes list with this single change.
           awk -v v="$latest" '
-            /^  artifacthub.io\/changes: \|$/ { print; print "    - Update base image to HAProxy " v; drop = 1; next }
+            /^  artifacthub.io\/changes: \|-?$/ { print; print "    - Update base image to HAProxy " v; drop = 1; next }
             drop && /^    - / { next }
             { drop = 0; print }
           ' "$CHART" > "$CHART.new" && mv "$CHART.new" "$CHART"
@@ -78,3 +85,9 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -s -am "MINOR: haproxy: update appVersion to $latest"
           git push origin HEAD:main
+
+          # A GITHUB_TOKEN push starts no workflow, so ci.yml's release-charts
+          # job never runs and the bumped chart would stay unpublished until
+          # somebody pushed to main by hand. release.sh is tag driven, so this
+          # packages exactly the charts whose version has no tag yet.
+          gh workflow run release.yml --ref main

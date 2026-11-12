@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: chart-version-bump
+  group: chart-version-bump-${{ github.event.workflow_run.head_sha }}
 
 jobs:
   bump:
@@ -25,6 +25,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      actions: write
     steps:
       # Deliberately main, never the pull request head: this job holds a
       # write token and must not run anything out of a contributor's fork.
@@ -64,14 +65,13 @@ jobs:
           fi
 
           old=$(awk '/^appVersion:/ {print $2; exit}' "$chart/Chart.yaml")
-          ver=$(awk '/^version:/ {print $2; exit}' "$chart/Chart.yaml")
           new=$(gh api "repos/$REPO/contents/$chart/Chart.yaml?ref=$SHA" \
             -H "Accept: application/vnd.github.raw" \
             | awk '/^appVersion:/ {print $2; exit}')
 
           # $new comes from a fork and all three reach arithmetic expansion,
           # which evaluates its operand as a bash expression.
-          for v in "$old" "$ver" "$new"; do
+          for v in "$old" "$new"; do
             [[ $v =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "malformed version: $v"; exit 1; }
           done
 
@@ -82,6 +82,20 @@ jobs:
             exit 0
           fi
 
+          gh pr merge "$pr" --repo "$REPO" --squash --match-head-commit "$SHA" \
+            --subject "MINOR: $chart: update appVersion to $new (#$pr)"
+
+          git fetch origin main
+          git checkout -B main origin/main
+          landed=$(awk '/^appVersion:/ {print $2; exit}' "$chart/Chart.yaml")
+          [ "$landed" = "$new" ] || { echo "merge of #$pr did not land as expected"; exit 1; }
+
+          # Only now, on post-merge main: the bump has to build on the version
+          # that is actually there, which a maintainer may have moved while
+          # this job was running.
+          ver=$(awk '/^version:/ {print $2; exit}' "$chart/Chart.yaml")
+          [[ $ver =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "malformed version: $ver"; exit 1; }
+
           IFS=. read -r omaj omin _ <<<"$old"
           IFS=. read -r nmaj nmin _ <<<"$new"
           IFS=. read -r vmaj vmin vpat <<<"$ver"
@@ -90,14 +104,6 @@ jobs:
           else                              bump="${vmaj}.${vmin}.$((vpat + 1))"; sev=MINOR
           fi
           echo "chart version: $ver -> $bump (RELEASE/$sev)"
-
-          gh pr merge "$pr" --repo "$REPO" --squash --match-head-commit "$SHA" \
-            --subject "MINOR: $chart: update appVersion to $new (#$pr)"
-
-          git fetch origin main
-          git checkout -B main origin/main
-          landed=$(awk '/^appVersion:/ {print $2; exit}' "$chart/Chart.yaml")
-          [ "$landed" = "$new" ] || { echo "merge of #$pr did not land as expected"; exit 1; }
 
           sed -i "s|^version: .*|version: $bump|" "$chart/Chart.yaml"
 
@@ -120,3 +126,9 @@ jobs:
             "$changes" \
             | git commit -s -a -F -
           git push origin HEAD:main
+
+          # A GITHUB_TOKEN push starts no workflow, so ci.yml's release-charts
+          # job never runs and the bumped chart would stay unpublished until
+          # somebody pushed to main by hand. release.sh is tag driven, so this
+          # packages exactly the charts whose version has no tag yet.
+          gh workflow run release.yml --ref main
