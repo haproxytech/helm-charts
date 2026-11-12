@@ -42,25 +42,93 @@ wait_for_merge() {
     return 1
 }
 
-# Push to main, rebasing onto whatever landed meanwhile. Jobs for different
-# pull requests are not serialised with each other, so a rejected push is
-# expected rather than exceptional.
-push_to_main() {
-    local attempt
+# The merge API returning does not mean mergeCommit is populated yet, so poll
+# for it. Treating "unknown" as "the squash changed something" would let the
+# duplicate-pull-request double bump through, which is what the caller uses
+# this to prevent.
+merge_commit_of() {
+    local pr="$1" attempt sha
     for attempt in 1 2 3 4 5; do
-        if git push origin HEAD:main; then
+        sha=$(gh pr view "${pr}" --repo "${REPO}" --json mergeCommit --jq '.mergeCommit.oid // empty') || sha=""
+        if [[ -n "${sha}" ]]; then
+            echo "${sha}"
             return 0
-        fi
-        echo "push rejected (attempt ${attempt}), rebasing onto origin/main"
-        git fetch origin main
-        if ! git rebase origin/main; then
-            git rebase --abort || true
-            echo "rebase onto origin/main conflicted, leaving main untouched"
-            return 1
         fi
         sleep 5
     done
-    echo "could not push to main after 5 attempts"
+    return 1
+}
+
+# Compute and push the version bump, redoing the whole calculation on each
+# attempt. The bump is a pure function of what is on main, so a push that
+# loses a race is simply recomputed against the new main; that is both simpler
+# than rebasing and removes the conflict case entirely. Leaving main with a
+# merged appVersion and no version bump would be permanent: release.sh is tag
+# driven and would skip the chart, and the pull request is already closed, so
+# nothing would retry.
+bump_and_push() {
+    local chart="$1" old="$2" new="$3"
+    local attempt ver bump sev changes
+    local omaj omin nmaj nmin vmaj vmin vpat
+
+    for attempt in 1 2 3 4 5; do
+        # A transient failure here must cost one attempt, not the whole run.
+        git fetch origin main || { echo "fetch failed (attempt ${attempt})"; sleep 5; continue; }
+        git checkout -B main origin/main
+
+        ver=$(main_chart_field "${chart}" version)
+        [[ ${ver} =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "malformed version: ${ver}"; return 1; }
+
+        IFS=. read -r omaj omin _ <<<"${old}"
+        IFS=. read -r nmaj nmin _ <<<"${new}"
+        IFS=. read -r vmaj vmin vpat <<<"${ver}"
+        if [[ "${nmaj}" != "${omaj}" ]]; then
+            bump="$((vmaj + 1)).0.0"
+            sev=MAJOR
+        elif [[ "${nmin}" != "${omin}" ]]; then
+            bump="${vmaj}.$((vmin + 1)).0"
+            sev=MAJOR
+        else
+            bump="${vmaj}.${vmin}.$((vpat + 1))"
+            sev=MINOR
+        fi
+        echo "chart version: ${ver} -> ${bump} (RELEASE/${sev}), attempt ${attempt}"
+
+        sed -i "s|^version: .*|version: ${bump}|" "${chart}/Chart.yaml"
+
+        # A GITHUB_TOKEN push does not trigger ci.yml, so lint here instead.
+        helm lint "${chart}/"
+
+        # Reuse the chart's own changelog entries for the commit body, the way
+        # the hand-written release commits do.
+        changes=$(awk '
+            /^  artifacthub.io\/changes: \|-?$/ { f = 1; next }
+            f && /^    - / { sub(/^    /, ""); print; next }
+            f { exit }
+        ' "${chart}/Chart.yaml")
+
+        printf '%s\n\n%s\n%s\n' \
+            "RELEASE/${sev}: ${chart}: Tag release ${bump}" \
+            "Changes in ${chart}:" \
+            "${changes}" \
+            | git commit -s -a -F -
+
+        if git push origin HEAD:main; then
+            return 0
+        fi
+        # A push can fail client-side after the ref was already updated, so
+        # check before recomputing: bumping again would publish a release
+        # differing from its predecessor only in the version string.
+        echo "push rejected (attempt ${attempt}), checking whether it landed anyway"
+        git fetch origin main || { sleep 5; continue; }
+        if [[ "$(main_chart_field "${chart}" version)" == "${bump}" ]]; then
+            echo "version ${bump} is already on main, the rejected push had landed"
+            return 0
+        fi
+        echo "recomputing against the new main"
+        sleep 5
+    done
+    echo "could not push the version bump after 5 attempts"
     return 1
 }
 
@@ -114,49 +182,39 @@ main() {
         --subject "MINOR: ${chart}: update appVersion to ${new} (#${pr})"
 
     wait_for_merge "${chart}" "${new}" || { echo "merge of #${pr} did not appear on main"; return 1; }
-    git checkout -B main origin/main
 
-    ver=$(main_chart_field "${chart}" version)
-    [[ ${ver} =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "malformed version: ${ver}"; return 1; }
-
-    local omaj omin nmaj nmin vmaj vmin vpat bump sev
-    IFS=. read -r omaj omin _ <<<"${old}"
-    IFS=. read -r nmaj nmin _ <<<"${new}"
-    IFS=. read -r vmaj vmin vpat <<<"${ver}"
-    if [[ "${nmaj}" != "${omaj}" ]]; then
-        bump="$((vmaj + 1)).0.0"
-        sev=MAJOR
-    elif [[ "${nmin}" != "${omin}" ]]; then
-        bump="${vmaj}.$((vmin + 1)).0"
-        sev=MAJOR
-    else
-        bump="${vmaj}.${vmin}.$((vpat + 1))"
-        sev=MINOR
+    # Runs are deliberately not serialised, so two jobs can clear the guard
+    # above before either merges. Whether the merge actually changed anything
+    # is only knowable afterwards: an empty squash means another run already
+    # landed this appVersion, and bumping again would publish a release
+    # differing from its predecessor only in the version string.
+    # Everything from here on runs after an irreversible merge, so no step may
+    # abort the job through errexit: leaving main with the appVersion merged
+    # and no version bump is permanent.
+    local merge_sha rc
+    if ! merge_sha=$(merge_commit_of "${pr}"); then
+        echo "could not determine the squash commit of #${pr}, refusing to bump blind"
+        return 1
     fi
-    echo "chart version: ${ver} -> ${bump} (RELEASE/${sev})"
+    git fetch origin main || true
 
-    sed -i "s|^version: .*|version: ${bump}|" "${chart}/Chart.yaml"
-
-    # A GITHUB_TOKEN push does not trigger ci.yml, so lint here instead.
-    helm lint "${chart}/"
-
-    # Reuse the chart's own changelog entries for the commit body, the way the
-    # hand-written release commits do.
-    local changes
-    changes=$(awk '
-        /^  artifacthub.io\/changes: \|-?$/ { f = 1; next }
-        f && /^    - / { sub(/^    /, ""); print; next }
-        f { exit }
-    ' "${chart}/Chart.yaml")
+    rc=0
+    git diff --quiet "${merge_sha}^" "${merge_sha}" -- "${chart}/Chart.yaml" || rc=$?
+    case "${rc}" in
+        0)
+            echo "the squash of #${pr} changed nothing, ${new} was already on main; no version bump"
+            return 0
+            ;;
+        1) ;;
+        *)
+            echo "could not inspect the squash of #${pr} (git diff exit ${rc}), refusing to bump blind"
+            return 1
+            ;;
+    esac
 
     git config user.name "github-actions[bot]"
     git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-    printf '%s\n\n%s\n%s\n' \
-        "RELEASE/${sev}: ${chart}: Tag release ${bump}" \
-        "Changes in ${chart}:" \
-        "${changes}" \
-        | git commit -s -a -F -
-    push_to_main
+    bump_and_push "${chart}" "${old}" "${new}"
 
     # A GITHUB_TOKEN push starts no workflow, so ci.yml's release-charts job
     # never runs. workflow_dispatch is exempt from that recursion guard.

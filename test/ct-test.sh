@@ -29,7 +29,10 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 CT_CONFIG="${SCRIPT_DIR}/ct.yaml"
-CT_VERSION="${CT_VERSION:-v3.10.0}"
+# Keep in step with .github/workflows/ci.yml and .github/scripts/install_charts.sh,
+# which pin the same version: ct lint rules, chart_schema.yaml and lintconf.yaml
+# all change between releases, so a mismatch makes local results diverge from CI.
+CT_VERSION="${CT_VERSION:-v3.14.0}"
 KIND_CLUSTER_NAME="${KIND_CLUSTER_NAME:-ct-dev}"
 KIND_KEEP_CLUSTER="${KIND_KEEP_CLUSTER:-0}"
 SKIP_KIND="${SKIP_KIND:-0}"
@@ -57,6 +60,14 @@ check_tool() {
 ensure_ct_configs() {
     local base_url="https://raw.githubusercontent.com/helm/chart-testing/${CT_VERSION}/etc"
     local files=(chart_schema.yaml lintconf.yaml)
+    local stamp="${SCRIPT_DIR}/.ct-version"
+
+    # Drop the cache when CT_VERSION changes. The files are gitignored, so a
+    # pair left over from an older ct would otherwise be kept forever and
+    # lint against different rules than CI does.
+    if [ ! -f "${stamp}" ] || [ "$(cat "${stamp}")" != "${CT_VERSION}" ]; then
+        rm -f "${SCRIPT_DIR}/chart_schema.yaml" "${SCRIPT_DIR}/lintconf.yaml"
+    fi
 
     for f in "${files[@]}"; do
         if [ ! -f "${SCRIPT_DIR}/${f}" ]; then
@@ -67,6 +78,20 @@ ensure_ct_configs() {
             fi
         fi
     done
+    echo "${CT_VERSION}" >"${stamp}"
+}
+
+# CT_VERSION governs the downloaded chart_schema.yaml and lintconf.yaml, but
+# the ct binary itself comes from PATH. A mismatch lints with one release's
+# rules against another's config files, which matches neither CI nor anything
+# else, so say so rather than failing: the binary is the developer's to manage.
+check_ct_version() {
+    local have
+    have=$(ct version 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1 || true)
+    if [ -n "${have}" ] && [ "v${have}" != "${CT_VERSION}" ]; then
+        echo -e "${YELLOW}WARNING:${NC} ct binary is v${have} but CT_VERSION is ${CT_VERSION} (CI uses ${CT_VERSION});" >&2
+        echo -e "         lint results may differ from CI. Install ${CT_VERSION} or set CT_VERSION=v${have}." >&2
+    fi
 }
 
 # --- Kind cluster management ---
@@ -228,6 +253,7 @@ main() {
     check_tool ct
     check_tool helm
     ensure_ct_configs
+    check_ct_version
 
     echo -e "${BOLD}Chart Testing (ct) — local${NC}"
     echo "Repo:    $REPO_ROOT"

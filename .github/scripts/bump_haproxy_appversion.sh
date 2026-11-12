@@ -25,7 +25,8 @@ push_to_main() {
             return 0
         fi
         echo "push rejected (attempt ${attempt}), rebasing onto origin/main"
-        git fetch origin main
+        # A transient failure here must cost one attempt, not the whole run.
+        git fetch origin main || { sleep 5; continue; }
         if ! git rebase origin/main; then
             git rebase --abort || true
             echo "rebase onto origin/main conflicted, leaving main untouched"

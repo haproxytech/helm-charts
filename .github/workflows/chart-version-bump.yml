@@ -16,7 +16,8 @@ permissions:
 # Keyed per pull request rather than one group for the whole workflow: GitHub
 # keeps only one *pending* run per group, so a shared group would let a third
 # PR finishing CI silently evict a queued second one. Runs therefore overlap,
-# and the script rebases and retries its push instead of relying on queueing.
+# and the script recomputes the bump and retries its push rather than relying
+# on queueing to serialise them.
 concurrency:
   group: chart-version-bump-${{ github.event.workflow_run.head_sha }}
 
@@ -33,7 +34,9 @@ jobs:
     steps:
       # Deliberately main, never the pull request head: this job holds a
       # write token and must not run anything out of a contributor's fork.
-      # Full history so the script can rebase onto origin/main.
+      # Full history is required: the script reads Chart.yaml out of
+      # origin/main and diffs the squash commit against its parent to detect
+      # an empty merge. A shallow checkout makes that diff fail.
       - uses: actions/checkout@v4
         with:
           ref: main
