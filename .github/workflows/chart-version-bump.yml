@@ -13,6 +13,10 @@ on:
 permissions:
   contents: read
 
+# Keyed per pull request rather than one group for the whole workflow: GitHub
+# keeps only one *pending* run per group, so a shared group would let a third
+# PR finishing CI silently evict a queued second one. Runs therefore overlap,
+# and the script rebases and retries its push instead of relying on queueing.
 concurrency:
   group: chart-version-bump-${{ github.event.workflow_run.head_sha }}
 
@@ -29,9 +33,11 @@ jobs:
     steps:
       # Deliberately main, never the pull request head: this job holds a
       # write token and must not run anything out of a contributor's fork.
+      # Full history so the script can rebase onto origin/main.
       - uses: actions/checkout@v4
         with:
           ref: main
+          fetch-depth: 0
       - name: Install tools (helm, cr)
         run: bash .github/scripts/install_tools.sh
 
@@ -42,93 +48,4 @@ jobs:
           SHA: ${{ github.event.workflow_run.head_sha }}
           BOT: haproxyci
           CHARTS: kubernetes-ingress|haproxy-unified-gateway
-        run: |
-          set -euo pipefail
-
-          pr=$(gh api "repos/$REPO/commits/$SHA/pulls" \
-            --jq '[.[] | select(.state == "open" and .base.ref == "main")][0].number // empty')
-          [ -n "$pr" ] || { echo "no open PR for $SHA"; exit 0; }
-
-          author=$(gh pr view "$pr" --repo "$REPO" --json author --jq '.author.login')
-          head=$(gh pr view "$pr" --repo "$REPO" --json headRefOid --jq '.headRefOid')
-          [ "$author" = "$BOT" ] || { echo "PR #$pr is from $author, not $BOT"; exit 0; }
-          [ "$head" = "$SHA" ] || { echo "PR #$pr moved past the tested commit"; exit 0; }
-
-          # Must touch exactly one supported Chart.yaml and nothing else, so
-          # this never auto-merges template or script changes.
-          files=$(gh pr diff "$pr" --repo "$REPO" --name-only)
-          chart=$(printf '%s\n' "$files" | sed -nE "s%^($CHARTS)/Chart.yaml\$%\1%p")
-          if [ "$(printf '%s\n' "$files" | wc -l)" -ne 1 ] || [ -z "$chart" ]; then
-            echo "PR #$pr does not change exactly one supported Chart.yaml:"
-            printf '%s\n' "$files"
-            exit 0
-          fi
-
-          old=$(awk '/^appVersion:/ {print $2; exit}' "$chart/Chart.yaml")
-          new=$(gh api "repos/$REPO/contents/$chart/Chart.yaml?ref=$SHA" \
-            -H "Accept: application/vnd.github.raw" \
-            | awk '/^appVersion:/ {print $2; exit}')
-
-          # $new comes from a fork and all three reach arithmetic expansion,
-          # which evaluates its operand as a bash expression.
-          for v in "$old" "$new"; do
-            [[ $v =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "malformed version: $v"; exit 1; }
-          done
-
-          echo "PR #$pr: $chart appVersion $old -> $new"
-          if [ "$new" = "$old" ] || \
-             [ "$(printf '%s\n%s\n' "$old" "$new" | sort -V | tail -1)" != "$new" ]; then
-            echo "appVersion is not newer, leaving PR #$pr alone"
-            exit 0
-          fi
-
-          gh pr merge "$pr" --repo "$REPO" --squash --match-head-commit "$SHA" \
-            --subject "MINOR: $chart: update appVersion to $new (#$pr)"
-
-          git fetch origin main
-          git checkout -B main origin/main
-          landed=$(awk '/^appVersion:/ {print $2; exit}' "$chart/Chart.yaml")
-          [ "$landed" = "$new" ] || { echo "merge of #$pr did not land as expected"; exit 1; }
-
-          # Only now, on post-merge main: the bump has to build on the version
-          # that is actually there, which a maintainer may have moved while
-          # this job was running.
-          ver=$(awk '/^version:/ {print $2; exit}' "$chart/Chart.yaml")
-          [[ $ver =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "malformed version: $ver"; exit 1; }
-
-          IFS=. read -r omaj omin _ <<<"$old"
-          IFS=. read -r nmaj nmin _ <<<"$new"
-          IFS=. read -r vmaj vmin vpat <<<"$ver"
-          if   [ "$nmaj" != "$omaj" ]; then bump="$((vmaj + 1)).0.0";        sev=MAJOR
-          elif [ "$nmin" != "$omin" ]; then bump="${vmaj}.$((vmin + 1)).0";  sev=MAJOR
-          else                              bump="${vmaj}.${vmin}.$((vpat + 1))"; sev=MINOR
-          fi
-          echo "chart version: $ver -> $bump (RELEASE/$sev)"
-
-          sed -i "s|^version: .*|version: $bump|" "$chart/Chart.yaml"
-
-          # A GITHUB_TOKEN push does not trigger ci.yml, so lint here instead.
-          helm lint "$chart/"
-
-          # Reuse the chart's own changelog entries for the commit body, the
-          # way the hand-written release commits do.
-          changes=$(awk '
-            /^  artifacthub.io\/changes: \|-?$/ { f = 1; next }
-            f && /^    - / { sub(/^    /, ""); print; next }
-            f { exit }
-          ' "$chart/Chart.yaml")
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          printf '%s\n\n%s\n%s\n' \
-            "RELEASE/$sev: $chart: Tag release $bump" \
-            "Changes in $chart:" \
-            "$changes" \
-            | git commit -s -a -F -
-          git push origin HEAD:main
-
-          # A GITHUB_TOKEN push starts no workflow, so ci.yml's release-charts
-          # job never runs and the bumped chart would stay unpublished until
-          # somebody pushed to main by hand. release.sh is tag driven, so this
-          # packages exactly the charts whose version has no tag yet.
-          gh workflow run release.yml --ref main
+        run: bash .github/scripts/bump_chart_version.sh
