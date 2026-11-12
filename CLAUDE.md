@@ -134,6 +134,25 @@ Community HAProxy chart (not a controller — just runs HAProxy as a workload).
 - `crdjob` - enabled, podAnnotations, ttl, scheduling, resources, image override
 - `gwapijob` - enabled, version (Gateway API CRD version), same options as crdjob
 
+### Gateway API version is coupled to appVersion
+
+`gwapijob.version` in `values.yaml` and `appVersion` **must change in the same commit**. Each HUG release accepts only a fixed set of Gateway API versions, and the sets do not overlap between releases:
+
+| appVersion | Accepted Gateway API versions |
+|---|---|
+| 1.0.10 | 1.3.0, 1.4.0, 1.5.0 |
+| 1.1.0 | 1.7.0 |
+
+A mismatch in either direction fails the `gwapijob` post-install hook immediately:
+
+```
+unsupported Gateway API version "v1.3.0", supported: [v1.7.0]
+```
+
+which fails `helm install` and turns `install-charts` red. The controller then logs `no matches for kind "Gateway"/"HTTPRoute"/...` because no Gateway API CRDs were installed. That error message lists the accepted versions, so it is also how you check: run the image with `--job-gwapi=<version>`.
+
+Consequence for automation: a haproxyci appVersion PR touching only `Chart.yaml` cannot pass CI when the Gateway API version has to move too (see #403, superseded by #404). `chart-version-bump.yml` requires green CI and so correctly skips it — red CI on a bot appVersion PR is the signal to look for a coupled chart change. The fix has to land as one commit carrying both halves.
+
 ### Metrics
 
 HUG exposes two separate metrics endpoints:
@@ -214,6 +233,21 @@ Modes: `lint`, `install`, `all`
 ### GitHub Actions Pipeline
 
 `.github/workflows/ci.yml` workflow: `lint-scripts` (shellcheck) -> `lint-charts` (ct lint) -> `install-charts` (ct install on Kind) -> `release-charts` (helm package + push to GitHub Releases, GHCR OCI, update gh-pages index). Helper scripts live in `.github/scripts/` (`install_charts.sh`, `install_tools.sh`, `release.sh`, `ct.yaml`). Auth for the release job uses the built-in `GITHUB_TOKEN` with `contents: write` + `packages: write`.
+
+`release-charts` only runs on a **push to main**, and that is the one automatic way a chart gets published. `release.yml` is the same step on `workflow_dispatch`.
+
+Two workflows commit to main on their own:
+
+| Workflow | Trigger | What it does |
+|---|---|---|
+| `haproxy-appversion.yml` | hourly cron + dispatch | Checks `docker.io/haproxytech/haproxy-alpine` for a newer plain `X.Y.Z` tag and bumps `haproxy/Chart.yaml` (appVersion, chart version, image tag, changes entry) straight on main |
+| `chart-version-bump.yml` | `workflow_run` on `lint-test-release` | After CI goes green on a haproxyci appVersion PR, squash-merges it and pushes the matching `RELEASE/...: Tag release` commit |
+
+Both bump the chart version from the appVersion change: major for major, minor for minor, patch otherwise. `RELEASE/MAJOR` tags a minor chart bump, `RELEASE/MINOR` a patch one, matching the release history.
+
+**A `GITHUB_TOKEN` push starts no workflow**, so neither bot commit triggers `ci.yml` and neither gets `ct lint`/`ct install` or a release. Both compensate by running `helm lint` in the job and then calling `gh workflow run release.yml --ref main` — `workflow_dispatch` is exempt from that recursion guard, unlike `push`. Switching either to a PAT would restore full CI on these commits.
+
+`chart-version-bump.yml` holds a write token while reacting to a fork PR, so it checks out `main` (never the PR head), requires the author to be `haproxyci`, requires the tested commit to still be the PR head (`--match-head-commit`), and requires the PR to touch exactly one supported `Chart.yaml` and nothing else. Values read out of the fork are validated against `^[0-9]+\.[0-9]+\.[0-9]+$` before reaching bash arithmetic expansion, which would otherwise evaluate them as expressions.
 
 ## Conventions
 
