@@ -227,7 +227,8 @@ controller:
       port: 31024
       targetPort: 31024
       nodePort: ""
-    # -- Extra ports to expose
+    # -- Extra ports to expose. Do not list Gateway listener ports: the controller
+    # adds those itself, and duplicating one conflicts with it on helm upgrade.
     extraPorts: []
     # -- Controller metrics port configuration (hug_* prometheus metrics)
     controller-metrics:

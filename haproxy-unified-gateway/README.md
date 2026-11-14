@@ -360,6 +360,8 @@ By default the chart exposes four container ports: `http` (31080), `https` (3144
 1. **`controller.containerPort`** — exposes the port on the container (pod spec)
 2. **`controller.service.extraPorts`** — exposes the port on the Service
 
+> **Gateway listener ports do not go here.** For every Gateway listener (for example HTTP, HTTPS or TCP), the controller adds a Service port named `<protocol>-<port>` with `targetPort` equal to the listener port and allocates its own NodePort. In `kubectl get svc`, `31090:30941/TCP` means service port 31090 and NodePort 30941; it is not a container port. Listing the same port in `extraPorts` makes `helm upgrade` fail under server-side apply with `conflict with "hug" ... .spec.ports[port=31090,protocol="TCP"].name`. No `containerPort` entry is needed either, because HAProxy listens on the listener port whether or not it is declared in the pod spec. Use these options only for ports that are not Gateway listeners.
+
 #### Using `--set` flags
 
 To add a container port only (e.g. for a sidecar or internal use):

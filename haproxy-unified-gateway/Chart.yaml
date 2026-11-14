@@ -16,7 +16,7 @@ apiVersion: v2
 name: haproxy-unified-gateway
 description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API Controller
 type: application
-version: 1.3.2
+version: 1.3.3
 appVersion: 1.1.0
 kubeVersion: ">=1.26.0-0"
 keywords:
@@ -43,4 +43,5 @@ annotations:
     - name: support
       url: https://github.com/haproxytech/helm-charts/issues
   artifacthub.io/changes: |-
-    - Add a default controller CPU request so HPA targetCPUUtilizationPercentage has a reference
+    - Grant the controller access to ListenerSets and TCPRoutes, which HUG 1.1.0 watches
+    - Document that Gateway listener ports must not be added through controller.service.extraPorts
