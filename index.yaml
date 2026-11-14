@@ -1219,6 +1219,44 @@ entries:
   haproxy-unified-gateway:
   - annotations:
       artifacthub.io/category: networking
+      artifacthub.io/changes: |-
+        - Grant the controller access to ListenerSets and TCPRoutes, which HUG 1.1.0 watches
+        - Document that Gateway listener ports must not be added through controller.service.extraPorts
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/haproxy-unified-gateway:1.1.0
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 1.1.0
+    created: "2026-11-14T13:34:22.798970362Z"
+    description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API
+      Controller
+    digest: 4aad5962d6053c97f9a1b4918ae61519f7103384b969454d4fb779003a6b1d78
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy-unified-gateway
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - haproxy
+    - gateway-api
+    - gateway
+    - load-balancer
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: zbratkovic@haproxy.com
+      name: Zlatko Bratkovic
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy-unified-gateway
+    sources:
+    - https://github.com/haproxytech/haproxy-unified-gateway
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-1.3.3/haproxy-unified-gateway-1.3.3.tgz
+    version: 1.3.3
+  - annotations:
+      artifacthub.io/category: networking
       artifacthub.io/changes: '- Add a default controller CPU request so HPA targetCPUUtilizationPercentage
         has a reference'
       artifacthub.io/images: |
@@ -6478,4 +6516,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-11-12T15:21:31.975271096Z"
+generated: "2026-11-14T13:34:22.799205996Z"
