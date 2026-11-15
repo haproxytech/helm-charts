@@ -238,6 +238,27 @@ test_metrics_port() {
         log_fail "$label"
     fi
 
+    # Verify HAProxy is told to serve stats on the stat containerPort: the
+    # binary defaults to 1024, while the Service and monitors target 31024
+    label="$chart: --stats-port follows controller.containerPort.stat"
+    if echo "$output" | grep -q '\-\-stats-port=31024' && \
+       helm template test-release "$REPO_ROOT/$chart" --set controller.containerPort.stat=32024 2>&1 \
+         | grep -q '\-\-stats-port=32024'; then
+        log_pass "$label"
+    else
+        log_fail "$label"
+    fi
+
+    # Verify the ClusterRole covers Ingress support (--enable-ingress)
+    label="$chart: ClusterRole grants ingresses, ingressclasses and ingresses/status"
+    if echo "$output" | grep -qE '^\s+- ingresses$' && \
+       echo "$output" | grep -qE '^\s+- ingressclasses$' && \
+       echo "$output" | grep -qE '^\s+- ingresses/status$'; then
+        log_pass "$label"
+    else
+        log_fail "$label"
+    fi
+
     # Verify metricsAuth=none omits kube-rbac and sets none
     label="$chart: --metrics-auth=none when metricsAuth=none"
     output=$(helm template test-release "$REPO_ROOT/$chart" \

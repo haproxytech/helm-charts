@@ -608,6 +608,58 @@ test_install_metrics_port() {
         log_fail "$svc_label"
     fi
 
+    # Scrape HAProxy stats through the Service, the path a ServiceMonitor
+    # takes. A port name alone proved nothing: the Service targeted 31024
+    # while HAProxy listened on 1024. HAProxy only binds stats once a
+    # Gateway is programmed, so create one first.
+    local scrape_label="$chart: HAProxy stats scrape through the Service stat port"
+    local gwc="it-stat-${ns}"
+    kubectl apply -n "$ns" -f - >/dev/null 2>&1 <<EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata: {name: ${gwc}}
+spec: {controllerName: gate.haproxy.org/hug}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata: {name: stat-probe}
+spec:
+  gatewayClassName: ${gwc}
+  listeners: [{name: http, port: 31090, protocol: HTTP}]
+EOF
+    local stat_port scrape=""
+    stat_port=$(kubectl get svc -n "$ns" "test-${chart}" -o jsonpath='{.spec.ports[?(@.name=="stat")].port}' 2>/dev/null)
+    if kubectl wait -n "$ns" gateway/stat-probe --for=condition=Programmed --timeout=120s >/dev/null 2>&1; then
+        for _ in 1 2 3 4 5; do
+            scrape=$(kubectl run -n "$ns" stat-probe --rm -i --quiet --restart=Never --image=busybox:1.36 -- \
+                wget -q -T 5 -O - "http://test-${chart}:${stat_port}/metrics" 2>/dev/null | grep -m1 '^haproxy_' || true)
+            [ -n "$scrape" ] && break
+            sleep 5
+        done
+    fi
+    if [ -n "$scrape" ]; then
+        log_pass "$scrape_label"
+    else
+        log_fail "$scrape_label"
+        dump_debug "$ns"
+    fi
+    kubectl delete -n "$ns" gateway/stat-probe --ignore-not-found >/dev/null 2>&1 || true
+    kubectl delete gatewayclass "$gwc" --ignore-not-found >/dev/null 2>&1 || true
+
+    # --enable-ingress needs these; without them the controller loops on
+    # "ingresses.networking.k8s.io is forbidden"
+    local rbac_label="$chart: controller ServiceAccount may watch Ingresses and update their status"
+    local sa as
+    sa=$(kubectl get pods -n "$ns" -l "app.kubernetes.io/instance=test-${chart}" -o jsonpath='{.items[0].spec.serviceAccountName}' 2>/dev/null)
+    as="system:serviceaccount:${ns}:${sa}"
+    if [ "$(kubectl auth can-i watch ingresses.networking.k8s.io --as="$as" -A)" = yes ] && \
+       [ "$(kubectl auth can-i list ingressclasses.networking.k8s.io --as="$as" 2>/dev/null)" = yes ] && \
+       [ "$(kubectl auth can-i update ingresses.networking.k8s.io --subresource=status --as="$as" -A)" = yes ]; then
+        log_pass "$rbac_label"
+    else
+        log_fail "$rbac_label"
+    fi
+
     helm uninstall "test-${chart}" -n "$ns" --wait 2>/dev/null || true
     delete_ns "$ns"
 }
