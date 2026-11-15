@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This chart bootstraps an HAProxy load balancer as deployment/daemonset on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager. As oposed to [HAProxy Kubernetes Ingress Controller](https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress) Chart, HAProxy is installed as a regular application and not as an Ingress Controller.
+This chart bootstraps an HAProxy load balancer as deployment/daemonset on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager. As opposed to [HAProxy Kubernetes Ingress Controller](https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress) Chart, HAProxy is installed as a regular application and not as an Ingress Controller.
 
 ### Prerequisites
 
@@ -17,7 +17,7 @@ This chart bootstraps an HAProxy load balancer as deployment/daemonset on a [Kub
 
 The quickest way to setup a Kubernetes cluster is with [Azure Kubernetes Service](https://azure.microsoft.com/en-us/services/kubernetes-service/), [AWS Elastic Kubernetes Service](https://aws.amazon.com/eks/) or [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine/) using their respective quick-start guides.
 
-For setting up Kubernetes on other cloud platforms or bare-metal servers refer to the Kubernetes [getting started guide](http://kubernetes.io/docs/getting-started-guides/).
+For setting up Kubernetes on other cloud platforms or bare-metal servers refer to the Kubernetes [getting started guide](https://kubernetes.io/docs/setup/).
 
 ### Install Helm
 
@@ -25,7 +25,7 @@ Get the latest [Helm release](https://github.com/helm/helm#install).
 
 ### Add Helm chart repo
 
-Once you have Helm installed, add the haproxytech Chat Repository as follows:
+Once you have Helm installed, add the haproxytech Chart Repository as follows:
 
 ```console
 helm repo add haproxytech https://haproxytech.github.io/helm-charts
@@ -36,23 +36,16 @@ Alternatively if you want to proceed with just OCI-based repository, skip this s
 
 ## Install the chart
 
-To install the chart with Helm v3 as _my-release_ deployment:
+To install the chart as _my-release_ deployment:
 
 ```console
 helm install my-release haproxytech/haproxy
 ```
 
-**_NOTE_**: To install the chart with Helm v2 (legacy Helm) the syntax requires adding deployment name to `--name` parameter:
+Alternatively also have OCI-based repository available for simplified access (add `--version X.Y.Z` to pin a chart version):
 
 ```console
-helm install haproxytech/haproxy \
-  --name my-release
-```
-
-Alternatively also have OCI-based repository available for simplified access:
-
-```console
-helm install oci://ghcr.io/haproxytech/helm-charts/haproxy --version 1.24.0
+helm install my-release oci://ghcr.io/haproxytech/helm-charts/haproxy
 ```
 
 ### Installing with unique name
@@ -68,11 +61,12 @@ helm install haproxytech/haproxy \
 
 To install the chart using a private registry for HAProxy (for instance to use a HAProxy Enterprise image) into a separate namespace _prod_.
 
-**_NOTE_**: Helm v3 requires namespace to be precreated (eg. with `kubectl create namespace prod`)
+**_NOTE_**: The namespace must exist; add `--create-namespace` to have Helm create it (eg. instead of `kubectl create namespace prod`)
 
 ```console
 helm install my-haproxy haproxytech/haproxy  \
   --namespace prod \
+  --create-namespace \
   --set image.tag=latest \
   --set image.repository=myregistry.domain.com/imagename \
   --set imageCredentials.registry=myregistry.domain.com \
@@ -83,10 +77,10 @@ helm install my-haproxy haproxytech/haproxy  \
 Alternatively, use a pre-configured (existing) imagePullSecret in the same namespace:
 
 ```console
-helm install my-ingress haproxytech/haproxy  \
+helm install my-haproxy haproxytech/haproxy  \
   --namespace prod \
   --set image.tag=SOMETAG \
-  --set existingImagePullSecret name-of-existing-image-pull-secret
+  --set existingImagePullSecret=name-of-existing-image-pull-secret
 ```
 
 **_NOTE_**: Enterprise images using S6 overlay need default CMD arguments disabled (more about YAML configuration file for Helm can be found in a separate paragraph below):
@@ -105,16 +99,13 @@ helm install my-haproxy2 haproxytech/haproxy \
   --set kind=DaemonSet
 ```
 
-**_NOTE_**: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string.
-
 ### Installing with Horizontal Pod Autoscaler
 
-[HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) automatically scales number of replicas in Deployment or Replication Controller and adjusts replica count. Therefore we want to unset default replicaCount by setting corresponding key value to null and enable autoscaling:
+[HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) automatically scales number of replicas in a Deployment. When autoscaling (or KEDA) is enabled the chart leaves `replicas` unset, so the HPA owns the replica count and `replicaCount` is ignored:
 
 ```console
 helm install my-haproxy3 haproxytech/haproxy \
   --set kind=Deployment \
-  --set replicaCount=null \
   --set autoscaling.enabled=true \
   --set autoscaling.targetCPUUtilizationPercentage=80
 ```
@@ -153,12 +144,14 @@ helm install my-haproxy5 haproxytech/haproxy \
 ### Using values from YAML file
 
 As opposed to using many `--set` invocations, much simpler approach is to define value overrides in a separate YAML file and specify them when invoking Helm.
-The `config` block can also support using helm templates to populate dynamic values, e.g. `{{ .Release.Name }}`.
+The `config` block can also support using helm templates to populate dynamic values, e.g. `{{ .Release.Name }}` or a value of your own such as `{{ .Values.global.serverTimeout }}` below.
 
 _mylb.yaml_:
 
 ```yaml
 kind: DaemonSet
+global:
+  serverTimeout: 60s
 config: |
   global
     log stdout format raw local0
@@ -185,7 +178,7 @@ service:
 And invoking Helm becomes (compare to the previous example):
 
 ```console
-helm install my-haproxy5 -f mylb.yml haproxytech/haproxy
+helm install my-haproxy5 -f mylb.yaml haproxytech/haproxy
 ```
 
 ### Using secrets in additional volume mounts
@@ -202,6 +195,7 @@ config: |
     log stdout format raw local0
     daemon
     maxconn 1024
+    ssl-load-extra-del-ext
   defaults
     log global
     timeout client 60s
@@ -222,7 +216,7 @@ mountedSecrets:
     mountPath: /usr/local/etc/ssl
 ```
 
-The above example assumes that there is a certificate in key `tls.crt` of a secret called `star-example-com`.
+The above example assumes a TLS Secret called `star-example-com` (for example created with `kubectl create secret tls star-example-com --cert=... --key=...`), which holds the certificate in key `tls.crt` and the private key in key `tls.key`. HAProxy looks for a key that is not in the certificate file at `<file>.key`, i.e. `tls.crt.key`; `ssl-load-extra-del-ext` makes it look for `tls.key` instead, so the Secret can be mounted as is.
 
 ### Using additional volumes and volumeMounts
 
@@ -277,7 +271,6 @@ config: |
   frontend fe_main
     mode http
     bind :80
-    http-request redirect scheme https code 301 unless { ssl_fc }
     default_backend be_main
   backend be_main
     mode http
@@ -318,7 +311,25 @@ sidecarContainers:
 
 ## Installing as non-root with binding to privileged ports
 
-To be able to bind to privileged ports such as tcp/80 and tcp/443 without root privileges (UID and GID are set to 1000 in the example, as HAProxy Docker image has UID/GID of 1000 reserved for HAProxy), there is a special workaround required as `NET_BIND_SERVICE` capability is [not propagated](https://github.com/kubernetes/kubernetes/issues/56374), so we need to use `initContainers` feature as well:
+To bind privileged ports such as tcp/80 and tcp/443 without root privileges (UID and GID are set to 1000 in the examples, as the HAProxy Docker image has UID/GID 1000 reserved for HAProxy), lower the start of the unprivileged port range for the pod. `net.ipv4.ip_unprivileged_port_start` is a namespaced, [safe sysctl](https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/) since Kubernetes 1.22, so it can be set through `podSecurityContext` without any privileged container:
+
+```yaml
+podSecurityContext:
+  sysctls:
+    - name: net.ipv4.ip_unprivileged_port_start
+      value: "0"
+securityContext:
+  enabled: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+```
+
+With `daemonset.useHostNetwork: true` the pod shares the node's network namespace, where Kubernetes does not allow pod sysctls. The only option there is a privileged init container, and it changes the setting **for the whole node**, not just for HAProxy:
 
 ```yaml
 kind: DaemonSet
@@ -333,6 +344,7 @@ daemonset:
     http: 80
     https: 443
     stat: 1024
+dnsPolicy: ClusterFirstWithHostNet
 config: |
   global
     log stdout format raw local0
@@ -399,6 +411,176 @@ HAProxy directly. The limit is a cap and nothing more. This differs from the
 HAProxy's and the controller's memory budgets *from* the container limit, so
 that leaving it unset changes how those processes size themselves.
 
+## Prometheus monitoring
+
+HAProxy has a built-in [Prometheus exporter](https://github.com/haproxy/haproxy/blob/master/addons/promex/README), which needs a frontend in `config`. The default `serviceMonitor.endpoints` scrape a Service port named `prometheus`; a `containerPorts` entry of that name creates both the container port and the Service port:
+
+```yaml
+containerPorts:
+  prometheus: 8405
+serviceMonitor:
+  enabled: true
+  extraLabels:
+    release: prometheus   # match your Prometheus serviceMonitorSelector
+config: |
+  global
+    log stdout format raw local0
+    maxconn 1024
+  defaults
+    log global
+    timeout client 60s
+    timeout connect 60s
+    timeout server 60s
+  frontend prometheus
+    mode http
+    bind :8405
+    http-request use-service prometheus-exporter if { path /metrics }
+    no log
+  frontend fe_main
+    bind :80
+    default_backend be_main
+  backend be_main
+    server web1 10.0.0.1:8080 check
+```
+
+The ServiceMonitor is only rendered when the `monitoring.coreos.com/v1` API (Prometheus Operator) is available.
+
+## Configuration
+
+The full set of supported values is defined in [`values.yaml`](values.yaml), which also carries inline documentation. To print the defaults of the chart version you have:
+
+```console
+helm show values haproxytech/haproxy
+```
+
+### Global
+
+| Key | Description | Default |
+|---|---|---|
+| `nameOverride` / `fullnameOverride` | Replace the chart name / the full generated name of all resources. | _unset_ |
+| `namespaceOverride` | Override `.Release.Namespace` for all resources (useful when this chart is a dependency). | _unset_ |
+| `rbac.create` | Create the Role and RoleBinding used by the pods. | `true` |
+| `serviceAccount.create` | Create a ServiceAccount. | `true` |
+| `serviceAccount.name` | ServiceAccount name (generated when empty). | _unset_ |
+| `serviceAccount.annotations` | ServiceAccount annotations. | `{}` |
+| `serviceAccount.automountServiceAccountToken` | Mount the ServiceAccount token into the pods. | `true` |
+| `podSecurityPolicy.enabled` | Create a PodSecurityPolicy (Kubernetes &lt; 1.25 only; PSP was removed in 1.25). | `false` |
+| `podSecurityPolicy.annotations` / `.allowedUnsafeSysctls` | PSP annotations and allowed unsafe sysctls. | `{}` / _unset_ |
+
+### Image and workload
+
+| Key | Description | Default |
+|---|---|---|
+| `image.repository` | HAProxy image (switch to use CE/EE images). | `docker.io/haproxytech/haproxy-alpine` |
+| `image.tag` | Image tag (defaults to the chart `appVersion`). | `""` |
+| `image.pullPolicy` | Image pull policy. | `IfNotPresent` |
+| `imageCredentials.registry` / `.username` / `.password` | Credentials for a private registry; the chart creates the pull Secret. | `null` |
+| `existingImagePullSecret` | Name of an existing pull Secret to use instead. | `null` |
+| `kind` | `Deployment` or `DaemonSet`. | `Deployment` |
+| `replicaCount` | Replicas (Deployment only; ignored when autoscaling or KEDA is enabled). | `1` |
+| `minReadySeconds` | Seconds a new pod must be ready before it counts as available. | `0` |
+| `strategy` | Deployment update strategy. | `{}` |
+| `updateStrategy` | DaemonSet update strategy. | `RollingUpdate`, `maxUnavailable: 1` |
+| `terminationGracePeriodSeconds` | Pod termination grace period. | `60` |
+| `priorityClassName` | `PriorityClass` of the pods. | `""` |
+| `args.enabled` | Pass command line arguments to HAProxy (disable for EE images using S6 overlay). | `true` |
+| `args.defaults` | Default arguments. | `["-f", "/usr/local/etc/haproxy/haproxy.cfg"]` |
+| `args.extraArgs` | Additional arguments. | `[]` |
+| `checksumConfigMap.enabled` | Roll the pods when `config` changes. | `true` |
+| `shareProcessNamespace.enabled` | Share the process namespace between containers (needed by reload sidecars). | `false` |
+| `sidecarContainers` / `initContainers` | Extra sidecar and init containers. | `[]` |
+| `lifecycle` | Container lifecycle handlers (`preStop`, `postStart`). | `{}` |
+| `livenessProbe` / `readinessProbe` / `startupProbe` | Probe definitions (none by default). | `{}` |
+| `deploymentAnnotations` / `deploymentLabels` | Metadata on the Deployment/DaemonSet. | `{}` |
+| `podAnnotations` / `podLabels` | Metadata on the pod template. | `{}` |
+
+### HAProxy configuration
+
+| Key | Description | Default |
+|---|---|---|
+| `config` | HAProxy configuration, passed through `tpl` (Helm templates allowed). | see `values.yaml` |
+| `configMount.mountPath` / `.subPath` | Where the configuration is mounted (EE images use a different path; a `subPath` disables automatic ConfigMap updates). | `/usr/local/etc/haproxy` / `""` |
+| `includes` | Extra files (maps, error pages, ...) mounted next to the configuration. | _unset_ |
+| `includesMountPath` | Mount path of `includes`. | `/usr/local/etc/haproxy/includes` |
+| `mountedSecrets` | Secrets to mount (`volumeName`, `secretName`, `mountPath`). | `[]` |
+| `extraEnvs` / `extraEnvFrom` | Extra `env` / `envFrom` entries. | `[]` |
+| `extraVolumes` / `extraVolumeMounts` | Extra volumes and mounts. | `[]` |
+
+### Ports, security and resources
+
+| Key | Description | Default |
+|---|---|---|
+| `containerPorts` | Named container ports; each also becomes a Service port. | `http: 80`, `https: 443`, `stat: 1024` |
+| `rawContainerPorts` | Container ports in full Kubernetes form. | `[]` |
+| `daemonset.useHostNetwork` / `.useHostPort` | DaemonSet host networking / host ports. | `false` |
+| `daemonset.hostPorts` | Host ports (must match `containerPorts` with `useHostNetwork`). | `http: 80`, `https: 443`, `stat: 1024` |
+| `podSecurityContext` | Pod security context (e.g. `sysctls`). | `{}` |
+| `securityContext` | Container security context; rendered only with `securityContext.enabled: true`. | `{}` |
+| `resources` | Requests and limits; see [Memory limits](#memory-limits). | `requests: cpu 250m, memory 128Mi` |
+
+### Scheduling
+
+| Key | Description | Default |
+|---|---|---|
+| `nodeSelector` / `tolerations` / `affinity` | Pod placement. | `{}` / `[]` / `{}` |
+| `topologySpreadConstraints` | Topology spread constraints (Deployment only). | `[]` |
+| `dnsPolicy` | Pod DNS policy (`ClusterFirstWithHostNet` with `useHostNetwork`). | `ClusterFirst` |
+| `dnsConfig` | Pod DNS config. | `{}` |
+
+### Service
+
+| Key | Description | Default |
+|---|---|---|
+| `service.name` | Service name (defaults to the chart fullname). Renaming replaces the Service and, with `LoadBalancer`, its external address. | `""` |
+| `service.type` | `ClusterIP`, `NodePort` or `LoadBalancer`. | `ClusterIP` |
+| `service.clusterIP` | Pin a ClusterIP. | `""` |
+| `service.loadBalancerIP` | Requested LB IP (provider-dependent). | `""` |
+| `service.loadBalancerSourceRanges` | CIDR allowlist for the LB. | `[]` |
+| `service.loadBalancerClass` | `LoadBalancerClass` (see [Selecting a LoadBalancer implementation](#selecting-a-loadbalancer-implementation)). | `null` |
+| `service.externalIPs` | External IPs. | `[]` |
+| `service.annotations` / `.labels` | Service metadata. | `{}` |
+| `service.externalTrafficPolicy` / `.internalTrafficPolicy` | Traffic policies. | _unset_ |
+| `service.ipFamilies` / `.ipFamilyPolicy` | Dual-stack settings. | _unset_ |
+| `service.trafficDistribution` | Traffic distribution (`PreferSameZone`, `PreferSameNode`, ...). | _unset_ |
+| `service.additionalPorts` | Extra Service ports (`name: port`, targeting the container port of the same name). | `{}` |
+| `service.rawAdditionalPorts` | Extra Service ports in full Kubernetes form. | `[]` |
+| `service.nodePorts` | Fixed NodePorts by port name (with `type: NodePort`). | `{}` |
+
+### Autoscaling and disruption
+
+| Key | Description | Default |
+|---|---|---|
+| `autoscaling.enabled` | Create an HPA (Deployment only). | `false` |
+| `autoscaling.minReplicas` / `.maxReplicas` | HPA bounds. | `1` / `7` |
+| `autoscaling.targetCPUUtilizationPercentage` | CPU target. | `80` |
+| `autoscaling.targetMemoryUtilizationPercentage` | Memory target. | _unset_ |
+| `autoscaling.additionalMetrics` / `.behavior` | Extra HPA metrics and scaling behaviour. | _unset_ |
+| `keda.enabled` | Create a KEDA `ScaledObject` instead of an HPA. | `false` |
+| `keda.minReplicas` / `.maxReplicas` | KEDA bounds. | `2` / `20` |
+| `keda.pollingInterval` / `.cooldownPeriod` | KEDA timing. | `30` / `300` |
+| `keda.restoreToOriginalReplicaCount` | Restore the replica count when the ScaledObject is removed. | `false` |
+| `keda.fallback` / `.behavior` / `.scaledObject.annotations` | Fallback, scaling behaviour and ScaledObject annotations. | _unset_ / `{}` / `{}` |
+| `keda.triggers` | KEDA triggers. | `[]` |
+| `PodDisruptionBudget.enable` | Create a PodDisruptionBudget. | `false` |
+| `PodDisruptionBudget.minAvailable` / `.maxUnavailable` | PDB constraint (set one). | _unset_ |
+
+### Monitoring, Ingress and Gateway API
+
+| Key | Description | Default |
+|---|---|---|
+| `serviceMonitor.enabled` | Create a ServiceMonitor (see [Prometheus monitoring](#prometheus-monitoring)). | `false` |
+| `serviceMonitor.extraLabels` | Labels for the Prometheus Operator selector. | `{}` |
+| `serviceMonitor.endpoints` | Scrape endpoints. | port `prometheus`, `/metrics`, `30s` |
+| `ingress.enabled` | Create an Ingress for the Service. | `false` |
+| `ingress.servicePort` | Service port the Ingress routes to. | `80` |
+| `ingress.className` | `ingressClassName`. | `""` |
+| `ingress.annotations` / `.labels` | Ingress metadata. | `{}` |
+| `ingress.hosts` / `.tls` | Ingress rules and TLS. | `haproxy.domain.com` `/` / `[]` |
+| `httpRoute.enabled` | Create a Gateway API HTTPRoute for the Service (needs Gateway API CRDs and a Gateway). | `false` |
+| `httpRoute.servicePort` | Service port the route sends traffic to. | `80` |
+| `httpRoute.parentRefs` / `.hostnames` / `.rules` | Gateways to attach to, hostnames and rules. | see `values.yaml` |
+| `httpRoute.annotations` / `.labels` | HTTPRoute metadata. | `{}` |
+
 ## Upgrading the chart
 
 To upgrade the _my-release_ deployment:
@@ -412,7 +594,7 @@ helm upgrade my-release haproxytech/haproxy
 To uninstall/delete the _my-release_ deployment:
 
 ```console
-helm delete my-release
+helm uninstall my-release
 ```
 
 ## Debugging
