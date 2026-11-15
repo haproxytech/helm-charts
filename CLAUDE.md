@@ -121,7 +121,7 @@ Community HAProxy chart (not a controller — just runs HAProxy as a workload).
 | `controller-podmonitor.yaml` | PodMonitor for Prometheus Operator (disabled by default, gated behind `.Capabilities.APIVersions`) |
 | `controller-service-metrics.yaml` | ClusterIP metrics Service with stat + metrics ports (created when serviceMonitor is enabled) |
 | `controller-poddisruptionbudget.yaml` | PDB (disabled by default) |
-| `namespace.yaml` | Optional namespace creation (pre-install hook) |
+| `namespace.yaml` | Optional namespace creation (plain resource, not a hook; needs `namespaceOverride`, see below) |
 | `NOTES.txt` | Post-install instructions |
 
 ### Values Structure
@@ -258,5 +258,6 @@ Both bump the chart version from the appVersion change: major for major, minor f
 - ArgoCD hook annotations included alongside Helm hooks
 - HugConf CR is a post-install hook (weight 5) that runs after the CRD job (weight 0)
 - HugConf cleanup is a pre-delete hook Job
+- `namespace.create` only works with `namespaceOverride` naming the namespace to create: the release namespace (`-n`) must already exist because Helm stores the release there. `namespace.yaml` is a plain resource, so nothing in the chart namespace may be a `pre-install` hook when `namespace.create` is set — it would run before the Namespace exists (see kubernetes-ingress `controller-defaultcertsecret.yaml`). `ci/deployment-namespacecreate-values.yaml` covers this in both charts; `integration-test.sh` verifies pods in the `namespaceOverride` namespace
 - Security context: non-root (UID 1000), CAP_NET_BIND_SERVICE, seccomp RuntimeDefault
 - ServiceMonitor/PodMonitor gated behind `.Capabilities.APIVersions "monitoring.coreos.com/v1"`
