@@ -84,6 +84,9 @@ containers:
       {{- with $ctlr.metricsAuth }}
       - --metrics-auth={{ . }}
       {{- end }}
+      {{- /* The binary defaults to 1024; the stat containerPort, Service
+      targetPort and monitor endpoints all target containerPort.stat. */}}
+      - --stats-port={{ $ctlr.containerPort.stat }}
       {{- range $ctlr.extraArgs }}
       - {{ . }}
       {{- end }}

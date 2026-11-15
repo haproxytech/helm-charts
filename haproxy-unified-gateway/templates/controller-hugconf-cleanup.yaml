@@ -115,13 +115,16 @@ spec:
             - /bin/sh
             - -c
             - |
-              APISERVER="https://kubernetes.default.svc"
-              TOKEN="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"
-              CACERT="/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-              wget --header="Authorization: Bearer ${TOKEN}" \
-                --ca-certificate="${CACERT}" \
-                --method=DELETE \
-                -q -O /dev/null \
-                "${APISERVER}/apis/gate.v3.haproxy.org/v3/namespaces/{{ include "haproxy-unified-gateway.namespace" . }}/hugconfs/{{ .Values.hugconf.name }}" 2>/dev/null || true
+              # curl, not wget: the image's wget is BusyBox, which cannot send
+              # DELETE, and the old "|| true" hid that, so nothing was deleted.
+              SA=/var/run/secrets/kubernetes.io/serviceaccount
+              URL="https://kubernetes.default.svc/apis/gate.v3.haproxy.org/v3/namespaces/{{ include "haproxy-unified-gateway.namespace" . }}/hugconfs/{{ .Values.hugconf.name }}"
+              code=$(curl -sS -o /tmp/resp -w '%{http_code}' -X DELETE \
+                --cacert "$SA/ca.crt" -H "Authorization: Bearer $(cat "$SA/token")" "$URL") || code=000
+              case "$code" in
+                200|202) echo "deleted HugConf {{ .Values.hugconf.name }}" ;;
+                404) echo "HugConf {{ .Values.hugconf.name }} already gone" ;;
+                *) echo "deleting HugConf {{ .Values.hugconf.name }} failed: HTTP $code"; cat /tmp/resp 2>/dev/null; exit 1 ;;
+              esac
   backoffLimit: 1
 {{- end }}

@@ -106,6 +106,25 @@ rules:
       - get
       - update
       - patch
+  # Kubernetes Ingress support (--enable-ingress): Ingresses are translated
+  # onto a synthetic Gateway and their status.loadBalancer is written back
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
+      - ingressclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses/status
+    verbs:
+      - get
+      - update
+      - patch
   - apiGroups:
       - coordination.k8s.io
     resources:

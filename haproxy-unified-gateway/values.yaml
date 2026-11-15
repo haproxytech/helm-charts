@@ -279,25 +279,24 @@ controller:
     # -- Extra labels for PodMonitor target discovery
     extraLabels: {}
     # -- PodMonitor endpoints configuration
+    # Only the HAProxy `stat` endpoint by default. PodMonitor has no
+    # bearerTokenFile, so it cannot authenticate to the kube-rbac `metrics`
+    # endpoint the way the ServiceMonitor does; the API server rejects a
+    # PodMonitor carrying that field. Use serviceMonitor for controller
+    # metrics with kube-rbac, or add the endpoint here with metricsAuth none
+    # (scheme: http) or basic (basicAuth).
     endpoints:
       - port: stat
         path: /metrics
         scheme: http
         interval: 30s
-      - port: metrics
-        path: /metrics
-        scheme: https
-        interval: 30s
-        tlsConfig:
-          insecureSkipVerify: true
-        bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
 
   # -- HorizontalPodAutoscaler configuration
   # NOTE: targetCPUUtilizationPercentage requires a CPU *request* to be set
   # under controller.resources.requests.cpu — without it the HPA cannot compute
   # CPU utilization and will not scale (kubectl shows <unknown> / FailedGetResourceMetric).
-  # The default resources below set only memory, so either add a CPU request or
-  # switch to targetMemoryUtilizationPercentage (memory is requested by default).
+  # The default resources above request 250m CPU; keep a CPU request if you
+  # override controller.resources, or switch to targetMemoryUtilizationPercentage.
   autoscaling:
     enabled: false
     minReplicas: 1
