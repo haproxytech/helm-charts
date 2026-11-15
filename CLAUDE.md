@@ -108,7 +108,7 @@ Community HAProxy chart (not a controller — just runs HAProxy as a workload).
 | `controller-daemonset.yaml` | DaemonSet with hostNetwork/hostPort support (when controller.kind=DaemonSet) |
 | `controller-service.yaml` | NodePort Service (stats port only; HTTP/HTTPS listener ports are added per Gateway by the controller — see PR #354) |
 | `controller-serviceaccount.yaml` | ServiceAccount |
-| `clusterrole.yaml` | RBAC: Gateway API resources, HUG CRDs (gate.v3.haproxy.org incl. globals/defaults), core K8s resources, auth/authz for kube-rbac metrics |
+| `clusterrole.yaml` | RBAC: Gateway API resources, HUG CRDs (gate.v3.haproxy.org incl. globals/defaults), core K8s resources, Ingresses/IngressClasses/Ingress status (for `--enable-ingress`), auth/authz for kube-rbac metrics |
 | `clusterrolebinding.yaml` | ClusterRoleBinding |
 | `controller-hugconf.yaml` | HugConf CR (logging, globalRef, defaultsRef configuration) — post-install hook (weight 5) |
 | `controller-hugconf-cleanup.yaml` | Pre-delete hook Job that deletes the HugConf CR on `helm uninstall` |
@@ -159,7 +159,7 @@ HUG exposes two separate metrics endpoints:
 
 | Port | Name | Source | Default |
 |---|---|---|---|
-| 31024 | `stat` | HAProxy stats (via `--stats-port`) | Always exposed |
+| 31024 | `stat` | HAProxy stats (via `--stats-port`, set from `controller.containerPort.stat`) | Served once the first Gateway is programmed |
 | 31060 | `metrics` | Controller metrics (via `--controller-port`) | Always exposed |
 
 - `controller.metricsAuth` controls `--metrics-auth` flag; default is `kube-rbac`
@@ -193,9 +193,10 @@ Flags the chart treats specially (rest can be passed via `controller.extraArgs`)
 
 | Flag | How the chart sets it | Notes |
 |---|---|---|
-| `--hugconf-crd` | Always, from `controller.hugconfCrd` or default `<release>-hugconf` | Required for the controller to find its HugConf CR |
+| `--hugconf-crd` | From `controller.hugconfCrd`, or `<namespace>/<hugconf.name>` when the chart creates the HugConf | Required for the controller to find its HugConf CR |
 | `--metrics-auth` | From `controller.metricsAuth` (default `kube-rbac`) | **Chart overrides the binary default of `none`** — kube-rbac wires TokenReview/SubjectAccessReview into the ClusterRole |
-| `--stats-port` / `--controller-port` | Hard-coded ports 1024 / 31060 in the Service/probes | Changing requires aligning Service ports too |
+| `--stats-port` | Always, from `controller.containerPort.stat` (31024) | **The binary default is 1024.** Without the flag HAProxy listens on 1024 while the Service, monitors and hostPort target 31024, so the `stat` scrape is refused; `integration-test.sh` (`metrics-port`) scrapes it through the Service to catch this |
+| `--controller-port` | Not set; the image listens on 31060 | Changing requires aligning `controller.containerPort.metrics` and the metrics Service |
 | `--job-check-crd` / `--job-gwapi` | Set by the CRD/Gateway-API hook jobs only | Not for the controller process |
 
 ## CI Values Files
