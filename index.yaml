@@ -4,6 +4,39 @@ entries:
   - annotations:
       artifacthub.io/category: networking
       artifacthub.io/changes: |
+        - Fix README examples that failed: the templated values file and the TLS Secret mount
+        - Recommend a pod sysctl over a privileged init container for binding privileged ports
+        - Document every value in a README configuration reference, and Prometheus monitoring
+      artifacthub.io/images: |
+        - name: haproxy
+          image: docker.io/haproxytech/haproxy-alpine:3.4.7
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.4.7
+    created: "2026-11-15T21:30:08.01369367Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 49232c88bf0a4068b4c394e160b2c05db8c4f757342c47323a7c4d12a6a39526
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.30.5/haproxy-1.30.5.tgz
+    version: 1.30.5
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/changes: |
         - Document memory limits and what HAProxy's memory use depends on
         - Note in NOTES.txt when no memory limit is set
       artifacthub.io/images: |
@@ -1219,6 +1252,47 @@ entries:
   haproxy-unified-gateway:
   - annotations:
       artifacthub.io/category: networking
+      artifacthub.io/changes: |-
+        - Serve HAProxy stats on controller.containerPort.stat (31024); HAProxy listened on 1024, so the stat Service port, ServiceMonitor, PodMonitor and DaemonSet hostPort all targeted a closed port
+        - Grant the controller access to Ingresses, IngressClasses and Ingress status, which --enable-ingress needs
+        - Delete the HugConf on helm uninstall; the cleanup Job used wget options the image's BusyBox wget rejects, and hid the failure
+        - Make the default PodMonitor installable by scraping only stat; the API server rejected its bearerTokenFile
+        - Document the chart's values in a README configuration reference, the first Gateway route, Ingress support and the 1.1.0 controller flags
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/haproxy-unified-gateway:1.1.0
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 1.1.0
+    created: "2026-11-15T21:30:08.25757558Z"
+    description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API
+      Controller
+    digest: 013f2662dd267cd08c0d533f7300782a71395966c39f6e14463047bf319e3c8f
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy-unified-gateway
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - haproxy
+    - gateway-api
+    - gateway
+    - load-balancer
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: zbratkovic@haproxy.com
+      name: Zlatko Bratkovic
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy-unified-gateway
+    sources:
+    - https://github.com/haproxytech/haproxy-unified-gateway
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-1.3.5/haproxy-unified-gateway-1.3.5.tgz
+    version: 1.3.5
+  - annotations:
+      artifacthub.io/category: networking
       artifacthub.io/changes: '- Document that namespace.create requires namespaceOverride,
         and document namespaceOverride'
       artifacthub.io/images: |
@@ -1879,6 +1953,40 @@ entries:
     - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-0.2.0/haproxy-unified-gateway-0.2.0.tgz
     version: 0.2.0
   kubernetes-ingress:
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/changes: |-
+        - Fix README instructions: drop the manual CRD upgrade step, whose URLs no longer exist, and the Helm v2 syntax
+        - Fix broken README examples (existingImagePullSecret, values file name) and dead links
+        - Document nameOverride and fullnameOverride, the current CRDs and that uninstall keeps them
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/kubernetes-ingress:3.4.0
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.4.0
+    created: "2026-11-15T21:30:08.528665605Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: dcca112460ca03bdc0c1802478fe8debfdc7218b2069303b15dd436540e7b8c8
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.56.2/kubernetes-ingress-1.56.2.tgz
+    version: 1.56.2
   - annotations:
       artifacthub.io/category: networking
       artifacthub.io/changes: |-
@@ -6586,4 +6694,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-11-15T18:31:25.981342909Z"
+generated: "2026-11-15T21:30:08.528914533Z"
