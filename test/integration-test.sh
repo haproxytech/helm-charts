@@ -291,10 +291,16 @@ install_and_verify() {
         return
     fi
 
+    # With namespaceOverride (e.g. namespace.create) the workload lives in that
+    # namespace, not in the release namespace that holds the Helm release.
+    local res_ns
+    res_ns=$(helm get values "test-${chart}" -n "$ns" --all 2>/dev/null | awk '/^namespaceOverride:/ {print $2}')
+    res_ns="${res_ns:-$ns}"
+
     # Wait for pods to be ready (belt-and-suspenders on top of --wait)
-    if ! wait_for_pods "$ns"; then
+    if ! wait_for_pods "$res_ns"; then
         log_fail "$label (pods not ready within ${TIMEOUT}s)"
-        dump_debug "$ns"
+        dump_debug "$res_ns"
         helm uninstall "test-${chart}" -n "$ns" --wait 2>/dev/null || true
         delete_ns "$ns"
         return
@@ -305,25 +311,25 @@ install_and_verify() {
 
     # Check that we have at least one Running or Completed pod
     local running
-    running=$(kubectl get pods -n "$ns" --no-headers 2>/dev/null | grep -cE 'Running|Completed|Succeeded' || true)
+    running=$(kubectl get pods -n "$res_ns" --no-headers 2>/dev/null | grep -cE 'Running|Completed|Succeeded' || true)
     if [ "$running" -eq 0 ]; then
         echo -e "    ${RED}No running pods found${NC}"
         ok=false
     fi
 
     # Verify ServiceAccount exists
-    if kubectl get serviceaccount -n "$ns" -l "app.kubernetes.io/instance=test-${chart}" --no-headers 2>/dev/null | grep -q .; then
+    if kubectl get serviceaccount -n "$res_ns" -l "app.kubernetes.io/instance=test-${chart}" --no-headers 2>/dev/null | grep -q .; then
         : # ok
     else
         # Some charts may not label SA; check by name
-        if ! kubectl get serviceaccount -n "$ns" 2>/dev/null | grep -q "test-${chart}\|${chart}"; then
+        if ! kubectl get serviceaccount -n "$res_ns" 2>/dev/null | grep -q "test-${chart}\|${chart}"; then
             echo -e "    ${YELLOW}ServiceAccount not found (may be expected)${NC}"
         fi
     fi
 
     # Verify Service exists (if applicable)
     local svc_count
-    svc_count=$(kubectl get svc -n "$ns" --no-headers 2>/dev/null | wc -l)
+    svc_count=$(kubectl get svc -n "$res_ns" --no-headers 2>/dev/null | wc -l)
     if [ "$svc_count" -gt 0 ]; then
         : # ok
     fi
@@ -332,7 +338,7 @@ install_and_verify() {
         log_pass "$label"
     else
         log_fail "$label"
-        dump_debug "$ns"
+        dump_debug "$res_ns"
     fi
 
     # Cleanup
