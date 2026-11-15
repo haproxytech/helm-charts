@@ -1,0 +1,5 @@
+## Test: namespace.create=true with namespaceOverride. The chart's Namespace
+## must exist before the CRD/Gateway API jobs and the HugConf hook run in it.
+namespace:
+  create: true
+namespaceOverride: haproxy-unified-gateway-nscreate

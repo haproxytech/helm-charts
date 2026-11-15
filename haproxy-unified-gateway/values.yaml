@@ -20,8 +20,14 @@ rbac:
 
 # -- Create a namespace as part of the release.
 # NOTE: do not combine this with `helm install --create-namespace`.
+# Set namespaceOverride to the namespace to create; the release namespace
+# (helm install -n) must already exist, as Helm stores the release there.
 namespace:
   create: false
+
+# -- Override the release namespace for all rendered resources
+# (useful in umbrella/combined charts and with namespace.create).
+# namespaceOverride: haproxy-unified-gateway
 
 # -- ServiceAccount configuration
 serviceAccount:
