@@ -23,7 +23,7 @@ This chart bootstraps an HAProxy kubernetes-ingress deployment/daemonset on a [K
 
 The quickest way to setup a Kubernetes cluster is with [Azure Kubernetes Service](https://azure.microsoft.com/en-us/services/kubernetes-service/), [AWS Elastic Kubernetes Service](https://aws.amazon.com/eks/) or [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine/) using their respective quick-start guides.
 
-For setting up Kubernetes on other cloud platforms or bare-metal servers refer to the Kubernetes [getting started guide](http://kubernetes.io/docs/getting-started-guides/).
+For setting up Kubernetes on other cloud platforms or bare-metal servers refer to the Kubernetes [getting started guide](https://kubernetes.io/docs/setup/).
 
 ### Install Helm
 
@@ -43,17 +43,10 @@ Alternatively if you want to proceed with just OCI-based repository, skip this s
 
 ## Installing the chart
 
-To install the chart with Helm v3 as _my-release_ deployment from Chat Repository:
+To install the chart as _my-release_ deployment from the Chart Repository:
 
 ```console
 helm install my-release haproxytech/kubernetes-ingress
-```
-
-**_NOTE_**: To install the chart with Helm v2 (legacy Helm) the syntax requires adding deployment name to `--name` parameter:
-
-```console
-helm install haproxytech/kubernetes-ingress \
-  --name my-release
 ```
 
 Alternatively also have OCI-based repository available for simplified access:
@@ -75,11 +68,12 @@ helm install haproxytech/kubernetes-ingress \
 
 To install the chart using a private registry for controller into a separate namespace _prod_.
 
-**_NOTE_**: Helm v3 requires namespace to be precreated (eg. with `kubectl create namespace prod`)
+**_NOTE_**: The namespace must exist; add `--create-namespace` to have Helm create it (eg. instead of `kubectl create namespace prod`)
 
 ```console
 helm install my-ingress haproxytech/kubernetes-ingress  \
   --namespace prod \
+  --create-namespace \
   --set controller.image.tag=SOMETAG \
   --set controller.imageCredentials.registry=myregistry.domain.com \
   --set controller.imageCredentials.username=MYUSERNAME \
@@ -92,7 +86,7 @@ Alternatively, use a pre-configured (existing) imagePullSecret in the same names
 helm install my-ingress haproxytech/kubernetes-ingress  \
   --namespace prod \
   --set controller.image.tag=SOMETAG \
-  --set controller.existingImagePullSecret name-of-existing-image-pull-secret
+  --set controller.existingImagePullSecret=name-of-existing-image-pull-secret
 ```
 
 ### Using values from YAML file
@@ -115,7 +109,7 @@ controller:
 And invoking Helm becomes (compare to the previous example):
 
 ```console
-helm install my-ingress -f mylb.yml haproxytech/kubernetes-ingress
+helm install my-ingress -f mylb.yaml haproxytech/kubernetes-ingress
 ```
 
 A typical YAML file for TCP services looks like (provided that configmap "[default/tcp](https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/controller.md)" was created) :
@@ -150,11 +144,11 @@ helm install my-ingress haproxytech/kubernetes-ingress \
   --set controller.ingressClass=haproxy
 ```
 
-**_NOTE_**: make sure your Ingress routes have corresponding `ingress.class: haproxy` annotation.
+**_NOTE_**: make sure your Ingress resources select the class with `spec.ingressClassName: haproxy` (the older `kubernetes.io/ingress.class: haproxy` annotation is deprecated).
 
 ### Installing Gateway API support
 
-[Gateway API support](https://gateway-api.sigs.k8s.io/) can be installed and used wth controller. Supported features can seen in [Ingress Controller documentation](https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/gateway-api.md)
+[Gateway API support](https://gateway-api.sigs.k8s.io/) can be installed and used with the controller. Supported features can be seen in the [Ingress Controller documentation](https://www.haproxy.com/documentation/kubernetes-ingress/gateway-api/).
 
 ```console
 helm install my-ingress haproxytech/kubernetes-ingress \
@@ -221,9 +215,9 @@ helm install my-ingress haproxytech/kubernetes-ingress \
 
 ### Installing with Kubernetes Event-driven Autoscaling (KEDA)
 
-[KEDA](https://keda.sh/docs/2.3/concepts/scaling-deployments/) is an improved scaling solution built on top of HPA which allows autoscaling criteria based on information from any event source including Prometheus metrics collected from HAProxy native Prometheus Exporter.
+[KEDA](https://keda.sh/docs/latest/concepts/scaling-deployments/) is an improved scaling solution built on top of HPA which allows autoscaling criteria based on information from any event source including Prometheus metrics collected from HAProxy native Prometheus Exporter.
 
-To enable KEDA, you will also need to install Prometheus Operator and ServiceMonitor enabled (serverAddress has to match `prometheus-kube-prometheus-prometheus` service IP):
+To enable KEDA, you will also need to install Prometheus Operator and ServiceMonitor enabled (`serverAddress` has to point at the `prometheus-kube-prometheus-prometheus` Service; the example assumes the Prometheus release below, installed in the `default` namespace):
 
 _mykeda.yaml_:
 
@@ -239,7 +233,7 @@ controller:
     triggers:
       - type: prometheus
         metadata:
-          serverAddress: http://10.96.206.247:9090
+          serverAddress: http://prometheus-kube-prometheus-prometheus.default.svc:9090
           metricName: haproxy_frontend_current_sessions
           threshold: "100"
           query: sum(rate(haproxy_frontend_current_sessions{proxy="http"}[2m]))
@@ -304,7 +298,7 @@ helm show values haproxytech/kubernetes-ingress
 helm show readme  haproxytech/kubernetes-ingress
 ```
 
-To override defaults, either pass a values file with `-f my-values.yaml` (recommended for anything non-trivial) or use `--set key=value` for one-offs. The tables below summarise every top-level key. Defaults reflect chart version `1.50.0` (controller `appVersion 3.2.8`); refer to `values.yaml` for the exact current default if you are on a different version.
+To override defaults, either pass a values file with `-f my-values.yaml` (recommended for anything non-trivial) or use `--set key=value` for one-offs. The tables below summarise every top-level key and its default in this chart version; `helm show values` above prints the defaults of the version you have installed.
 
 ### Global / cluster-wide
 
@@ -313,6 +307,8 @@ To override defaults, either pass a values file with `-f my-values.yaml` (recomm
 | `rbac.create` | Create the ClusterRole + ClusterRoleBinding required by the controller. | `true` |
 | `namespace.create` | Create the `namespaceOverride` namespace from the chart (do **not** combine with `helm install --create-namespace`). Requires `namespaceOverride`; the release namespace (`helm install -n`) must already exist, as Helm stores the release there. | `false` |
 | `namespaceOverride` | Override `.Release.Namespace` for all rendered resources (useful in umbrella/combined charts). | _unset_ |
+| `nameOverride` | Replace the chart name in generated resource names. | _unset_ |
+| `fullnameOverride` | Replace the full generated name (`<release>-<chart>`) of all resources. | _unset_ |
 | `serviceAccount.create` | Create a dedicated ServiceAccount for the controller. | `true` |
 | `serviceAccount.name` | Name of the ServiceAccount (auto-generated when empty). | _unset_ |
 | `serviceAccount.automountServiceAccountToken` | Override the SA-token automount behaviour. Unset = use the Kubernetes default (`true`). | _unset_ |
@@ -406,7 +402,7 @@ To override defaults, either pass a values file with `-f my-values.yaml` (recomm
 | `controller.keda.scaledObject.annotations` | `ScaledObject` annotations. | `{}` |
 | `controller.keda.horizontalPodAutoscalerConfig` | Underlying HPA config emitted by KEDA. | `{}` |
 | `controller.keda.triggers` | List of KEDA triggers (required when `keda.enabled=true`; chart fails at render if empty). | `[]` |
-| `controller.PodDisruptionBudget.enable` | Create a PDB (Deployment only). | `false` |
+| `controller.PodDisruptionBudget.enable` | Create a PDB for the controller pods (Deployment or DaemonSet). | `false` |
 | `controller.PodDisruptionBudget.maxUnavailable` / `.minAvailable` | PDB constraints (set one). | _unset_ |
 
 #### Memory limits and sizing
@@ -543,7 +539,7 @@ Both ServiceMonitor and PodMonitor are gated behind the `monitoring.coreos.com/v
 
 ### CRD installation job
 
-A Helm `post-install` / `pre-upgrade` hook Job that applies the controller's CRDs (`core.haproxy.org/v1alpha2` Defaults, Globals, Backends). Available since chart `1.35.0`.
+A Helm `post-install` / `pre-upgrade` hook Job that installs and upgrades the controller's CRDs (`ingress.v3.haproxy.org/v3` Backends, Defaults, Frontends, Globals, TCPs and ValidationRules). Available since chart `1.35.0`.
 
 | Key | Description | Default |
 |---|---|---|
@@ -614,24 +610,17 @@ To upgrade the _my-release_ deployment:
 helm upgrade my-release haproxytech/kubernetes-ingress
 ```
 
-By default Helm [does not upgrade](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/) CRDs during an upgrade, so before doing an upgrade it is mandatory to upgrade CRDs to the latest version by hand **before** doing a Helm chart upgrade.
-
-```console
-kubectl apply -f https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/crds/core.haproxy.org_defaults.yaml
-kubectl apply -f https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/crds/core.haproxy.org_globals.yaml
-kubectl apply -f https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/crds/core.haproxy.org_backends.yaml
-```
-
-Note: from Helm Chart 1.35.0, Helm Chart contains CRD install/upgrade job that will take care of both installing and
-upgrading CRDs accordingly.
+Helm itself [does not upgrade](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/) CRDs, so the chart ships the [CRD installation job](#crd-installation-job), which installs the controller's CRDs on `helm install` and upgrades them before every `helm upgrade`. No manual CRD step is needed.
 
 ## Uninstalling the chart
 
 To uninstall/delete the _my-release_ deployment:
 
 ```console
-helm delete my-release
+helm uninstall my-release
 ```
+
+The CRDs installed by the CRD job are not removed, so custom resources survive a reinstall. Delete the `ingress.v3.haproxy.org` CRDs by hand to remove them and every resource of those kinds.
 
 ## Debugging
 
