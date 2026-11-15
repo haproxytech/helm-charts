@@ -35,6 +35,8 @@ rbac:
 ## Create namespace
 ## https://kubernetes.io/docs/tasks/administer-cluster/namespaces-walkthrough/
 ## Note: do not combine this with `helm install --create-namespace`.
+## Set namespaceOverride to the namespace to create; the release namespace
+## (helm install -n) must already exist, as Helm stores the release there.
 namespace:
   create: false
 

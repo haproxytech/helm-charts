@@ -311,7 +311,7 @@ To override defaults, either pass a values file with `-f my-values.yaml` (recomm
 | Key | Description | Default |
 |---|---|---|
 | `rbac.create` | Create the ClusterRole + ClusterRoleBinding required by the controller. | `true` |
-| `namespace.create` | Create the release namespace from the chart (do **not** combine with `helm install --create-namespace`). | `false` |
+| `namespace.create` | Create the `namespaceOverride` namespace from the chart (do **not** combine with `helm install --create-namespace`). Requires `namespaceOverride`; the release namespace (`helm install -n`) must already exist, as Helm stores the release there. | `false` |
 | `namespaceOverride` | Override `.Release.Namespace` for all rendered resources (useful in umbrella/combined charts). | _unset_ |
 | `serviceAccount.create` | Create a dedicated ServiceAccount for the controller. | `true` |
 | `serviceAccount.name` | Name of the ServiceAccount (auto-generated when empty). | _unset_ |

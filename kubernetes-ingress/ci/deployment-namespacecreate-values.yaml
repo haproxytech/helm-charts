@@ -1,0 +1,6 @@
+## Test: namespace.create=true with namespaceOverride and the default,
+## chart-generated TLS certificate. The certificate Secret must be created
+## after the chart's Namespace, which a pre-install hook cannot do.
+namespace:
+  create: true
+namespaceOverride: kubernetes-ingress-nscreate
