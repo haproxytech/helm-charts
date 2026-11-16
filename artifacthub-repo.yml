@@ -7,3 +7,13 @@ owners:
     email: dkorunic@haproxy.com
   - name: Zlatko Bratkovic
     email: zbratkovic@haproxy.com
+# Versions whose packaged Chart.yaml has an artifacthub.io/changes entry Artifact
+# Hub cannot parse. Artifact Hub reads annotations from the .tgz, not index.yaml,
+# so they cannot be fixed without replacing a published archive.
+ignore:
+  - name: kubernetes-ingress
+    version: ^1\.17\.3$
+  - name: kubernetes-ingress
+    version: ^1\.56\.2$
+  - name: haproxy
+    version: ^1\.30\.5$
