@@ -135,9 +135,13 @@ bump_and_push() {
 main() {
     local pr author head files chart new old ver v
 
-    pr=$(gh api "repos/${REPO}/commits/${SHA}/pulls" \
-        --jq '[.[] | select(.state == "open" and .base.ref == "main")][0].number // empty')
-    [[ -n "${pr}" ]] || { echo "no open pull request for ${SHA}"; return 0; }
+    # Match on the head commit across open pull requests: commits/{sha}/pulls
+    # on the base repo returns nothing for a commit that only exists in a
+    # fork, which is where every haproxyci pull request comes from.
+    pr=$(gh pr list --repo "${REPO}" --base main --state open --limit 200 \
+        --json number,headRefOid \
+        --jq "first(.[] | select(.headRefOid == \"${SHA}\") | .number) // empty")
+    [[ -n "${pr}" ]] || { echo "::warning::no open pull request for ${SHA}"; return 0; }
 
     author=$(gh pr view "${pr}" --repo "${REPO}" --json author --jq '.author.login')
     head=$(gh pr view "${pr}" --repo "${REPO}" --json headRefOid --jq '.headRefOid')
