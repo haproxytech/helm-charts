@@ -17,7 +17,7 @@ name: haproxy-unified-gateway
 description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API Controller
 type: application
 version: 1.3.5
-appVersion: 1.1.0
+appVersion: 1.1.1
 kubeVersion: ">=1.26.0-0"
 keywords:
   - haproxy
@@ -37,14 +37,10 @@ annotations:
   artifacthub.io/category: networking
   artifacthub.io/images: |
     - name: controller
-      image: docker.io/haproxytech/haproxy-unified-gateway:1.1.0
+      image: docker.io/haproxytech/haproxy-unified-gateway:1.1.1
   artifacthub.io/license: Apache-2.0
   artifacthub.io/links: |
     - name: support
       url: https://github.com/haproxytech/helm-charts/issues
   artifacthub.io/changes: |-
-    - Serve HAProxy stats on controller.containerPort.stat (31024); HAProxy listened on 1024, so the stat Service port, ServiceMonitor, PodMonitor and DaemonSet hostPort all targeted a closed port
-    - Grant the controller access to Ingresses, IngressClasses and Ingress status, which --enable-ingress needs
-    - Delete the HugConf on helm uninstall; the cleanup Job used wget options the image's BusyBox wget rejects, and hid the failure
-    - Make the default PodMonitor installable by scraping only stat; the API server rejected its bearerTokenFile
-    - Document the chart's values in a README configuration reference, the first Gateway route, Ingress support and the 1.1.0 controller flags
+    - Use HAProxy Unified Gateway 1.1.1 version for base image
