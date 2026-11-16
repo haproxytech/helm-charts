@@ -1285,6 +1285,43 @@ entries:
   haproxy-unified-gateway:
   - annotations:
       artifacthub.io/category: networking
+      artifacthub.io/changes: '- Use HAProxy Unified Gateway 1.1.1 version for base
+        image'
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/haproxy-unified-gateway:1.1.1
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 1.1.1
+    created: "2026-11-16T12:39:27.930924772Z"
+    description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API
+      Controller
+    digest: aecd22c66fce4126de47027f0ccc465e170f7d1e3ce774234f935822939db467
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy-unified-gateway
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - haproxy
+    - gateway-api
+    - gateway
+    - load-balancer
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: zbratkovic@haproxy.com
+      name: Zlatko Bratkovic
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy-unified-gateway
+    sources:
+    - https://github.com/haproxytech/haproxy-unified-gateway
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-1.3.6/haproxy-unified-gateway-1.3.6.tgz
+    version: 1.3.6
+  - annotations:
+      artifacthub.io/category: networking
       artifacthub.io/changes: |-
         - Serve HAProxy stats on controller.containerPort.stat (31024); HAProxy listened on 1024, so the stat Service port, ServiceMonitor, PodMonitor and DaemonSet hostPort all targeted a closed port
         - Grant the controller access to Ingresses, IngressClasses and Ingress status, which --enable-ingress needs
@@ -6761,4 +6798,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-11-16T06:12:18.978860536Z"
+generated: "2026-11-16T12:39:27.931098352Z"
