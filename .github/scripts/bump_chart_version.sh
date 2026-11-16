@@ -137,10 +137,12 @@ main() {
 
     # Match on the head commit across open pull requests: commits/{sha}/pulls
     # on the base repo returns nothing for a commit that only exists in a
-    # fork, which is where every haproxyci pull request comes from.
+    # fork, which is where every haproxyci pull request comes from. Filter on
+    # the author too: anyone can open a pull request on the same public
+    # commit, and picking theirs first would block the bot's merge.
     pr=$(gh pr list --repo "${REPO}" --base main --state open --limit 200 \
-        --json number,headRefOid \
-        --jq "first(.[] | select(.headRefOid == \"${SHA}\") | .number) // empty")
+        --json number,headRefOid,author \
+        --jq "first(.[] | select(.headRefOid == \"${SHA}\" and .author.login == \"${BOT}\") | .number) // empty")
     [[ -n "${pr}" ]] || { echo "::warning::no open pull request for ${SHA}"; return 0; }
 
     author=$(gh pr view "${pr}" --repo "${REPO}" --json author --jq '.author.login')
