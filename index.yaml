@@ -4,6 +4,39 @@ entries:
   - annotations:
       artifacthub.io/category: networking
       artifacthub.io/changes: |
+        - "Fix README examples that failed: the templated values file and the TLS Secret mount"
+        - Recommend a pod sysctl over a privileged init container for binding privileged ports
+        - Document every value in a README configuration reference, and Prometheus monitoring
+      artifacthub.io/images: |
+        - name: haproxy
+          image: docker.io/haproxytech/haproxy-alpine:3.4.7
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.4.7
+    created: "2026-11-16T06:12:18.728174826Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 432976ed35ec3290aec040f542580de3a948245e698644dc895d729c8d1b654e
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.30.6/haproxy-1.30.6.tgz
+    version: 1.30.6
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/changes: |
         - Fix README examples that failed: the templated values file and the TLS Secret mount
         - Recommend a pod sysctl over a privileged init container for binding privileged ports
         - Document every value in a README configuration reference, and Prometheus monitoring
@@ -1953,6 +1986,40 @@ entries:
     - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-0.2.0/haproxy-unified-gateway-0.2.0.tgz
     version: 0.2.0
   kubernetes-ingress:
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/changes: |-
+        - "Fix README instructions: drop the manual CRD upgrade step, whose URLs no longer exist, and the Helm v2 syntax"
+        - Fix broken README examples (existingImagePullSecret, values file name) and dead links
+        - Document nameOverride and fullnameOverride, the current CRDs and that uninstall keeps them
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/kubernetes-ingress:3.4.0
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.4.0
+    created: "2026-11-16T06:12:18.97822811Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 04a2d9da4d15d54ecd033a70ceb6484dd10052d5fc8ebfb5e1c3ec3465ddd25c
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.56.3/kubernetes-ingress-1.56.3.tgz
+    version: 1.56.3
   - annotations:
       artifacthub.io/category: networking
       artifacthub.io/changes: |-
@@ -6694,4 +6761,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-11-15T21:30:08.528914533Z"
+generated: "2026-11-16T06:12:18.978860536Z"
