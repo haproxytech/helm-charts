@@ -133,6 +133,23 @@ test_chart_metadata() {
         fi
     done
 
+    # Artifact Hub parses each artifacthub.io/changes entry as YAML. An unquoted
+    # entry containing ": " or " #" becomes a map or gets truncated, and the
+    # whole package is rejected ("invalid changes annotation").
+    local bad
+    bad=$(awk '
+        /^  artifacthub.io\/changes:/ { f = 1; next }
+        f && /^  [^ ]/ { f = 0 }
+        f && /^    - [^"'\''{]/ && !/^    - kind: / && /(: | #|:$)/
+    ' "$chart_yaml")
+    if [ -n "$bad" ]; then
+        echo -e "  ${RED}FAIL${NC} $chart: unquoted artifacthub.io/changes entry:"
+        sed 's/^/    /' <<< "$bad"
+        FAILED=$((FAILED + 1))
+        FAILURES+=("$chart: unquoted artifacthub.io/changes entry")
+        ok=false
+    fi
+
     if $ok; then
         log_pass "$label"
     fi
