@@ -108,7 +108,7 @@ Community HAProxy chart (not a controller — just runs HAProxy as a workload).
 | `controller-daemonset.yaml` | DaemonSet with hostNetwork/hostPort support (when controller.kind=DaemonSet) |
 | `controller-service.yaml` | NodePort Service (stats port only; HTTP/HTTPS listener ports are added per Gateway by the controller — see PR #354) |
 | `controller-serviceaccount.yaml` | ServiceAccount |
-| `clusterrole.yaml` | RBAC: Gateway API resources, HUG CRDs (gate.v3.haproxy.org incl. globals/defaults), core K8s resources, Ingresses/IngressClasses/Ingress status (for `--enable-ingress`), auth/authz for kube-rbac metrics |
+| `clusterrole.yaml` | RBAC: Gateway API resources, HUG CRDs (gate.v3.haproxy.org incl. globals/defaults), core K8s resources, Ingresses/IngressClasses/Ingress status and kubernetes-ingress Backend CRs (`ingress.v3.haproxy.org`) (for `--enable-ingress`), auth/authz for kube-rbac metrics |
 | `clusterrolebinding.yaml` | ClusterRoleBinding |
 | `controller-hugconf.yaml` | HugConf CR (logging, globalRef, defaultsRef configuration) — post-install hook (weight 5) |
 | `controller-hugconf-cleanup.yaml` | Pre-delete hook Job that deletes the HugConf CR on `helm uninstall` |
