@@ -459,12 +459,12 @@ helm show values haproxytech/haproxy
 |---|---|---|
 | `nameOverride` / `fullnameOverride` | Replace the chart name / the full generated name of all resources. | _unset_ |
 | `namespaceOverride` | Override `.Release.Namespace` for all resources (useful when this chart is a dependency). | _unset_ |
-| `rbac.create` | Create the Role and RoleBinding used by the pods. | `true` |
+| `rbac.create` | Create the Role and RoleBinding that let the pods use the PodSecurityPolicy (only with `podSecurityPolicy.enabled` on Kubernetes &lt; 1.25). | `true` |
 | `serviceAccount.create` | Create a ServiceAccount. | `true` |
-| `serviceAccount.name` | ServiceAccount name (generated when empty). | _unset_ |
+| `serviceAccount.name` | ServiceAccount name (generated when empty; `default` when `serviceAccount.create` is `false`). | _unset_ |
 | `serviceAccount.annotations` | ServiceAccount annotations. | `{}` |
 | `serviceAccount.automountServiceAccountToken` | Mount the ServiceAccount token into the pods. | `true` |
-| `podSecurityPolicy.enabled` | Create a PodSecurityPolicy (Kubernetes &lt; 1.25 only; PSP was removed in 1.25). | `false` |
+| `podSecurityPolicy.enabled` | Create a PodSecurityPolicy (Kubernetes &lt; 1.25 only; PSP was removed in 1.25). Also needs `rbac.create`. | `false` |
 | `podSecurityPolicy.annotations` / `.allowedUnsafeSysctls` | PSP annotations and allowed unsafe sysctls. | `{}` / _unset_ |
 
 ### Image and workload
@@ -491,7 +491,7 @@ helm show values haproxytech/haproxy
 | `sidecarContainers` / `initContainers` | Extra sidecar and init containers. | `[]` |
 | `lifecycle` | Container lifecycle handlers (`preStop`, `postStart`). | `{}` |
 | `livenessProbe` / `readinessProbe` / `startupProbe` | Probe definitions (none by default). | `{}` |
-| `deploymentAnnotations` / `deploymentLabels` | Metadata on the Deployment/DaemonSet. | `{}` |
+| `deploymentAnnotations` / `deploymentLabels` | Metadata on the Deployment (not applied to the DaemonSet). | `{}` |
 | `podAnnotations` / `podLabels` | Metadata on the pod template. | `{}` |
 
 ### HAProxy configuration
@@ -499,7 +499,7 @@ helm show values haproxytech/haproxy
 | Key | Description | Default |
 |---|---|---|
 | `config` | HAProxy configuration, passed through `tpl` (Helm templates allowed). | see `values.yaml` |
-| `configMount.mountPath` / `.subPath` | Where the configuration is mounted (EE images use a different path; a `subPath` disables automatic ConfigMap updates). | `/usr/local/etc/haproxy` / `""` |
+| `configMount.mountPath` / `.subPath` | Where the configuration is mounted. A `subPath` also names the configuration file (`haproxy.cfg` otherwise) and disables automatic ConfigMap updates; EE images use a different path. | `/usr/local/etc/haproxy` / `""` |
 | `includes` | Extra files (maps, error pages, ...) mounted next to the configuration. | _unset_ |
 | `includesMountPath` | Mount path of `includes`. | `/usr/local/etc/haproxy/includes` |
 | `mountedSecrets` | Secrets to mount (`volumeName`, `secretName`, `mountPath`). | `[]` |
@@ -541,7 +541,7 @@ helm show values haproxytech/haproxy
 | `service.annotations` / `.labels` | Service metadata. | `{}` |
 | `service.externalTrafficPolicy` / `.internalTrafficPolicy` | Traffic policies. | _unset_ |
 | `service.ipFamilies` / `.ipFamilyPolicy` | Dual-stack settings. | _unset_ |
-| `service.trafficDistribution` | Traffic distribution (`PreferSameZone`, `PreferSameNode`, ...). | _unset_ |
+| `service.trafficDistribution` | Traffic distribution (`PreferSameZone`, `PreferSameNode`, ...); rendered only on Kubernetes 1.31+. | _unset_ |
 | `service.additionalPorts` | Extra Service ports (`name: port`, targeting the container port of the same name). | `{}` |
 | `service.rawAdditionalPorts` | Extra Service ports in full Kubernetes form. | `[]` |
 | `service.nodePorts` | Fixed NodePorts by port name (with `type: NodePort`). | `{}` |
@@ -555,7 +555,7 @@ helm show values haproxytech/haproxy
 | `autoscaling.targetCPUUtilizationPercentage` | CPU target. | `80` |
 | `autoscaling.targetMemoryUtilizationPercentage` | Memory target. | _unset_ |
 | `autoscaling.additionalMetrics` / `.behavior` | Extra HPA metrics and scaling behaviour. | _unset_ |
-| `keda.enabled` | Create a KEDA `ScaledObject` instead of an HPA. | `false` |
+| `keda.enabled` | Create a KEDA `ScaledObject` instead of an HPA (Deployment only). | `false` |
 | `keda.minReplicas` / `.maxReplicas` | KEDA bounds. | `2` / `20` |
 | `keda.pollingInterval` / `.cooldownPeriod` | KEDA timing. | `30` / `300` |
 | `keda.restoreToOriginalReplicaCount` | Restore the replica count when the ScaledObject is removed. | `false` |

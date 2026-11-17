@@ -16,7 +16,7 @@ apiVersion: v2
 name: haproxy
 description: A Helm chart for HAProxy on Kubernetes
 type: application
-version: 1.30.6
+version: 1.30.7
 appVersion: 3.4.7
 kubeVersion: ">=1.17.0-0"
 keywords:
@@ -38,6 +38,6 @@ annotations:
     - name: support
       url: https://github.com/haproxytech/helm-charts/issues
   artifacthub.io/changes: |
-    - "Fix README examples that failed: the templated values file and the TLS Secret mount"
-    - Recommend a pod sysctl over a privileged init container for binding privileged ports
-    - Document every value in a README configuration reference, and Prometheus monitoring
+    - "README: rbac.create only creates the PodSecurityPolicy Role and RoleBinding"
+    - "README: deploymentLabels and deploymentAnnotations apply to the Deployment only"
+    - "README: note the Kubernetes 1.31 gate on trafficDistribution and other value caveats"
