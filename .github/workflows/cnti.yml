@@ -1,6 +1,10 @@
-# Installs the kubernetes-ingress chart with its defaults on a kind cluster,
-# runs the CNTi Test Suite's essential tests against it and publishes the
-# result as the badge in the README. https://github.com/lfn-cnti/testsuite-action
+# Installs each chart below with its defaults on a kind cluster, runs the
+# CNTi Test Suite's essential tests against it and publishes the result as
+# the chart's badge in the README. https://github.com/lfn-cnti/testsuite-action
+#
+# A chart takes .github/cnti/<chart>.yaml (the suite configuration) and
+# .github/cnti/<chart>-expected.yaml (its known results), and its badge is
+# published to <chart>/ on the orphan branch `badges`.
 name: CNTi essential
 
 on:
@@ -25,7 +29,7 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  # Runs on main (weekly or by hand): the only runs that publish the badge,
+  # Runs on main (weekly or by hand): the only runs that publish the badges,
   # and the only ones with a write token. Forks that enable scheduled
   # workflows do not run either job.
   essential:
@@ -33,8 +37,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
-      # Publishes the badge to the orphan branch `badges`.
+      # Publishes the badges to the orphan branch `badges`.
       contents: write
+    strategy: &essential-strategy
+      # One chart's result doesn't stop the other's. The charts publish to
+      # separate directories; the action retries a badge push that races
+      # another.
+      fail-fast: false
+      matrix:
+        chart:
+          - kubernetes-ingress
+          - haproxy-unified-gateway
     steps: &essential-steps
       - uses: actions/checkout@v4
         with:
@@ -49,19 +62,19 @@ jobs:
           # A released suite version, bumped on purpose after reading the
           # release notes.
           version: v2.4.1
-          cnf_config: .github/cnti/kubernetes-ingress.yaml
+          cnf_config: .github/cnti/${{ matrix.chart }}.yaml
           tests: cert
           badge_branch: badges
-          # One directory per chart on the badge branch, so the other charts
-          # can get their own badge later.
-          badge_name: kubernetes-ingress
+          badge_name: ${{ matrix.chart }}
           # Known results: a test whose result changes is reported in the job
           # summary and as a warning.
-          expected_results: .github/cnti/kubernetes-ingress-expected.yaml
+          expected_results: .github/cnti/${{ matrix.chart }}-expected.yaml
+          # Artifact names must be unique within a run.
+          artifact_name: cnti-${{ matrix.chart }}
 
   # Pull requests that change the job or its configuration, and manual runs
   # on other branches: the same steps with a read-only token. The action
-  # publishes the badge only from the default branch, so nothing is
+  # publishes the badges only from the default branch, so nothing is
   # published here.
   essential-pr:
     if: github.repository == 'haproxytech/helm-charts' && (github.event_name == 'pull_request' || github.ref != 'refs/heads/main')
@@ -69,4 +82,5 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: read
+    strategy: *essential-strategy
     steps: *essential-steps
