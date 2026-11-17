@@ -45,7 +45,7 @@ To install the chart as _my-release_ deployment:
 helm install my-release haproxytech/haproxy-unified-gateway
 ```
 
-The chart installs the HUG and Gateway API CRDs through hook Jobs (see [CRD and Gateway API installation jobs](#crd-and-gateway-api-installation-jobs)), so no separate CRD step is needed.
+The chart installs the HUG and Gateway API CRDs through hook Jobs (see [CRD and Gateway API installation jobs](#crd-and-gateway-api-installation-jobs)), so no separate CRD step is needed. See also the official [installation guide](https://www.haproxy.com/documentation/haproxy-unified-gateway/installation/on-premises/).
 
 ### Routing the first request
 
@@ -141,7 +141,7 @@ helm install my-release haproxytech/haproxy-unified-gateway \
 
 ### Installing with host networking (DaemonSet)
 
-When using DaemonSet mode, you can enable host networking and host ports:
+When using DaemonSet mode, you can enable host networking (for host ports instead, see [DaemonSet with host ports](#daemonset-with-host-ports)):
 
 ```console
 helm install my-release haproxytech/haproxy-unified-gateway \
@@ -158,10 +158,10 @@ On some environments like EKS and GKE there might be a need to pass service anno
 helm install my-release haproxytech/haproxy-unified-gateway \
   --set controller.service.type=LoadBalancer \
   --set controller.service.annotations."service\.beta\.kubernetes\.io/aws-load-balancer-internal"="0.0.0.0/0" \
-  --set controller.service.annotations."service\.beta\.kubernetes\.io/aws-load-balancer-cross-zone-load-balancing-enabled"="true"
+  --set-string controller.service.annotations."service\.beta\.kubernetes\.io/aws-load-balancer-cross-zone-load-balancing-enabled"="true"
 ```
 
-**_NOTE_**: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string.
+**_NOTE_**: With helm `--set` it is needed to put quotes and escape dots in the annotation key and commas in the value string. Use `--set-string` for values such as `true` or numbers, which `--set` turns into a boolean or integer that Kubernetes rejects as an annotation value.
 
 ### Installing with LoadBalancer IP
 
@@ -233,10 +233,10 @@ helm install my-release haproxytech/haproxy-unified-gateway \
 
 HUG exposes two separate metrics endpoints:
 
-- **`stat`** (port 31024) — HAProxy native metrics (`haproxy_*` prefix): connections, request rates, backend health, latency, error codes
-- **`metrics`** (port 31060) — HUG controller metrics (`hug_*` prefix): event batch processing, config generation, cert/map operations, HAProxy reloads
+- **`stat`** (port 31024) — HAProxy native metrics (`haproxy_*` prefix): connections, request rates, backend health, latency, error codes ([reference](https://www.haproxy.com/documentation/haproxy-unified-gateway/administration/prometheus-metrics/haproxy-stats-metrics/))
+- **`metrics`** (port 31060) — HUG controller metrics (`hug_*` prefix): event batch processing, config generation, cert/map operations, HAProxy reloads ([reference](https://www.haproxy.com/documentation/haproxy-unified-gateway/administration/prometheus-metrics/controller-metrics/))
 
-The chart supports both [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/introduction.md) and [PodMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#podmonitor) for Prometheus Operator integration. These are mutually exclusive — enable only one. By default, both endpoints are scraped.
+The chart supports both [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/introduction.md) and [PodMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#podmonitor) for Prometheus Operator integration. These are mutually exclusive — enable only one (the chart fails at render when both are enabled). The default ServiceMonitor endpoints scrape both; the default PodMonitor endpoints scrape only `stat` (see [below](#using-podmonitor-instead-of-servicemonitor)). Enabling the ServiceMonitor also creates a ClusterIP metrics Service (`<fullname>-metrics`) exposing `stat` and `metrics`; it requires `controller.service.enabled`.
 
 **Note:** HAProxy serves the `stat` endpoint only once the controller has programmed its first Gateway; until then that scrape target is down. The chart passes `--stats-port` from `controller.containerPort.stat`, so change the port there rather than through `extraArgs`.
 
@@ -331,6 +331,8 @@ controller:
 
 #### Using basic authentication
 
+The Secret `hug-metrics-basic-auth` (keys `username` and `password`) is not created by the chart; create it in the release namespace first.
+
 ```yaml
 controller:
   metricsAuth: basic
@@ -359,6 +361,23 @@ controller:
             key: password
 ```
 
+To keep the password out of the pod arguments, the controller also reads the credentials from the `METRICS_BASIC_AUTH_USER` and `METRICS_BASIC_AUTH_PASSWORD` environment variables; set them from the same Secret instead of the two `extraArgs`:
+
+```yaml
+controller:
+  extraEnvs:
+    - name: METRICS_BASIC_AUTH_USER
+      valueFrom:
+        secretKeyRef:
+          name: hug-metrics-basic-auth
+          key: username
+    - name: METRICS_BASIC_AUTH_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: hug-metrics-basic-auth
+          key: password
+```
+
 #### Using PodMonitor instead of ServiceMonitor
 
 PodMonitor scrapes pods directly without creating an extra metrics Service. A PodMonitor has no `bearerTokenFile`, so it cannot use the Prometheus ServiceAccount token the way the kube-rbac ServiceMonitor does, and its default endpoints therefore scrape only `stat`:
@@ -375,7 +394,7 @@ To also scrape the controller `metrics` endpoint with a PodMonitor, use `metrics
 
 ### Configuring HugConf
 
-The chart creates a HugConf custom resource for controller configuration. You can customize logging, and optionally reference Global and Defaults custom resources:
+The chart creates a HugConf custom resource for controller configuration (a `post-install` / `pre-upgrade` hook that runs after the CRD job) and passes it to the controller as `--hugconf-crd=<namespace>/<hugconf.name>`. You can customize logging, and optionally reference Global and Defaults custom resources:
 
 ```yaml
 hugconf:
@@ -398,7 +417,9 @@ hugconf:
     name: haproxytech
 ```
 
-The Global and Defaults CRDs are automatically installed by the CRD job. When a `globalRef` or `defaultsRef` is set, the controller uses the referenced CR to configure the HAProxy global/defaults sections. When removed, built-in defaults are restored.
+The Global and Defaults CRDs are automatically installed by the CRD job. When a `globalRef` or `defaultsRef` is set, the controller uses the referenced CR to configure the HAProxy global/defaults sections. When removed, built-in defaults are restored. The fields, log categories and levels are described in the official [HugConf](https://www.haproxy.com/documentation/haproxy-unified-gateway/configuration-reference/hugconf-crd/), [Global](https://www.haproxy.com/documentation/haproxy-unified-gateway/configuration-reference/global-crd/) and [Defaults](https://www.haproxy.com/documentation/haproxy-unified-gateway/configuration-reference/defaults-crd/) references.
+
+To manage the HugConf yourself, set `hugconf.create=false` and point `controller.hugconfCrd` at it (`namespace/name`); with both unset the controller gets no `--hugconf-crd` flag.
 
 ### Adding extra ports
 
@@ -494,7 +515,7 @@ controller:
 
 #### Available controller flags
 
-Flags of the HUG 1.1.0 controller (`/usr/local/sbin/hug --help`):
+Flags of the HUG 1.1.1 controller (`/usr/local/sbin/hug --help`, see also [controller options](https://github.com/haproxytech/haproxy-unified-gateway/blob/v1.1.1/documentation/controller-options.md)):
 
 | Flag | Default | Description |
 | --- | --- | --- |
@@ -616,7 +637,7 @@ controller:
 
 By default, the chart runs two `post-install` / `pre-upgrade` hook Jobs: `crdjob` installs and upgrades the HUG CRDs (`gate.v3.haproxy.org`), and `gwapijob` installs the Gateway API CRDs of version `gwapijob.version`. On the very first install the controller starts before these Jobs have run, so it logs `if kind is a CRD, it should be installed before calling Start` errors for a few seconds until the CRDs exist; this is expected and it recovers on its own.
 
-**_NOTE_**: `gwapijob.version` defaults to the Gateway API version the controller release (`appVersion`) supports, and each HUG release accepts only specific versions. Any other value fails the Job, and with it `helm install`, with `unsupported Gateway API version "vX.Y.Z", supported: [...]`. Only change it together with `controller.image.tag`.
+**_NOTE_**: `gwapijob.version` defaults to the Gateway API version the controller release (`appVersion`) supports, and each HUG release accepts only specific versions. Any other value fails the Job, and with it `helm install`, with `unsupported Gateway API version "vX.Y.Z", supported: [...]`. The chart's default controller (HUG 1.1.1) accepts only Gateway API `1.7.0`. Only change it together with `controller.image.tag`.
 
 To disable the Jobs, for example when the CRDs are managed separately:
 
@@ -641,7 +662,7 @@ helm show values haproxytech/haproxy-unified-gateway
 | `rbac.create` | Create the controller ClusterRole and ClusterRoleBinding. | `true` |
 | `namespace.create` | Create the `namespaceOverride` namespace (do **not** combine with `helm install --create-namespace`). Requires `namespaceOverride`; the release namespace (`helm install -n`) must already exist, as Helm stores the release there. | `false` |
 | `namespaceOverride` | Override `.Release.Namespace` for all resources (umbrella/combined charts, `namespace.create`). | _unset_ |
-| `nameOverride` / `fullnameOverride` | Replace the chart name / the full generated name of all resources. | _unset_ |
+| `nameOverride` / `fullnameOverride` | Replace the chart name / the full generated name of all resources. `nameOverride` also changes the `app.kubernetes.io/name` label that the controller's `--hug-service-label` matches by default, so pass `--hug-service-label=app.kubernetes.io/name:<nameOverride>` in `controller.extraArgs` with it. | _unset_ |
 | `serviceAccount.create` | Create the controller ServiceAccount. | `true` |
 | `serviceAccount.name` | ServiceAccount name (generated when empty). | `""` |
 | `serviceAccount.annotations` | ServiceAccount annotations. | `{}` |
@@ -651,20 +672,20 @@ helm show values haproxytech/haproxy-unified-gateway
 | Key | Description | Default |
 |---|---|---|
 | `controller.kind` | `Deployment` or `DaemonSet`. | `Deployment` |
-| `controller.replicaCount` | Replicas (Deployment only; ignored with HPA or KEDA). | `1` |
+| `controller.replicaCount` | Replicas (Deployment only; not rendered with `autoscaling.enabled`, and overridden by KEDA's HPA). | `1` |
 | `controller.image.repository` / `.tag` / `.pullPolicy` | Controller image (`tag` defaults to the chart `appVersion`). | `docker.io/haproxytech/haproxy-unified-gateway` / `""` / `IfNotPresent` |
 | `controller.imagePullSecrets` | Pull Secrets for the controller and Job pods. | `[]` |
-| `controller.hugconfCrd` | HugConf reference (`namespace/name`) passed as `--hugconf-crd`; empty uses the chart's HugConf, `<namespace>/<hugconf.name>`. | `""` |
+| `controller.hugconfCrd` | HugConf reference (`namespace/name`) passed as `--hugconf-crd`; empty uses the chart's HugConf, `<namespace>/<hugconf.name>` (no flag at all when `hugconf.create` is also `false`). | `""` |
 | `controller.metricsAuth` | Metrics endpoint auth: `none`, `kube-rbac` or `basic`. | `kube-rbac` |
 | `controller.extraArgs` | Extra controller flags, see [Available controller flags](#available-controller-flags). | `[]` |
 | `controller.containerPort` | Container ports; `stat` is also passed as `--stats-port`. | `http: 31080`, `https: 31443`, `stat: 31024`, `metrics: 31060` |
 | `controller.resources` | Requests and limits, see [Memory limits and sizing](#memory-limits-and-sizing). | `requests: cpu 250m, memory 2048Mi`, `limits.memory: 2560Mi` |
-| `controller.unprivileged` | Run as non-root (UID/GID 1000). | `true` |
-| `controller.allowPrivilegeEscalation` | Container `allowPrivilegeEscalation`. | `false` |
-| `controller.seccompProfile` | Seccomp profile (`{}` disables it). | `type: RuntimeDefault` |
+| `controller.unprivileged` | Run as non-root (UID/GID 1000), dropping all capabilities except `NET_BIND_SERVICE`. When `false`, no container security context is rendered. | `true` |
+| `controller.allowPrivilegeEscalation` | Container `allowPrivilegeEscalation` (only with `unprivileged`). | `false` |
+| `controller.seccompProfile` | Seccomp profile (only with `unprivileged`; `{}` disables it). | `type: RuntimeDefault` |
 | `controller.podSecurityContext` | Pod security context, merged over the non-root defaults. | `{}` |
-| `controller.livenessProbe` / `.readinessProbe` / `.startupProbe` | Probe overrides. | `{}` |
-| `controller.strategy` | Deployment update strategy. | `type: RollingUpdate` |
+| `controller.livenessProbe` / `.readinessProbe` / `.startupProbe` | Probe definitions, rendered as given. The chart sets no probes by default. | `{}` |
+| `controller.strategy` | Deployment `strategy`, or DaemonSet `updateStrategy` with `kind: DaemonSet`. | `type: RollingUpdate` |
 | `controller.priorityClassName` | `PriorityClass` of the pods. | `""` |
 | `controller.nodeSelector` / `.tolerations` / `.affinity` | Pod placement. | `{}` / `[]` / `{}` |
 | `controller.topologySpreadConstraints` | Topology spread constraints. | `[]` |
@@ -690,7 +711,7 @@ helm show values haproxytech/haproxy-unified-gateway
 | `controller.service.stat.port` / `.targetPort` / `.nodePort` | Stats Service port. | `31024` / `31024` / `""` |
 | `controller.service.extraPorts` | Extra Service ports; never Gateway listener ports, see [Adding extra ports](#adding-extra-ports). | `[]` |
 | `controller.service.controller-metrics.port` / `.targetPort` | Controller metrics port on the metrics Service. | `31060` / `31060` |
-| `controller.service.metrics.type` / `.annotations` / `.labels` | Metrics Service (created with `serviceMonitor.enabled`). | `ClusterIP` / `{}` / `{}` |
+| `controller.service.metrics.type` / `.annotations` / `.labels` | Metrics Service with the `stat` and `metrics` ports (created with `serviceMonitor.enabled` and `service.enabled`). | `ClusterIP` / `{}` / `{}` |
 
 ### Monitoring, autoscaling and disruption
 
@@ -699,6 +720,7 @@ helm show values haproxytech/haproxy-unified-gateway
 | `controller.serviceMonitor.enabled` | Create a ServiceMonitor and the metrics Service. | `false` |
 | `controller.podMonitor.enabled` | Create a PodMonitor (mutually exclusive with `serviceMonitor`). | `false` |
 | `controller.serviceMonitor.extraLabels` / `controller.podMonitor.extraLabels` | Labels for the Prometheus Operator selector. | `{}` |
+| `controller.serviceMonitor.nameOverride` / `controller.podMonitor.nameOverride` | Name of the ServiceMonitor / PodMonitor (defaults to the full generated name). | _unset_ |
 | `controller.serviceMonitor.endpoints` | Scrape endpoints: `stat` over HTTP, `metrics` over HTTPS with the Prometheus ServiceAccount token (kube-rbac). | see `values.yaml` |
 | `controller.podMonitor.endpoints` | Scrape endpoints: `stat` only (a PodMonitor cannot send the kube-rbac token). | `stat`, `/metrics`, `30s` |
 | `controller.autoscaling.enabled` | Create an HPA (not with KEDA). | `false` |
@@ -718,7 +740,7 @@ helm show values haproxytech/haproxy-unified-gateway
 
 | Key | Description | Default |
 |---|---|---|
-| `hugconf.create` | Create the HugConf custom resource (post-install hook). | `true` |
+| `hugconf.create` | Create the HugConf custom resource (`post-install` / `pre-upgrade` hook) and the `pre-delete` Job that removes it on uninstall. | `true` |
 | `hugconf.name` | HugConf name. | `hugconf` |
 | `hugconf.logging.defaultLevel` | Default log level. | `Info` |
 | `hugconf.logging.categoryLevelList` | Per-category log levels (`k8s` and `batch` at `Error`). | see `values.yaml` |
@@ -732,8 +754,8 @@ helm show values haproxytech/haproxy-unified-gateway
 | `gwapijob.version` | Gateway API version to install; must be one the controller release supports. | `1.7.0` |
 | `crdjob.ttlSecondsAfterFinished` / `gwapijob.ttlSecondsAfterFinished` | Seconds before a finished Job is removed. | `60` |
 | `crdjob.resources` / `gwapijob.resources` | Job container resources. | `{}` |
-| `crdjob.image` / `gwapijob.image` | Image override (`repository`, `tag`); defaults to the controller image. | `{}` |
-| `crdjob.podAnnotations` / `gwapijob.podAnnotations` | Job pod annotations. | `{}` |
+| `crdjob.image` / `gwapijob.image` | Image override (`repository`, `tag`); defaults to the controller image. `tag` is used only with `repository` and defaults to the chart `appVersion`. | `{}` |
+| `crdjob.podAnnotations` / `gwapijob.podAnnotations` | Annotations on the Job and its pod. | `{}` |
 | `crdjob.nodeSelector` / `.tolerations` / `.affinity` (same for `gwapijob`) | Job pod placement. | `{}` / `[]` / `{}` |
 
 ## Memory limits and sizing
@@ -800,7 +822,7 @@ To uninstall/delete the _my-release_ deployment:
 helm uninstall my-release
 ```
 
-A pre-delete hook Job removes the chart's HugConf first. The HUG and Gateway API CRDs installed by the Jobs are kept, so other Gateway API controllers and your Gateways, Routes and HUG custom resources survive; delete the CRDs by hand to remove them and every resource of those kinds.
+With `hugconf.create` (the default), a pre-delete hook Job removes the chart's HugConf first. The HUG and Gateway API CRDs installed by the Jobs are kept, so other Gateway API controllers and your Gateways, Routes and HUG custom resources survive; delete the CRDs by hand to remove them and every resource of those kinds.
 
 ## Debugging
 
