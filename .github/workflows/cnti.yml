@@ -5,9 +5,9 @@ name: CNTi essential
 
 on:
   schedule:
-    # Off the full hour: GitHub delays or drops scheduled runs under load,
-    # which peaks at the start of each hour.
-    - cron: "41 3 * * *"
+    # Weekly, Mondays, off the full hour: GitHub delays or drops scheduled runs
+    # under load, which peaks at the start of each hour.
+    - cron: "41 3 * * 1"
   workflow_dispatch:
   # Pull requests that change the job or its configuration.
   pull_request:
@@ -25,7 +25,7 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  # Runs on main (nightly or by hand): the only runs that publish the badge,
+  # Runs on main (weekly or by hand): the only runs that publish the badge,
   # and the only ones with a write token. Forks that enable scheduled
   # workflows do not run either job.
   essential:
@@ -44,7 +44,7 @@ jobs:
 
       # Creates a kind cluster of a control plane and two workers, installs
       # the chart with its defaults, and runs the essential tests.
-      - uses: lfn-cnti/testsuite-action@v1.4.0
+      - uses: lfn-cnti/testsuite-action@3c0e163cbbdde302cdd9abb9dbe8c2cbd6a72c71 # v1.4.0
         with:
           # A released suite version, bumped on purpose after reading the
           # release notes.
