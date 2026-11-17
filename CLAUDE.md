@@ -59,7 +59,7 @@ KEEP_NS=1 ./test/integration-test.sh
 ## Contribution Requirements
 
 - All commits require a `Signed-off-by` line (DCO): `git commit -s -m "message"`
-- Any change to a chart requires a chart **version bump** in `Chart.yaml` following semver
+- Any change to a chart requires a chart **version bump** in `Chart.yaml` following semver, and a new `artifacthub.io/changes` list for that release. That includes the chart's own `README.md`: it ships in the package and is what Artifact Hub shows
 - Submit changes to multiple charts in **separate PRs**
 
 ## Project Structure
@@ -167,7 +167,15 @@ HUG exposes two separate metrics endpoints:
 - When `kube-rbac`: controller serves HTTPS, validates bearer tokens via TokenReview API
 - When `none`: plain HTTP, no authentication
 - ClusterRole includes `tokenreviews` and `subjectaccessreviews` for kube-rbac auth
-- The metrics Service (`controller-service-metrics.yaml`) exposes both `stat` and `metrics` ports, created only when ServiceMonitor is enabled
+- The metrics Service (`controller-service-metrics.yaml`) exposes both `stat` and `metrics` ports, created only when ServiceMonitor **and** `controller.service.enabled` are on
+
+### Health probes
+
+The chart ships **no default liveness/readiness probes** (`controller.livenessProbe: {}` etc.), because HUG 1.1.1 has no health endpoint the kubelet can reach: the image's `haproxy.cfg` has a `healthz` frontend (`monitor-uri /healthz`) with no `bind`, nothing in the controller adds one (only the `stats` frontend gets a port, in `hug/startup/startup.go`), and controller-runtime's `HealthProbeBindAddress` is unset. gopherd checks haproxy inside the container instead (runtime socket + `unix@/var/run/haproxy/health.sock`). Proper probes need HUG to bind the `healthz` frontend, like kubernetes-ingress's `--healthz-bind-port` (1042). Until then CNTi's `liveness` and `readiness` tests fail (see CNTi below).
+
+### `nameOverride` and the Service label
+
+The controller finds its own Service by `--hug-service-label` (default `app.kubernetes.io/name:haproxy-unified-gateway`). `nameOverride` changes that label, so anyone using it must also pass `--hug-service-label` in `controller.extraArgs`.
 
 ### What HUG chart intentionally does NOT have (compared to kubernetes-ingress)
 
@@ -179,11 +187,14 @@ HUG exposes two separate metrics endpoints:
 
 ### HUG Source Project
 
-Source repo: `gitlab.int.haproxy.com/zbratkovic/unified-k8s-gateway` (internal). When you have a local clone, the useful paths are:
+Source repo: public at `github.com/haproxytech/haproxy-unified-gateway` (tags `vX.Y.Z` match `appVersion`; default branch `dev`), mirrored from `gitlab.int.haproxy.com/zbratkovic/unified-k8s-gateway` (internal). Useful paths:
 - `cmd/controller/main.go` – controller entry point
 - `hug/configuration/configuration.go` – CLI flags definition
 - `api/definition/` – CRD definitions
 - `documentation/metrics*.md` – metrics documentation
+- `fs/usr/local/hug/haproxy.cfg`, `fs/etc/gopherd/gopherd.yml` – the image's base HAProxy config and process supervisor config
+
+Official user documentation: https://www.haproxy.com/documentation/haproxy-unified-gateway/ (kubernetes-ingress: https://www.haproxy.com/documentation/kubernetes-ingress/). Where it disagrees with the chart, the chart wins: e.g. its Helm page uses a nonexistent `controller.service.metrics.nodePort` and a `gwapijob.version` that the current appVersion rejects.
 
 ### HUG Controller Flags
 
@@ -248,6 +259,17 @@ Both bump the chart version from the appVersion change: major for major, minor f
 
 **A `GITHUB_TOKEN` push starts no workflow**, so neither bot commit triggers `ci.yml` and neither gets `ct lint`/`ct install` or a release. Both compensate by running `helm lint` in the job and then calling `gh workflow run release.yml --ref main` — `workflow_dispatch` is exempt from that recursion guard, unlike `push`. Switching either to a PAT would restore full CI on these commits.
 
+`release.sh` packages every chart and uploads with `--skip-existing`, so one push carrying several version bumps releases each of them, and unbumped charts are skipped.
+
+### CNTi essential (`cnti.yml`)
+
+Runs the LF Networking CNTi Test Suite's 19 essential tests (pass mark 15) against each chart installed with its defaults on a kind cluster, via `lfn-cnti/testsuite-action` (pinned by commit SHA; suite version pinned in `version:`). A matrix over `kubernetes-ingress` and `haproxy-unified-gateway`; weekly (Mondays 03:41 UTC), by hand, and on PRs touching the workflow or `.github/cnti/**`.
+
+- Per chart: `.github/cnti/<chart>.yaml` (suite config) and `.github/cnti/<chart>-expected.yaml` (known failures with reasons). A result that differs from the expected file is a job warning, not a failure; update the file in the PR that changes the result.
+- Only the `essential` job (main) has `contents: write`, to publish `<chart>/cnti-badge.json` to the orphan branch `badges`, which the root README's badges read. `essential-pr` runs the same steps read-only.
+- Current scores: kubernetes-ingress 17/19 (`cpu_limits`, `single_process_type` fail by design); haproxy-unified-gateway **15/19, exactly the pass mark** (also `liveness`, `readiness`: see HUG Health probes). Any new HUG failure turns its badge red.
+- Adding a chart: append to the matrix, add the two files, add a badge to the root README; run it on a branch first (`gh workflow run cnti.yml --ref <branch>`) to learn the real failures before writing the expected file.
+
 `chart-version-bump.yml` holds a write token while reacting to a fork PR, so it checks out `main` (never the PR head), requires the author to be `haproxyci`, requires the tested commit to still be the PR head (`--match-head-commit`), and requires the PR to touch exactly one supported `Chart.yaml` and nothing else. Values read out of the fork are validated against `^[0-9]+\.[0-9]+\.[0-9]+$` before reaching bash arithmetic expansion, which would otherwise evaluate them as expressions.
 
 ## Conventions
@@ -257,8 +279,8 @@ Both bump the chart version from the appVersion change: major for major, minor f
 - All templates use `include "<chart>.namespace"` for namespace
 - Helm hooks used for CRD installation jobs (post-install, pre-upgrade)
 - ArgoCD hook annotations included alongside Helm hooks
-- HugConf CR is a post-install hook (weight 5) that runs after the CRD job (weight 0)
+- HugConf CR is a `post-install,pre-upgrade` hook (weight 5) that runs after the CRD job (same hooks, weight 0)
 - HugConf cleanup is a pre-delete hook Job
 - `namespace.create` only works with `namespaceOverride` naming the namespace to create: the release namespace (`-n`) must already exist because Helm stores the release there. `namespace.yaml` is a plain resource, so nothing in the chart namespace may be a `pre-install` hook when `namespace.create` is set — it would run before the Namespace exists (see kubernetes-ingress `controller-defaultcertsecret.yaml`). `ci/deployment-namespacecreate-values.yaml` covers this in both charts; `integration-test.sh` verifies pods in the `namespaceOverride` namespace
 - Security context: non-root (UID 1000), CAP_NET_BIND_SERVICE, seccomp RuntimeDefault
-- ServiceMonitor/PodMonitor gated behind `.Capabilities.APIVersions "monitoring.coreos.com/v1"`
+- ServiceMonitor/PodMonitor: in `haproxy-unified-gateway` and `haproxy` gated behind `.Capabilities.APIVersions "monitoring.coreos.com/v1"`. **Not in `kubernetes-ingress`**: there they render whenever enabled, and the install fails if the Prometheus Operator CRDs are missing
