@@ -4,9 +4,9 @@
 
 An ingress controller is a Kubernetes resource that routes traffic from outside your cluster to services within the cluster. HAProxy Kubernetes Ingress Controller uses ConfigMap to store the haproxy configuration.
 
-Detailed documentation can be found within the [Official Documentation](https://www.haproxy.com/documentation/kubernetes/latest/).
+Detailed documentation can be found within the [Official Documentation](https://www.haproxy.com/documentation/kubernetes-ingress/), including [installing with Helm](https://www.haproxy.com/documentation/kubernetes-ingress/community/installation/on-prem/).
 
-Additional configuration details can be found in [annotation reference](https://github.com/haproxytech/kubernetes-ingress/tree/master/documentation) and in image [arguments reference](https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/controller.md).
+Additional configuration details can be found in the [Ingress annotation reference](https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/ingress/), the [ConfigMap options reference](https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/configmap/) and the controller [startup arguments reference](https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/startupargs/).
 
 ## Introduction
 
@@ -49,10 +49,10 @@ To install the chart as _my-release_ deployment from the Chart Repository:
 helm install my-release haproxytech/kubernetes-ingress
 ```
 
-Alternatively also have OCI-based repository available for simplified access:
+Alternatively also have OCI-based repository available for simplified access (requires Helm 3.8+):
 
 ```console
-helm install oci://ghcr.io/haproxytech/helm-charts/kubernetes-ingress
+helm install my-release oci://ghcr.io/haproxytech/helm-charts/kubernetes-ingress
 ```
 
 ### Installing with unique name
@@ -112,7 +112,7 @@ And invoking Helm becomes (compare to the previous example):
 helm install my-ingress -f mylb.yaml haproxytech/kubernetes-ingress
 ```
 
-A typical YAML file for TCP services looks like (provided that configmap "[default/tcp](https://github.com/haproxytech/kubernetes-ingress/blob/master/documentation/controller.md)" was created) :
+A typical YAML file for TCP services looks like (provided that the [TCP services ConfigMap](https://www.haproxy.com/documentation/kubernetes-ingress/ingress-tutorials/load-balance-tcp/) "default/tcp" was created):
 
 ```yaml
 controller:
@@ -156,7 +156,7 @@ helm install my-ingress haproxytech/kubernetes-ingress \
   --set controller.kubernetesGateway.gatewayControllerName=haproxy.org/gateway-controller
 ```
 
-**_NOTE_**: Gateway API is not part of the default k8s API so it needs to be installed.
+**_NOTE_**: Gateway API is not part of the default k8s API so its CRDs need to be installed separately; see [Enable the Gateway API](https://www.haproxy.com/documentation/kubernetes-ingress/gateway-api/enable-gateway-api/).
 
 ### Installing with service annotations
 
@@ -312,7 +312,7 @@ To override defaults, either pass a values file with `-f my-values.yaml` (recomm
 | `serviceAccount.create` | Create a dedicated ServiceAccount for the controller. | `true` |
 | `serviceAccount.name` | Name of the ServiceAccount (auto-generated when empty). | _unset_ |
 | `serviceAccount.automountServiceAccountToken` | Override the SA-token automount behaviour. Unset = use the Kubernetes default (`true`). | _unset_ |
-| `podSecurityPolicy.enabled` | Create a PodSecurityPolicy (Kubernetes &lt; 1.25 only — PSP was removed in 1.25). | `false` |
+| `podSecurityPolicy.enabled` | Create a PodSecurityPolicy (Kubernetes &lt; 1.25 only — PSP was removed in 1.25; also requires `rbac.create`). | `false` |
 | `podSecurityPolicy.annotations` | Annotations applied to the PSP (e.g. AppArmor / seccomp profile selectors). | `{}` |
 | `aws.licenseConfigSecretName` | Name of the Secret holding AWS Marketplace HAPEE license files (EKS / EKS-Anywhere only). | `""` |
 
@@ -327,7 +327,7 @@ To override defaults, either pass a values file with `-f my-values.yaml` (recomm
 | `controller.imageCredentials.registry` / `.username` / `.password` | Inline credentials for a private registry (chart will create an `imagePullSecret`). | `null` |
 | `controller.existingImagePullSecret` | Name of an existing `kubernetes.io/dockerconfigjson` Secret to use instead. | `null` |
 | `controller.kind` | `Deployment` or `DaemonSet`. | `Deployment` |
-| `controller.replicaCount` | Replica count (Deployment only; ignored for DaemonSet). | `2` |
+| `controller.replicaCount` | Replica count (Deployment only; ignored for DaemonSet and when HPA or KEDA is enabled). | `2` |
 | `controller.minReadySeconds` | Min seconds a new pod must be ready before counting as available. | `0` |
 | `controller.strategy.type` | Rollout strategy (`RollingUpdate` or `Recreate` for Deployment; `RollingUpdate` / `OnDelete` for DaemonSet). | `RollingUpdate` |
 | `controller.terminationGracePeriodSeconds` | Pod termination grace period. | `60` |
@@ -342,9 +342,9 @@ To override defaults, either pass a values file with `-f my-values.yaml` (recomm
 | `controller.allowPrivilegedPorts` | Allow non-root to bind ports &lt; 1024 (auto-enables `net.ipv4.ip_unprivileged_port_start=0`). | `false` |
 | `controller.enableRuntimeDefaultSeccompProfile` | Apply seccomp `RuntimeDefault` profile. | `true` |
 | `controller.allowPrivilegeEscalation` | Container `allowPrivilegeEscalation`. | `false` |
-| `controller.initContainers` | List of init containers. | `[]` |
+| `controller.initContainers` | List of init containers (or a string, rendered with `tpl`). | `[]` |
 | `controller.sysctls` | Pod-level sysctls (map). | `{}` |
-| `controller.lifecycle` | Container lifecycle handlers (`preStop`, `postStart`). | `{}` |
+| `controller.lifecycle` | Container lifecycle handlers (`preStop`, `postStart`); a map, or a string rendered with `tpl`. | `{}` |
 | `controller.enableServiceLinks` | Whether to inject service-discovery env vars (set `false` in large clusters to reduce env-var bloat). | `true` |
 
 ### Container ports, probes, debug endpoints
@@ -361,14 +361,14 @@ To override defaults, either pass a values file with `-f my-values.yaml` (recomm
 
 | Key | Description | Default |
 |---|---|---|
-| `controller.ingressClassResource.name` | Name of the `IngressClass` resource (Kubernetes &ge; 1.18). | `haproxy` |
+| `controller.ingressClassResource.name` | Name of the `IngressClass` resource, which the chart always creates. Its `spec.controller` is `haproxy.org/ingress-controller/<ingressClass>` (`haproxy.org/ingress-controller` when `ingressClass` is `null`). | `haproxy` |
 | `controller.ingressClassResource.default` | Mark this `IngressClass` as the cluster default. | `false` |
 | `controller.ingressClassResource.parameters` | `parametersRef` block for the `IngressClass`. | `{}` |
 | `controller.ingressClass` | The class name the controller listens on (`null` = serve all). | `haproxy` |
 | `controller.kubernetesGateway.enabled` | Enable Gateway API support (Gateway API CRDs must be installed separately). | `false` |
 | `controller.kubernetesGateway.gatewayControllerName` | Name advertised in `GatewayClass.spec.controllerName`. | `haproxy.org/gateway-controller` |
 | `controller.defaultTLSSecret.enabled` | Enable default TLS Secret (auto-generated if `secret` is `null`, otherwise reused). | `true` |
-| `controller.defaultTLSSecret.secretNamespace` | Namespace of the default TLS Secret. | release namespace |
+| `controller.defaultTLSSecret.secretNamespace` | Namespace of the existing Secret named by `secret` (rendered with `tpl`). The auto-generated Secret always goes into the release namespace. | release namespace |
 | `controller.defaultTLSSecret.secret` | Name of an existing Secret to reuse (must contain `tls.crt` **and** `tls.key`). | `null` |
 | `controller.publishService.enabled` | Mirror the Service endpoints into `Ingress.status.loadBalancer`. | `true` |
 | `controller.publishService.pathOverride` | Override path (`<namespace>/<service>`). | `""` |
@@ -378,9 +378,9 @@ To override defaults, either pass a values file with `-f my-values.yaml` (recomm
 | Key | Description | Default |
 |---|---|---|
 | `controller.extraLabels` | Additional labels on the Deployment/DaemonSet metadata. | `{}` |
-| `controller.annotations` | Additional annotations on the Deployment/DaemonSet metadata. | `{}` |
-| `controller.podLabels` | Additional labels on the pod template. | `{}` |
-| `controller.podAnnotations` | Additional annotations on the pod template. | `{}` |
+| `controller.annotations` | Additional annotations on the Deployment/DaemonSet metadata (also applied to the CRD job). | `{}` |
+| `controller.podLabels` | Additional labels on the pod template (also applied to the CRD job pod). | `{}` |
+| `controller.podAnnotations` | Additional annotations on the pod template (a map, or a string rendered with `tpl`). | `{}` |
 
 ### Resources, autoscaling and disruption
 
@@ -394,13 +394,13 @@ To override defaults, either pass a values file with `-f my-values.yaml` (recomm
 | `controller.autoscaling.behavior` | HPA scaling behaviour block. | _unset_ |
 | `controller.autoscaling.custom` | Custom HPA metrics (Pods/Object/External). | _unset_ |
 | `controller.autoscaling.annotations` | HPA annotations. | `{}` |
-| `controller.keda.enabled` | Enable KEDA `ScaledObject` (mutually exclusive with HPA; requires `serviceMonitor` enabled). | `false` |
+| `controller.keda.enabled` | Enable KEDA `ScaledObject` (Deployment only; mutually exclusive with HPA, which is not rendered while KEDA is enabled; requires `serviceMonitor` enabled). | `false` |
 | `controller.keda.minReplicas` / `.maxReplicas` | KEDA bounds. | `2` / `20` |
 | `controller.keda.pollingInterval` / `.cooldownPeriod` | KEDA timing. | `30` / `300` |
 | `controller.keda.restoreToOriginalReplicaCount` | Restore replica count on KEDA removal. | `false` |
 | `controller.keda.fallback` | Fallback behaviour on trigger failure. | _unset_ |
 | `controller.keda.scaledObject.annotations` | `ScaledObject` annotations. | `{}` |
-| `controller.keda.horizontalPodAutoscalerConfig` | Underlying HPA config emitted by KEDA. | `{}` |
+| `controller.keda.horizontalPodAutoscalerConfig` | Underlying HPA config emitted by KEDA (`name` and `behavior` are passed through). | `{}` |
 | `controller.keda.triggers` | List of KEDA triggers (required when `keda.enabled=true`; chart fails at render if empty). | `[]` |
 | `controller.PodDisruptionBudget.enable` | Create a PDB for the controller pods (Deployment or DaemonSet). | `false` |
 | `controller.PodDisruptionBudget.maxUnavailable` / `.minAvailable` | PDB constraints (set one). | _unset_ |
@@ -460,11 +460,12 @@ yourself always wins.
 
 | Key | Description | Default |
 |---|---|---|
-| `controller.extraArgs` | Additional CLI flags passed to the controller binary (e.g. `--namespace-whitelist`, `--disable-ipv6`, `--sync-period`). | `[]` |
-| `controller.config` | Map written into the controller ConfigMap (global HAProxy tuning — `timeout-connect`, `rate-limit-*`, etc.). Ignored when `config.cr-global` is set; move config into `spec.log_targets` of the Global CR. | `{}` |
+| `controller.extraArgs` | Additional CLI flags passed to the controller binary (e.g. `--namespace-whitelist`, `--disable-ipv6`, `--sync-period`). See the [startup arguments reference](https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/startupargs/). | `[]` |
+| `controller.config` | Map written into the controller ConfigMap (global HAProxy tuning — `timeout-connect`, `rate-limit-*`, etc.), or a string rendered with `tpl`. See the [ConfigMap options reference](https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/configmap/). | `{}` |
 | `controller.configAnnotations` | Annotations on the controller ConfigMap. | `{}` |
+| `controller.auxiliaryConfig` | Raw HAProxy configuration (rendered with `tpl`). When set, the chart creates a dedicated ConfigMap and mounts it at `/etc/haproxy/haproxy-aux.cfg`. See [auxiliary configuration file](https://www.haproxy.com/documentation/kubernetes-ingress/ingress-tutorials/auxiliary-config-file/). | `""` |
 | `controller.logging.level` | Controller log level (`trace`, `debug`, `info`, `warning`, `error`). Applies only to the **controller's own** logs. | `info` |
-| `controller.logging.traffic` | HAProxy access-log config (`address`, `format`, `facility`). Ignored when `config.cr-global` is set (use the CR's `spec.log_targets` instead). | `{}` |
+| `controller.logging.traffic` | HAProxy access-log config (`address`, `format`, `facility`), written to the ConfigMap as `syslog-server`. Ignored when `config.cr-global` is set (use the CR's `spec.log_targets` instead). | `{}` |
 
 ### Service (the main HAProxy frontend)
 
@@ -475,20 +476,20 @@ yourself always wins.
 | `controller.service.annotations` / `.labels` | Service metadata (cloud-provider LB hints typically go here). | `{}` |
 | `controller.service.ports.http` / `.https` / `.stat` / `.admin` | Service port numbers. | `80`, `443`, `1024`, `6060` |
 | `controller.service.nodePorts.http` / `.https` / `.stat` / `.admin` | Optional explicit NodePort values; omit for random allocation. | _unset_ |
-| `controller.service.enablePorts.http` / `.https` / `.quic` / `.stat` / `.admin` | Toggle individual Service ports (at least one of `http`/`https`/`stat` or a `tcpPorts` entry must remain enabled). **Disabling `admin` no longer disables Prometheus/pprof** — use `controller.prometheus.enabled` / `controller.pprof.enabled` for that. | all `true` |
+| `controller.service.enablePorts.http` / `.https` / `.quic` / `.stat` / `.admin` | Toggle individual Service ports (at least one of `http`/`https`/`stat` or a `tcpPorts` entry must remain enabled). `quic` is a UDP port on `ports.https` / `nodePorts.https`, rendered only on Kubernetes &ge; 1.24. **Disabling `admin` no longer disables Prometheus/pprof** — use `controller.prometheus.enabled` / `controller.pprof.enabled` for that. | all `true` |
 | `controller.service.targetPorts` | Mapping of Service ports to container ports (name or number). | named ports |
 | `controller.service.tcpPorts` | Extra TCP ports (e.g. for MySQL/Redis pass-through via the TCP ConfigMap). | `[]` |
 | `controller.service.healthCheckNodePort` | Health-check NodePort (only used with `externalTrafficPolicy: Local`). | `0` |
 | `controller.service.externalTrafficPolicy` | `Cluster` (default) or `Local` (preserves client source IP). | _unset_ |
 | `controller.service.externalIPs` | List of external IPs to advertise. | `[]` |
-| `controller.service.loadBalancerIP` | Requested LB IP (provider-dependent). | `""` |
-| `controller.service.loadBalancerSourceRanges` | CIDR allowlist for the LB. | `[]` |
-| `controller.service.loadBalancerClass` | `LoadBalancerClass` (Kubernetes &ge; 1.24). | `null` |
+| `controller.service.loadBalancerIP` | Requested LB IP (provider-dependent; only with `type: LoadBalancer`). | `""` |
+| `controller.service.loadBalancerSourceRanges` | CIDR allowlist for the LB (only with `type: LoadBalancer`). | `[]` |
+| `controller.service.loadBalancerClass` | `LoadBalancerClass` (only with `type: LoadBalancer`). | `null` |
 | `controller.service.clusterIP` | Pin a specific ClusterIP. | _unset_ |
 | `controller.service.ipFamilies` / `.ipFamilyPolicy` | IPv4 / IPv6 dual-stack config. | _unset_ |
 | `controller.service.sessionAffinity` | Service `sessionAffinity` (`None` / `ClientIP`). | _unset_ |
-| `controller.service.trafficDistribution` | Traffic distribution policy (`PreferSameZone`, `PreferSameNode`). | _unset_ |
-| `controller.service.metrics.type` | Type of the secondary metrics Service (created when `serviceMonitor.enabled=true`). | `ClusterIP` |
+| `controller.service.trafficDistribution` | Traffic distribution policy (`PreferSameZone`, `PreferSameNode`); rendered only on Kubernetes &ge; 1.31. | _unset_ |
+| `controller.service.metrics.type` | Type of the secondary metrics Service, which exposes only the `stat` port (created when both `serviceMonitor.enabled` and `service.enabled` are `true`). | `ClusterIP` |
 | `controller.service.metrics.annotations` / `.labels` | Metadata for the metrics Service. | `{}` |
 
 ### Deployment / DaemonSet host networking
@@ -510,20 +511,22 @@ yourself always wins.
 |---|---|---|
 | `controller.extraEnvs` | Extra `env:` entries on the controller container (e.g. `TZ`). | `[]` |
 | `controller.extraEnvFrom` | Extra `envFrom:` entries (ConfigMap / Secret refs). | `[]` |
-| `controller.extraContainers` | Additional sidecar containers. | `[]` |
-| `controller.extraVolumeMounts` | Extra `volumeMounts` on the controller container (needed e.g. when running with `readOnlyRootFilesystem`). | `[]` |
-| `controller.extraVolumes` | Extra `volumes` on the pod. | `[]` |
+| `controller.extraContainers` | Additional sidecar containers (or a string rendered with `tpl`). | `[]` |
+| `controller.extraVolumeMounts` | Extra `volumeMounts` on the controller container (needed e.g. when running with `readOnlyRootFilesystem`); a list, or a string rendered with `tpl`. | `[]` |
+| `controller.extraVolumes` | Extra `volumes` on the pod (or a string rendered with `tpl`). | `[]` |
 
 ### Prometheus integrations (ServiceMonitor / PodMonitor)
 
-Both ServiceMonitor and PodMonitor are gated behind the `monitoring.coreos.com/v1` API — they are only rendered when the Prometheus Operator CRDs are present. Enabling either toggle requires `controller.prometheus.enabled=true` (the chart fails at render otherwise, since `/metrics` would not be exposed). `serviceMonitor` and `podMonitor` are mutually exclusive — enable at most one.
+Neither ServiceMonitor nor PodMonitor is capability-gated: if the Prometheus Operator CRDs (`monitoring.coreos.com/v1`) are missing, `helm install` fails with `no matches for kind ServiceMonitor` (or `PodMonitor`). Enabling either toggle requires `controller.prometheus.enabled=true` (the chart fails at render otherwise, since `/metrics` would not be exposed). Enable at most one of `serviceMonitor` and `podMonitor`; the chart does not enforce this, but both would scrape the same pods.
 
 | Key | Description | Default |
 |---|---|---|
-| `controller.serviceMonitor.enabled` | Create a `ServiceMonitor`. Also creates the secondary metrics Service. | `false` |
+| `controller.serviceMonitor.enabled` | Create a `ServiceMonitor`. Also creates the secondary metrics Service when `service.enabled=true`. | `false` |
+| `controller.serviceMonitor.nameOverride` | Name of the `ServiceMonitor` (defaults to the chart full name). | _unset_ |
 | `controller.serviceMonitor.extraLabels` | Labels for Prometheus Operator selector matching. | `{}` |
 | `controller.serviceMonitor.endpoints` | List of scrape endpoints (defaults to one scrape on the `stat` port `/metrics`). | see `values.yaml` |
 | `controller.podMonitor.enabled` | Create a `PodMonitor` (alternative to `ServiceMonitor`). | `false` |
+| `controller.podMonitor.nameOverride` | Name of the `PodMonitor` (defaults to the chart full name). | _unset_ |
 | `controller.podMonitor.extraLabels` | Labels for Prometheus Operator selector matching. | `{}` |
 | `controller.podMonitor.endpoints` | List of scrape endpoints. | see `values.yaml` |
 
@@ -531,9 +534,9 @@ Both ServiceMonitor and PodMonitor are gated behind the `monitoring.coreos.com/v
 
 | Key | Description | Default |
 |---|---|---|
-| `controller.sync.mode` | `default` (event-driven via K8s informers) or `fetch` (periodic pull). | `default` |
-| `controller.sync.fetchParams.period` | Polling period when `mode=fetch`. | `5s` |
-| `controller.sync.fetchParams.source` | `k8s` or `proxy`. | `k8s` |
+| `controller.sync.mode` | `default` (event-driven via K8s informers) or `fetch` (periodic pull). Applies to `kind: Deployment` only. | `default` |
+| `controller.sync.fetchParams.period` | Polling period when `mode=fetch` (`--proxy-k8s-fetch-period`); the controller uses `5s` when unset. | _unset_ |
+| `controller.sync.fetchParams.source` | `k8s` or `proxy`. With `proxy`, the chart also creates a proxy Deployment and Service. | `k8s` |
 | `controller.sync.proxyParams.replicaCount` | Number of proxy-mode replicas (required when `source=proxy`). | `3` |
 | `controller.sync.proxyParams.proxySvcLabelSelector` | Label selector for the proxy service. | `run:haproxy-ingress-proxy` |
 
