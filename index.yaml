@@ -4,6 +4,39 @@ entries:
   - annotations:
       artifacthub.io/category: networking
       artifacthub.io/changes: |
+        - "README: rbac.create only creates the PodSecurityPolicy Role and RoleBinding"
+        - "README: deploymentLabels and deploymentAnnotations apply to the Deployment only"
+        - "README: note the Kubernetes 1.31 gate on trafficDistribution and other value caveats"
+      artifacthub.io/images: |
+        - name: haproxy
+          image: docker.io/haproxytech/haproxy-alpine:3.4.7
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.4.7
+    created: "2026-11-17T09:27:32.127378717Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 9151f634d6d71bec864055726cd51152db999e1c90ec9a3d5732a4acdabfa271
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.30.7/haproxy-1.30.7.tgz
+    version: 1.30.7
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/changes: |
         - "Fix README examples that failed: the templated values file and the TLS Secret mount"
         - Recommend a pod sysctl over a privileged init container for binding privileged ports
         - Document every value in a README configuration reference, and Prometheus monitoring
@@ -1285,6 +1318,45 @@ entries:
   haproxy-unified-gateway:
   - annotations:
       artifacthub.io/category: networking
+      artifacthub.io/changes: |-
+        - Sync README parameter tables and examples with the chart values
+        - "Fix the service annotations example: use --set-string for boolean values"
+        - Document serviceMonitor/podMonitor nameOverride and basic auth via env vars
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/haproxy-unified-gateway:1.1.1
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 1.1.1
+    created: "2026-11-17T09:27:32.33845171Z"
+    description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API
+      Controller
+    digest: 8974327bf9a7154da4c46f969fbe4e944b93839dbbfdfc1168711bd66ae9adc9
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy-unified-gateway
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - haproxy
+    - gateway-api
+    - gateway
+    - load-balancer
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: zbratkovic@haproxy.com
+      name: Zlatko Bratkovic
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy-unified-gateway
+    sources:
+    - https://github.com/haproxytech/haproxy-unified-gateway
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-1.3.7/haproxy-unified-gateway-1.3.7.tgz
+    version: 1.3.7
+  - annotations:
+      artifacthub.io/category: networking
       artifacthub.io/changes: '- Use HAProxy Unified Gateway 1.1.1 version for base
         image'
       artifacthub.io/images: |
@@ -2023,6 +2095,40 @@ entries:
     - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-0.2.0/haproxy-unified-gateway-0.2.0.tgz
     version: 0.2.0
   kubernetes-ingress:
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/changes: |-
+        - "Fix README: the OCI install example lacked a release name, and ServiceMonitor/PodMonitor are not capability-gated"
+        - Document auxiliaryConfig and serviceMonitor/podMonitor nameOverride in the README
+        - Correct README defaults and conditions (sync fetch period, metrics Service, QUIC, trafficDistribution) and link the official docs
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/kubernetes-ingress:3.4.0
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.4.0
+    created: "2026-11-17T09:27:32.587574878Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: abdad9ad8a4ed189fdfacf8b08156497dd96d803f22e42bfe94ea42595327624
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.56.4/kubernetes-ingress-1.56.4.tgz
+    version: 1.56.4
   - annotations:
       artifacthub.io/category: networking
       artifacthub.io/changes: |-
@@ -6798,4 +6904,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-11-16T12:39:27.931098352Z"
+generated: "2026-11-17T09:27:32.587824158Z"
