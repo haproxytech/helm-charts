@@ -125,6 +125,16 @@ rules:
       - get
       - update
       - patch
+  # kubernetes-ingress Backend CRs, referenced from Ingresses via cr-backend;
+  # watched only when --enable-ingress is set and their CRD is installed
+  - apiGroups:
+      - ingress.v3.haproxy.org
+    resources:
+      - backends
+    verbs:
+      - get
+      - list
+      - watch
   - apiGroups:
       - coordination.k8s.io
     resources:
