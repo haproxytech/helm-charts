@@ -5,7 +5,8 @@
 ![GitHub](https://img.shields.io/github/license/haproxytech/helm-charts)
 [![CI](https://github.com/haproxytech/helm-charts/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/haproxytech/helm-charts/actions/workflows/ci.yml)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/haproxytech)](https://artifacthub.io/packages/search?repo=haproxytech)
-[![CNTi essential: kubernetes-ingress](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/haproxytech/helm-charts/badges/kubernetes-ingress/cnti-badge.json)](https://github.com/haproxytech/helm-charts/actions/workflows/cnti.yml)
+[![CNTi essential: kubernetes-ingress](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/haproxytech/helm-charts/badges/kubernetes-ingress/cnti-badge.json&label=CNTi%20kubernetes-ingress)](https://github.com/haproxytech/helm-charts/actions/workflows/cnti.yml)
+[![CNTi essential: haproxy-unified-gateway](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/haproxytech/helm-charts/badges/haproxy-unified-gateway/cnti-badge.json&label=CNTi%20haproxy-unified-gateway)](https://github.com/haproxytech/helm-charts/actions/workflows/cnti.yml)
 
 Official [HAProxy Technologies](https://www.haproxy.com/) Helm charts for running [HAProxy](https://github.com/haproxy/haproxy) on [Kubernetes](https://kubernetes.io/): as a plain load balancer, as an Ingress controller, or as a Gateway API controller.
 
