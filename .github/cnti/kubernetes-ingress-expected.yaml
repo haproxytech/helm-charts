@@ -1,0 +1,15 @@
+# The essential tests' results the kubernetes-ingress chart knows and accepts,
+# for the CNTi job (.github/workflows/cnti.yml, expected_results). A test not
+# listed is expected to pass. When a result changes, the job says so in its
+# summary and as a warning; the badge doesn't change. Update this file in the
+# pull request that changes the result.
+- test: cpu_limits
+  status: failed
+  reason: >-
+    The chart sets a CPU request and no CPU limit by default, so the
+    controller isn't throttled under load
+- test: single_process_type
+  status: failed
+  reason: >-
+    The image's gopherd supervises two process types in one container,
+    haproxy and the controller, by design

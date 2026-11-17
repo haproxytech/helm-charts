@@ -5,6 +5,7 @@
 ![GitHub](https://img.shields.io/github/license/haproxytech/helm-charts)
 [![CI](https://github.com/haproxytech/helm-charts/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/haproxytech/helm-charts/actions/workflows/ci.yml)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/haproxytech)](https://artifacthub.io/packages/search?repo=haproxytech)
+[![CNTi essential: kubernetes-ingress](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/haproxytech/helm-charts/badges/kubernetes-ingress/cnti-badge.json)](https://github.com/haproxytech/helm-charts/actions/workflows/cnti.yml)
 
 This repository hosts official [HAProxy Technologies](https://www.haproxy.com/) Helm Charts for deploying [HAProxy Load Balancer](https://github.com/haproxy/haproxy) and [Ingress controller](https://github.com/haproxytech/kubernetes-ingress) on [Kubernetes](https://kubernetes.io/).
 

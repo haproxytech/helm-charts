@@ -1,0 +1,72 @@
+# Installs the kubernetes-ingress chart with its defaults on a kind cluster,
+# runs the CNTi Test Suite's essential tests against it and publishes the
+# result as the badge in the README. https://github.com/lfn-cnti/testsuite-action
+name: CNTi essential
+
+on:
+  schedule:
+    # Weekly, Mondays, off the full hour: GitHub delays or drops scheduled runs
+    # under load, which peaks at the start of each hour.
+    - cron: "41 3 * * 1"
+  workflow_dispatch:
+  # Pull requests that change the job or its configuration.
+  pull_request:
+    paths:
+      - .github/workflows/cnti.yml
+      - .github/cnti/**
+
+permissions:
+  contents: read
+
+# One run per branch or pull request at a time; a new commit on a pull
+# request cancels the run for the previous one.
+concurrency:
+  group: cnti-essential-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  # Runs on main (weekly or by hand): the only runs that publish the badge,
+  # and the only ones with a write token. Forks that enable scheduled
+  # workflows do not run either job.
+  essential:
+    if: github.repository == 'haproxytech/helm-charts' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      # Publishes the badge to the orphan branch `badges`.
+      contents: write
+    steps: &essential-steps
+      - uses: actions/checkout@v4
+        with:
+          # The suite doesn't need the job's write token; the action passes it
+          # to the badge publisher on its own.
+          persist-credentials: false
+
+      # Creates a kind cluster of a control plane and two workers, installs
+      # the chart with its defaults, and runs the essential tests.
+      - uses: lfn-cnti/testsuite-action@3c0e163cbbdde302cdd9abb9dbe8c2cbd6a72c71 # v1.4.0
+        with:
+          # A released suite version, bumped on purpose after reading the
+          # release notes.
+          version: v2.4.1
+          cnf_config: .github/cnti/kubernetes-ingress.yaml
+          tests: cert
+          badge_branch: badges
+          # One directory per chart on the badge branch, so the other charts
+          # can get their own badge later.
+          badge_name: kubernetes-ingress
+          # Known results: a test whose result changes is reported in the job
+          # summary and as a warning.
+          expected_results: .github/cnti/kubernetes-ingress-expected.yaml
+
+  # Pull requests that change the job or its configuration, and manual runs
+  # on other branches: the same steps with a read-only token. The action
+  # publishes the badge only from the default branch, so nothing is
+  # published here.
+  essential-pr:
+    if: github.repository == 'haproxytech/helm-charts' && (github.event_name == 'pull_request' || github.ref != 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps: *essential-steps
