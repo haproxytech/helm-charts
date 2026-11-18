@@ -89,6 +89,12 @@ replicaCount: 1   # used only for Deployment mode
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#min-ready-seconds
 minReadySeconds: 0
 
+## revisionHistoryLimit setting of Deployment or DaemonSet
+## Number of old ReplicaSets (Deployment) or ControllerRevisions (DaemonSet) kept for rollback.
+## Leave unset to use the Kubernetes default (10).
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy
+revisionHistoryLimit: null
+
 ## Command line arguments to pass to HAProxy
 args:
   enabled: true    # EE images require disabling this due to S6-overlay

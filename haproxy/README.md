@@ -479,6 +479,7 @@ helm show values haproxytech/haproxy
 | `kind` | `Deployment` or `DaemonSet`. | `Deployment` |
 | `replicaCount` | Replicas (Deployment only; ignored when autoscaling or KEDA is enabled). | `1` |
 | `minReadySeconds` | Seconds a new pod must be ready before it counts as available. | `0` |
+| `revisionHistoryLimit` | Old ReplicaSets (Deployment) or ControllerRevisions (DaemonSet) kept for rollback; unset uses the Kubernetes default of 10. | `null` |
 | `strategy` | Deployment update strategy. | `{}` |
 | `updateStrategy` | DaemonSet update strategy. | `RollingUpdate`, `maxUnavailable: 1` |
 | `terminationGracePeriodSeconds` | Pod termination grace period. | `60` |
