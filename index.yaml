@@ -4,6 +4,37 @@ entries:
   - annotations:
       artifacthub.io/category: networking
       artifacthub.io/changes: |
+        - "Add revisionHistoryLimit value for the Deployment and DaemonSet"
+      artifacthub.io/images: |
+        - name: haproxy
+          image: docker.io/haproxytech/haproxy-alpine:3.4.7
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.4.7
+    created: "2026-11-18T18:46:45.202255555Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: fc919127861e117ef9e13d91a905896119b10058cc434ca70659c3f6de6d3b5c
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.31.0/haproxy-1.31.0.tgz
+    version: 1.31.0
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/changes: |
         - "README: rbac.create only creates the PodSecurityPolicy Role and RoleBinding"
         - "README: deploymentLabels and deploymentAnnotations apply to the Deployment only"
         - "README: note the Kubernetes 1.31 gate on trafficDistribution and other value caveats"
@@ -6941,4 +6972,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-11-17T17:06:42.881698262Z"
+generated: "2026-11-18T18:46:45.202634625Z"
