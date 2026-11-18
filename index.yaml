@@ -1349,6 +1349,43 @@ entries:
   haproxy-unified-gateway:
   - annotations:
       artifacthub.io/category: networking
+      artifacthub.io/changes: '- "Add controller.revisionHistoryLimit for the controller
+        Deployment/DaemonSet"'
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/haproxy-unified-gateway:1.1.1
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 1.1.1
+    created: "2026-11-18T19:25:51.801149852Z"
+    description: A Helm chart for HAProxy Unified Gateway - Kubernetes Gateway API
+      Controller
+    digest: c4e17c89aac6a0af5b3fa005a29946659618ee55f95e8d52f953339e793aadf2
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy-unified-gateway
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - haproxy
+    - gateway-api
+    - gateway
+    - load-balancer
+    kubeVersion: '>=1.26.0-0'
+    maintainers:
+    - email: zbratkovic@haproxy.com
+      name: Zlatko Bratkovic
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy-unified-gateway
+    sources:
+    - https://github.com/haproxytech/haproxy-unified-gateway
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-1.4.0/haproxy-unified-gateway-1.4.0.tgz
+    version: 1.4.0
+  - annotations:
+      artifacthub.io/category: networking
       artifacthub.io/changes: '- "RBAC: allow get/list/watch on kubernetes-ingress
         Backend CRs (ingress.v3.haproxy.org), watched with --enable-ingress"'
       artifacthub.io/images: |
@@ -2163,6 +2200,38 @@ entries:
     - https://github.com/haproxytech/helm-charts/releases/download/haproxy-unified-gateway-0.2.0/haproxy-unified-gateway-0.2.0.tgz
     version: 0.2.0
   kubernetes-ingress:
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/changes: '- "Add controller.revisionHistoryLimit for the controller
+        Deployment/DaemonSet and the proxy Deployment"'
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/kubernetes-ingress:3.4.0
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.4.0
+    created: "2026-11-18T19:25:52.083657178Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: 0f12ce1832a2328ac16611d6b16f28bac649f8c9bb4ca3de0865348d5220ba36
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.57.0/kubernetes-ingress-1.57.0.tgz
+    version: 1.57.0
   - annotations:
       artifacthub.io/category: networking
       artifacthub.io/changes: |-
@@ -6972,4 +7041,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-11-18T18:46:45.202634625Z"
+generated: "2026-11-18T19:25:52.084062923Z"
