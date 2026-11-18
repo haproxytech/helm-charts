@@ -329,6 +329,7 @@ To override defaults, either pass a values file with `-f my-values.yaml` (recomm
 | `controller.kind` | `Deployment` or `DaemonSet`. | `Deployment` |
 | `controller.replicaCount` | Replica count (Deployment only; ignored for DaemonSet and when HPA or KEDA is enabled). | `2` |
 | `controller.minReadySeconds` | Min seconds a new pod must be ready before counting as available. | `0` |
+| `controller.revisionHistoryLimit` | Old ReplicaSets (Deployment, including the fetch-mode proxy) or ControllerRevisions (DaemonSet) kept for rollback; unset uses the Kubernetes default of 10. | `null` |
 | `controller.strategy.type` | Rollout strategy (`RollingUpdate` or `Recreate` for Deployment; `RollingUpdate` / `OnDelete` for DaemonSet). | `RollingUpdate` |
 | `controller.terminationGracePeriodSeconds` | Pod termination grace period. | `60` |
 | `controller.priorityClassName` | `PriorityClass` for the controller pod. | `""` |

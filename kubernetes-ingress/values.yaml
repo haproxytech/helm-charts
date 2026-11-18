@@ -76,6 +76,12 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#min-ready-seconds
   minReadySeconds: 0
 
+  ## revisionHistoryLimit setting of Deployment or DaemonSet
+  ## Number of old ReplicaSets (Deployment) or ControllerRevisions (DaemonSet) kept for rollback.
+  ## Leave unset to use the Kubernetes default (10).
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy
+  revisionHistoryLimit: null
+
   ## Running container without root privileges
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   unprivileged: true

@@ -34,6 +34,9 @@ spec:
   replicas: {{ .Values.controller.replicaCount }}
   {{- end }}
   minReadySeconds: {{ .Values.controller.minReadySeconds }}
+  {{- if not (kindIs "invalid" .Values.controller.revisionHistoryLimit) }}
+  revisionHistoryLimit: {{ .Values.controller.revisionHistoryLimit }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "kubernetes-ingress.selectorLabels" . | nindent 6 }}

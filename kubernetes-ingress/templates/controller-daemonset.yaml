@@ -31,6 +31,9 @@ metadata:
     {{- end }}
 spec:
   minReadySeconds: {{ .Values.controller.minReadySeconds }}
+  {{- if not (kindIs "invalid" .Values.controller.revisionHistoryLimit) }}
+  revisionHistoryLimit: {{ .Values.controller.revisionHistoryLimit }}
+  {{- end }}
   {{- with .Values.controller.strategy }}
   updateStrategy:
     {{- toYaml . | nindent 4 }}
