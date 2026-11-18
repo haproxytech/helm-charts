@@ -27,6 +27,9 @@ metadata:
     {{- include "haproxy.labels" . | nindent 4 }}
 spec:
   minReadySeconds: {{ .Values.minReadySeconds }}
+  {{- if not (kindIs "invalid" .Values.revisionHistoryLimit) }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- end }}
   {{- with .Values.updateStrategy }}
   updateStrategy:
     {{- toYaml . | nindent 4 }}

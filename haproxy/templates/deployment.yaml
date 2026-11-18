@@ -31,6 +31,9 @@ metadata:
     {{- end }}
 spec:
   minReadySeconds: {{ .Values.minReadySeconds }}
+  {{- if not (kindIs "invalid" .Values.revisionHistoryLimit) }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- end }}
   {{- if and (not .Values.autoscaling.enabled) (not .Values.keda.enabled) }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
