@@ -29,6 +29,9 @@ spec:
   {{- if not .Values.controller.autoscaling.enabled }}
   replicas: {{ .Values.controller.replicaCount }}
   {{- end }}
+  {{- if not (kindIs "invalid" .Values.controller.revisionHistoryLimit) }}
+  revisionHistoryLimit: {{ .Values.controller.revisionHistoryLimit }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "haproxy-unified-gateway.selectorLabels" . | nindent 6 }}

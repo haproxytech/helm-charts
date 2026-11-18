@@ -60,6 +60,11 @@ controller:
   # -- Number of replicas (only for Deployment mode)
   replicaCount: 1
 
+  # -- Old ReplicaSets (Deployment) or ControllerRevisions (DaemonSet) kept for rollback.
+  # Leave unset to use the Kubernetes default (10).
+  # ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy
+  revisionHistoryLimit: null
+
   # -- HugConf CRD reference (namespace/name)
   # If empty, defaults to "<release-namespace>/hugconf"
   hugconfCrd: ""

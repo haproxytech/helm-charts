@@ -673,6 +673,7 @@ helm show values haproxytech/haproxy-unified-gateway
 |---|---|---|
 | `controller.kind` | `Deployment` or `DaemonSet`. | `Deployment` |
 | `controller.replicaCount` | Replicas (Deployment only; not rendered with `autoscaling.enabled`, and overridden by KEDA's HPA). | `1` |
+| `controller.revisionHistoryLimit` | Old ReplicaSets (Deployment) or ControllerRevisions (DaemonSet) kept for rollback; unset uses the Kubernetes default of 10. | `null` |
 | `controller.image.repository` / `.tag` / `.pullPolicy` | Controller image (`tag` defaults to the chart `appVersion`). | `docker.io/haproxytech/haproxy-unified-gateway` / `""` / `IfNotPresent` |
 | `controller.imagePullSecrets` | Pull Secrets for the controller and Job pods. | `[]` |
 | `controller.hugconfCrd` | HugConf reference (`namespace/name`) passed as `--hugconf-crd`; empty uses the chart's HugConf, `<namespace>/<hugconf.name>` (no flag at all when `hugconf.create` is also `false`). | `""` |
