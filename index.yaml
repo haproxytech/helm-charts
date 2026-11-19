@@ -2202,6 +2202,37 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/category: networking
+      artifacthub.io/changes: '- Use Ingress Controller 3.4.1 version for base image'
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/kubernetes-ingress:3.4.1
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.4.1
+    created: "2026-11-19T09:43:33.513723963Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: daedaa6bd3dae9ae9d735f8e1321bb89d3340893237273f0792a547cd91a4cbb
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.57.1/kubernetes-ingress-1.57.1.tgz
+    version: 1.57.1
+  - annotations:
+      artifacthub.io/category: networking
       artifacthub.io/changes: '- "Add controller.revisionHistoryLimit for the controller
         Deployment/DaemonSet and the proxy Deployment"'
       artifacthub.io/images: |
@@ -7041,4 +7072,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-11-18T19:25:52.084062923Z"
+generated: "2026-11-19T09:43:33.514161747Z"
