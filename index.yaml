@@ -4,6 +4,37 @@ entries:
   - annotations:
       artifacthub.io/category: networking
       artifacthub.io/changes: |
+        - Update base image to HAProxy 3.4.9
+      artifacthub.io/images: |
+        - name: haproxy
+          image: docker.io/haproxytech/haproxy-alpine:3.4.9
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.4.9
+    created: "2026-11-26T17:23:43.117351321Z"
+    description: A Helm chart for HAProxy on Kubernetes
+    digest: 023a86a9011509748ba92226b0e54060e23bb47ce2396c96b87721a239a148c6
+    home: https://github.com/haproxytech/helm-charts/tree/main/haproxy
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/haproxy/chart-icon.png
+    keywords:
+    - haproxy
+    kubeVersion: '>=1.17.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: haproxy
+    sources:
+    - http://www.haproxy.org/
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/haproxy-1.31.2/haproxy-1.31.2.tgz
+    version: 1.31.2
+  - annotations:
+      artifacthub.io/category: networking
+      artifacthub.io/changes: |
         - "Add revisionHistoryLimit value for the Deployment and DaemonSet"
       artifacthub.io/images: |
         - name: haproxy
@@ -7109,4 +7140,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-11-19T10:18:12.072524283Z"
+generated: "2026-11-26T17:23:43.117676971Z"
