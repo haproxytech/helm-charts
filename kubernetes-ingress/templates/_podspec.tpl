@@ -62,10 +62,14 @@ hostNetwork: true
 topologySpreadConstraints:
   {{- range $constraint := . }}
   - {{ toYaml $constraint | nindent 4 | trim }}
-    {{- if not $constraint.labelSelector }}
+    {{- if not (hasKey $constraint "labelSelector") }}
     labelSelector:
       matchLabels:
+      {{- if $isProxy }}
+        {{- include "kubernetes-ingress.serviceProxySelectorLabels" $root | nindent 8 }}
+      {{- else }}
         {{- include "kubernetes-ingress.selectorLabels" $root | nindent 8 }}
+      {{- end }}
     {{- end }}
   {{- end }}
 {{- end }}
@@ -165,7 +169,7 @@ containers:
 {{- end }}
 {{- end }}
 {{- range $ctlr.extraArgs }}
-    - {{ tpl . $root }}
+    - {{ tpl (toString .) $root }}
 {{- end }}
     {{- if $ctlr.unprivileged }}
     securityContext:

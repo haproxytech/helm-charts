@@ -474,7 +474,7 @@ yourself always wins.
 |---|---|---|
 | `controller.service.enabled` | Render the Service. Set `false` for DaemonSet + `useHostPort` deployments where the Service is redundant. | `true` |
 | `controller.service.type` | `ClusterIP`, `NodePort` or `LoadBalancer`. | `NodePort` |
-| `controller.service.annotations` / `.labels` | Service metadata (cloud-provider LB hints typically go here). Rendered with `tpl`. | `{}` |
+| `controller.service.annotations` / `.labels` | Service metadata (cloud-provider LB hints typically go here). Annotations are rendered with `tpl`. | `{}` |
 | `controller.service.ports.http` / `.https` / `.stat` / `.admin` | Service port numbers. | `80`, `443`, `1024`, `6060` |
 | `controller.service.nodePorts.http` / `.https` / `.stat` / `.admin` | Optional explicit NodePort values; omit for random allocation. | _unset_ |
 | `controller.service.enablePorts.http` / `.https` / `.quic` / `.stat` / `.admin` | Toggle individual Service ports (at least one of `http`/`https`/`stat` or a `tcpPorts` entry must remain enabled). `quic` is a UDP port on `ports.https` / `nodePorts.https`, rendered only on Kubernetes &ge; 1.24. **Disabling `admin` no longer disables Prometheus/pprof** — use `controller.prometheus.enabled` / `controller.pprof.enabled` for that. | all `true` |
