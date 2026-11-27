@@ -258,6 +258,15 @@ controller:
     secretNamespace: '{{ include "kubernetes-ingress.namespace" . }}'
     secret: null
 
+  ## TLS session ticket keys shared by every replica, so that a client resumes its TLS session on any of them
+  ## Sets the `tls-ticket-keys` controller config key (controller >= 3.5)
+  ## secret names an existing Secret holding 3 base64 keys, one per line, under its `tls-ticket-keys` key
+  ## Left null, the chart generates one with random keys and keeps them across upgrades. Rotating the keys is up to the user
+  tlsTicketKeys:
+    enabled: false
+    secretNamespace: '{{ include "kubernetes-ingress.namespace" . }}'
+    secret: null
+
   ## Compute Resources for controller container
   ## The image sizes HAProxy and the controller from the memory available to
   ## the container, so a memory limit is what bounds them: HAProxy is given
