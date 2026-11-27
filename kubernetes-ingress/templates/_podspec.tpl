@@ -165,7 +165,7 @@ containers:
 {{- end }}
 {{- end }}
 {{- range $ctlr.extraArgs }}
-    - {{ . }}
+    - {{ tpl . $root }}
 {{- end }}
     {{- if $ctlr.unprivileged }}
     securityContext:
