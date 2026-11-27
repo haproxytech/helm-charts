@@ -453,7 +453,7 @@ yourself always wins.
 | `controller.nodeSelector` | `nodeSelector` map. | `{}` |
 | `controller.tolerations` | Tolerations list. | `[]` |
 | `controller.affinity` | Node/pod affinity rules. | `{}` |
-| `controller.topologySpreadConstraints` | Topology spread constraints (Deployment only — ignored for DaemonSet since DS already runs one pod per node). | `[]` |
+| `controller.topologySpreadConstraints` | Topology spread constraints (Deployment only — ignored for DaemonSet since DS already runs one pod per node). If you don't specify `labelSelector`, it will fall-back to the charts `selectorLabels` by default. | `[]` |
 | `controller.dnsConfig` | Pod DNS config. | `{}` |
 | `controller.dnsPolicy` | Pod DNS policy. Set to `ClusterFirstWithHostNet` when `useHostNetwork=true`. | `ClusterFirst` |
 
@@ -461,7 +461,7 @@ yourself always wins.
 
 | Key | Description | Default |
 |---|---|---|
-| `controller.extraArgs` | Additional CLI flags passed to the controller binary (e.g. `--namespace-whitelist`, `--disable-ipv6`, `--sync-period`). See the [startup arguments reference](https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/startupargs/). | `[]` |
+| `controller.extraArgs` | Additional CLI flags (rendered with `tpl`) passed to the controller binary (e.g. `--namespace-whitelist`, `--disable-ipv6`, `--sync-period`). See the [startup arguments reference](https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/startupargs/). | `[]` |
 | `controller.config` | Map written into the controller ConfigMap (global HAProxy tuning — `timeout-connect`, `rate-limit-*`, etc.), or a string rendered with `tpl`. See the [ConfigMap options reference](https://www.haproxy.com/documentation/kubernetes-ingress/community/configuration-reference/configmap/). | `{}` |
 | `controller.configAnnotations` | Annotations on the controller ConfigMap. | `{}` |
 | `controller.auxiliaryConfig` | Raw HAProxy configuration (rendered with `tpl`). When set, the chart creates a dedicated ConfigMap and mounts it at `/etc/haproxy/haproxy-aux.cfg`. See [auxiliary configuration file](https://www.haproxy.com/documentation/kubernetes-ingress/ingress-tutorials/auxiliary-config-file/). | `""` |
@@ -474,7 +474,7 @@ yourself always wins.
 |---|---|---|
 | `controller.service.enabled` | Render the Service. Set `false` for DaemonSet + `useHostPort` deployments where the Service is redundant. | `true` |
 | `controller.service.type` | `ClusterIP`, `NodePort` or `LoadBalancer`. | `NodePort` |
-| `controller.service.annotations` / `.labels` | Service metadata (cloud-provider LB hints typically go here). | `{}` |
+| `controller.service.annotations` / `.labels` | Service metadata (cloud-provider LB hints typically go here). Rendered with `tpl`. | `{}` |
 | `controller.service.ports.http` / `.https` / `.stat` / `.admin` | Service port numbers. | `80`, `443`, `1024`, `6060` |
 | `controller.service.nodePorts.http` / `.https` / `.stat` / `.admin` | Optional explicit NodePort values; omit for random allocation. | _unset_ |
 | `controller.service.enablePorts.http` / `.https` / `.quic` / `.stat` / `.admin` | Toggle individual Service ports (at least one of `http`/`https`/`stat` or a `tcpPorts` entry must remain enabled). `quic` is a UDP port on `ports.https` / `nodePorts.https`, rendered only on Kubernetes &ge; 1.24. **Disabling `admin` no longer disables Prometheus/pprof** — use `controller.prometheus.enabled` / `controller.pprof.enabled` for that. | all `true` |
