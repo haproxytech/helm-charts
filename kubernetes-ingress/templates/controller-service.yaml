@@ -28,7 +28,7 @@ metadata:
 {{- with .Values.controller.service.annotations }}
   annotations:
     {{- range $key, $value := . }}
-    {{ $key }}: {{ $value | quote }}
+    {{ $key }}: {{ tpl $value $ | quote }}
     {{- end }}
 {{- end }}
 spec:
