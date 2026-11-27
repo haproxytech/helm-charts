@@ -1,0 +1,4 @@
+controller:
+  kind: Deployment
+  tlsTicketKeys:
+    enabled: true

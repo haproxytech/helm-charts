@@ -153,6 +153,25 @@ Create a default fully qualified default cert secret name.
 {{- end -}}
 
 {{/*
+Create the name of the generated TLS ticket keys Secret.
+*/}}
+{{- define "kubernetes-ingress.tlsTicketKeys.fullname" -}}
+{{- printf "%s-%s" (include "kubernetes-ingress.fullname" .) "tls-ticket-keys" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Reference of the TLS ticket keys Secret, as namespace/name, for the tls-ticket-keys config key.
+*/}}
+{{- define "kubernetes-ingress.tlsTicketKeys.secretRef" -}}
+{{- $keys := .Values.controller.tlsTicketKeys -}}
+{{- if $keys.secret -}}
+{{- printf "%s/%s" (tpl $keys.secretNamespace .) $keys.secret -}}
+{{- else -}}
+{{- printf "%s/%s" (include "kubernetes-ingress.namespace" .) (include "kubernetes-ingress.tlsTicketKeys.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Construct the path for the publish-service.
 By default this will use the <namespace>/<service-name> matching the controller's service name.
 Users can provide an override for an explicit service they want to use via `.Values.controller.publishService.pathOverride`

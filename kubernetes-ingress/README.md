@@ -371,6 +371,9 @@ To override defaults, either pass a values file with `-f my-values.yaml` (recomm
 | `controller.defaultTLSSecret.enabled` | Enable default TLS Secret (auto-generated if `secret` is `null`, otherwise reused). | `true` |
 | `controller.defaultTLSSecret.secretNamespace` | Namespace of the existing Secret named by `secret` (rendered with `tpl`). The auto-generated Secret always goes into the release namespace. | release namespace |
 | `controller.defaultTLSSecret.secret` | Name of an existing Secret to reuse (must contain `tls.crt` **and** `tls.key`). | `null` |
+| `controller.tlsTicketKeys.enabled` | Share TLS session ticket keys across replicas through the `tls-ticket-keys` controller config key (controller >= 3.5). | `false` |
+| `controller.tlsTicketKeys.secretNamespace` | Namespace of the existing Secret named by `secret` (rendered with `tpl`). The auto-generated Secret always goes into the release namespace. | release namespace |
+| `controller.tlsTicketKeys.secret` | Name of an existing Secret holding 3 base64 keys, one per line, under its `tls-ticket-keys` key. `null` generates one with random keys, kept across upgrades. | `null` |
 | `controller.publishService.enabled` | Mirror the Service endpoints into `Ingress.status.loadBalancer`. | `true` |
 | `controller.publishService.pathOverride` | Override path (`<namespace>/<service>`). | `""` |
 

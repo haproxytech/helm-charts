@@ -25,7 +25,8 @@ metadata:
   annotations:
 {{ toYaml .Values.controller.configAnnotations | indent 4 }}
 {{- end }}
-{{- if or .Values.controller.logging.traffic .Values.controller.config }}
+{{- $tlsTicketKeys := .Values.controller.tlsTicketKeys | default dict }}
+{{- if or .Values.controller.logging.traffic .Values.controller.config $tlsTicketKeys.enabled }}
 data:
 {{- if .Values.controller.logging.traffic }}
   syslog-server: {{ include "kubernetes-ingress.syslogServer" . }}
@@ -35,6 +36,18 @@ data:
 {{ tpl .Values.controller.config . | indent 2 }}
 {{- else }}
 {{ toYaml .Values.controller.config | indent 2 }}
+{{- end }}
+{{- end }}
+{{- if $tlsTicketKeys.enabled }}
+{{- /* A user-set controller.config["tls-ticket-keys"] wins */}}
+{{- $set := false }}
+{{- if eq "string" (printf "%T" .Values.controller.config) }}
+{{- $set = regexMatch "(?m)^\\s*tls-ticket-keys:" (tpl .Values.controller.config .) }}
+{{- else }}
+{{- $set = hasKey (.Values.controller.config | default dict) "tls-ticket-keys" }}
+{{- end }}
+{{- if not $set }}
+  tls-ticket-keys: {{ include "kubernetes-ingress.tlsTicketKeys.secretRef" . | quote }}
 {{- end }}
 {{- end }}
 {{- end }}
