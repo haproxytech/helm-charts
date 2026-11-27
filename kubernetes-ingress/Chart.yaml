@@ -16,7 +16,7 @@ apiVersion: v2
 name: kubernetes-ingress
 description: A Helm chart for HAProxy Kubernetes Ingress Controller
 type: application
-version: 1.57.1
+version: 1.58.0
 appVersion: 3.4.1
 kubeVersion: ">=1.23.0-0"
 keywords:
@@ -39,4 +39,6 @@ annotations:
     - name: support
       url: https://github.com/haproxytech/helm-charts/issues
   artifacthub.io/changes: |-
-    - Use Ingress Controller 3.4.1 version for base image
+    - Make topologySpreadConstraints labelSelector optional by using chart wide selectorLabels by default
+    - Pass controller's extraArgs through tpl function
+    - Pass controller's service annotations through tpl function
