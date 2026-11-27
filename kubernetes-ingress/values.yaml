@@ -365,15 +365,12 @@ controller:
 
   ## Topology spread constraints (Deployment only; ignored for DaemonSet since
   ## DaemonSets already run one pod per node — see _podspec.tpl).
+  ## If labelSelector is left out, it will default to the selectorLabels of the chart
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   topologySpreadConstraints: []
   # - maxSkew: 1
   #   topologyKey: kubernetes.io/zone
   #   whenUnsatisfiable: DoNotSchedule
-  #   labelSelector:
-  #     matchLabels:
-  #       app.kubernetes.io/name: kubernetes-ingress
-  #       app.kubernetes.io/instance: kubernetes-ingress
 
   ## Pod DNS Config
   ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/

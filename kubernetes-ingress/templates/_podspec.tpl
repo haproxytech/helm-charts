@@ -60,7 +60,14 @@ hostNetwork: true
 {{- if not $isDaemonSet }}
 {{- with $ctlr.topologySpreadConstraints }}
 topologySpreadConstraints:
-  {{- toYaml . | nindent 2 }}
+  {{- range $constraint := . }}
+  - {{ toYaml $constraint | nindent 4 | trim }}
+    {{- if not $constraint.labelSelector }}
+    labelSelector:
+      matchLabels:
+        {{- include "kubernetes-ingress.selectorLabels" $root | nindent 8 }}
+    {{- end }}
+  {{- end }}
 {{- end }}
 {{- end }}
 {{- if $ctlr.dnsConfig }}
