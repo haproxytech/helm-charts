@@ -2270,6 +2270,40 @@ entries:
   kubernetes-ingress:
   - annotations:
       artifacthub.io/category: networking
+      artifacthub.io/changes: |-
+        - Make topologySpreadConstraints labelSelector optional by using chart wide selectorLabels by default
+        - Pass controller's extraArgs through tpl function
+        - Pass controller's service annotations through tpl function
+      artifacthub.io/images: |
+        - name: controller
+          image: docker.io/haproxytech/kubernetes-ingress:3.4.1
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/haproxytech/helm-charts/issues
+    apiVersion: v2
+    appVersion: 3.4.1
+    created: "2026-11-28T08:37:01.434927106Z"
+    description: A Helm chart for HAProxy Kubernetes Ingress Controller
+    digest: de40bccde616aa9d53923a9f088d6b62dca5c080a8daa3a9dba67b298cfcd022
+    home: https://github.com/haproxytech/helm-charts/tree/main/kubernetes-ingress
+    icon: https://raw.githubusercontent.com/haproxytech/helm-charts/main/kubernetes-ingress/chart-icon.png
+    keywords:
+    - ingress
+    - haproxy
+    kubeVersion: '>=1.23.0-0'
+    maintainers:
+    - email: dkorunic@haproxy.com
+      name: Dinko Korunic
+    name: kubernetes-ingress
+    sources:
+    - https://github.com/haproxytech/kubernetes-ingress
+    type: application
+    urls:
+    - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-1.58.0/kubernetes-ingress-1.58.0.tgz
+    version: 1.58.0
+  - annotations:
+      artifacthub.io/category: networking
       artifacthub.io/changes: '- Use Ingress Controller 3.4.1 version for base image'
       artifacthub.io/images: |
         - name: controller
@@ -7140,4 +7174,4 @@ entries:
     urls:
     - https://github.com/haproxytech/helm-charts/releases/download/kubernetes-ingress-0.2.4/kubernetes-ingress-0.2.4.tgz
     version: 0.2.4
-generated: "2026-11-26T17:23:43.117676971Z"
+generated: "2026-11-28T08:37:01.435406179Z"
