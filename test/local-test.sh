@@ -545,6 +545,65 @@ test_loadbalancer_fields() {
     fi
 }
 
+# kubernetes-ingress only: topologySpreadConstraints get a default labelSelector
+# matching the pods they sit in (controller vs proxy), an explicit one is kept
+# as is, and extraArgs / Service annotations go through tpl without breaking
+# non-string values.
+test_template_rendering() {
+    local chart="$1"
+    [ "$chart" = "kubernetes-ingress" ] || return 0
+
+    local tsc='[{"maxSkew":1,"topologyKey":"kubernetes.io/hostname","whenUnsatisfiable":"DoNotSchedule"}]'
+    local output label
+
+    label="$chart: topologySpreadConstraints default labelSelector matches controller pods"
+    output=$(helm template test-release "$REPO_ROOT/$chart" -s templates/controller-deployment.yaml \
+        --set-json "controller.topologySpreadConstraints=$tsc" 2>&1 || true)
+    if echo "$output" | grep -A3 'labelSelector:' | grep -q 'app.kubernetes.io/name: kubernetes-ingress$'; then
+        log_pass "$label"
+    else
+        log_fail "$label"
+    fi
+
+    label="$chart: topologySpreadConstraints default labelSelector matches proxy pods"
+    output=$(helm template test-release "$REPO_ROOT/$chart" -s templates/controller-proxy-deployment.yaml \
+        --set controller.sync.mode=fetch --set controller.sync.fetchParams.source=proxy \
+        --set-json "controller.topologySpreadConstraints=$tsc" 2>&1 || true)
+    if echo "$output" | grep -A3 'labelSelector:' | grep -q 'app.kubernetes.io/name: test-release-kubernetes-ingress-proxy$'; then
+        log_pass "$label"
+    else
+        log_fail "$label"
+    fi
+
+    label="$chart: explicit topologySpreadConstraints labelSelector (incl. {}) kept, no default added"
+    output=$(helm template test-release "$REPO_ROOT/$chart" -s templates/controller-deployment.yaml \
+        --set-json 'controller.topologySpreadConstraints=[{"maxSkew":1,"topologyKey":"kubernetes.io/hostname","whenUnsatisfiable":"DoNotSchedule","labelSelector":{"matchLabels":{"custom":"yes"}}},{"maxSkew":1,"topologyKey":"topology.kubernetes.io/zone","whenUnsatisfiable":"ScheduleAnyway","labelSelector":{}}]' 2>&1 || true)
+    if [ "$(echo "$output" | grep -c 'labelSelector:')" -eq 2 ] && echo "$output" | grep -q 'custom: "\{0,1\}yes"\{0,1\}$'; then
+        log_pass "$label"
+    else
+        log_fail "$label"
+    fi
+
+    label="$chart: controller.service.annotations rendered with tpl, non-strings quoted"
+    output=$(helm template test-release "$REPO_ROOT/$chart" -n tpl-ns -s templates/controller-service.yaml \
+        --set-json 'controller.service.annotations={"a":true,"b":30,"c":"{{ .Release.Namespace }}"}' 2>&1 || true)
+    if echo "$output" | grep -q 'a: "true"' && echo "$output" | grep -q 'b: "30"' \
+        && echo "$output" | grep -q 'c: "tpl-ns"'; then
+        log_pass "$label"
+    else
+        log_fail "$label"
+    fi
+
+    label="$chart: controller.extraArgs rendered with tpl, non-strings accepted"
+    output=$(helm template test-release "$REPO_ROOT/$chart" -n tpl-ns -s templates/controller-deployment.yaml \
+        --set-json 'controller.extraArgs=["--namespace-whitelist={{ .Release.Namespace }}",5]' 2>&1 || true)
+    if echo "$output" | grep -q -- '- --namespace-whitelist=tpl-ns$' && echo "$output" | grep -q -- '- 5$'; then
+        log_pass "$label"
+    else
+        log_fail "$label"
+    fi
+}
+
 main() {
     local filter="${1:-}"
 
@@ -568,6 +627,7 @@ main() {
         test_monitoring "$chart"
         test_auxiliary_config "$chart"
         test_loadbalancer_fields "$chart"
+        test_template_rendering "$chart"
         test_ci_values "$chart"
         test_ct_lint "$chart"
     done
